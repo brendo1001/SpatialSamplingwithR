@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial sampling with R</title>
+  <meta name="description" content="Spatial sampling with R">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial sampling with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial sampling with R" />
+  
+  
+  
+
+<meta name="author" content="Dick J. Brus">
+
+
+<meta name="date" content="2018-06-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="SI.html">
+<link rel="next" href="SY.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Foreword</a></li>
+<li class="chapter" data-level="1" data-path="GeneralIntro.html"><a href="GeneralIntro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.1</b> Simulated population</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
+<li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
+<li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="STSI.html"><a href="STSI.html"><i class="fa fa-check"></i><b>4</b> Stratified random sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="STSI.html"><a href="STSI.html#estimation-of-the-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>4.1</b> Estimation of the mean and its sampling variance</a></li>
+<li class="chapter" data-level="4.2" data-path="STSI.html"><a href="STSI.html#confidence-interval-estimate"><i class="fa fa-check"></i><b>4.2</b> Confidence interval estimate</a></li>
+<li class="chapter" data-level="4.3" data-path="STSI.html"><a href="STSI.html#cumrootf"><i class="fa fa-check"></i><b>4.3</b> Optimal stratification</a></li>
+<li class="chapter" data-level="4.4" data-path="STSI.html"><a href="STSI.html#geographical-stratification"><i class="fa fa-check"></i><b>4.4</b> Geographical stratification</a></li>
+<li class="chapter" data-level="4.5" data-path="STSI.html"><a href="STSI.html#STSIallocation"><i class="fa fa-check"></i><b>4.5</b> Allocation of sample size to strata</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="SY.html"><a href="SY.html"><i class="fa fa-check"></i><b>5</b> Systematic random sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="SY.html"><a href="SY.html#EstVarSY"><i class="fa fa-check"></i><b>5.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="pps.html"><a href="pps.html"><i class="fa fa-check"></i><b>6</b> Sampling with probabilities proportional to size</a><ul>
+<li class="chapter" data-level="6.1" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-with-replacement-ppswr"><i class="fa fa-check"></i><b>6.1</b> Probability-proportional-to-size sampling with replacement (ppswr)</a></li>
+<li class="chapter" data-level="6.2" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-without-replacement-ppswor"><i class="fa fa-check"></i><b>6.2</b> Probability-proportional-to-size sampling without replacement (ppswor)</a></li>
+<li class="chapter" data-level="6.3" data-path="pps.html"><a href="pps.html#spatial-version-of-ppswor"><i class="fa fa-check"></i><b>6.3</b> Spatial version of ppswor</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
+<li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.1.1</b> Regression estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator"><i class="fa fa-check"></i><b>9.2</b> Ratio estimator</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.2.1</b> Ratio estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-with-unknown-mean-of-covariate"><i class="fa fa-check"></i><b>9.3</b> Regression estimator with unknown mean of covariate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="Balanced.html"><a href="Balanced.html"><i class="fa fa-check"></i><b>10</b> Balanced sampling</a><ul>
+<li class="chapter" data-level="10.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sample-versus-balanced-sampling-design"><i class="fa fa-check"></i><b>10.1</b> Balanced sample versus balanced sampling design</a></li>
+<li class="chapter" data-level="10.2" data-path="Balanced.html"><a href="Balanced.html#unequal-inclusion-probabilities"><i class="fa fa-check"></i><b>10.2</b> Unequal inclusion probabilities</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial sampling with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="STSI" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Stratified random sampling</h1>
+<p>In stratified random sampling the population is divided into subpopulations, for instance soil mapping units, areas with the same land use or land cover, administrative units <em>et cetera</em>. The subareas do not overlap, and their sum equals the entire population (study area). Within each subpopulation, referred to as a stratum, a probability sample is selected by any probability sampling design. If these probability samples are selected by simple random sampling, as described in the previous chapter, this leads to stratified <em>simple</em> random sampling (STSI). If sampling units were selected by systematic random sampling, then this leads to stratified <em>systematic</em> random sampling. This chapter is about stratified simple random sampling. Stratified simple random samples can be selected with R package <code>stratification</code>, function <code>strata</code>. Take care that the order of the numeric with the number of units to be selected per stratum (stratum sample sizes) is equal to the order of the factor with the strata in the data file.</p>
+<p>Stratified simple random sampling is illustrated with Voorst (Figure <a href="STSI.html#fig:SampleSTSI">4.1</a>). In the data frame with simulated data there is a column stratum. These are combinations of soil type and land use, obtained by overlaying a soil map and a land use map.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sampling)
+<span class="co"># compute total number of pixels per stratum and stratum weights (relative size)</span>
+Nh&lt;-<span class="kw">tapply</span>(<span class="dt">X=</span>grdVoorst<span class="op">$</span>stratum, <span class="dt">INDEX =</span> grdVoorst<span class="op">$</span>stratum, <span class="dt">FUN =</span>length) 
+wh&lt;-Nh<span class="op">/</span><span class="kw">sum</span>(Nh)
+<span class="co">#total sample size</span>
+n &lt;-<span class="st"> </span><span class="dv">40</span>
+<span class="co"># compute stratum sample sizes for proportional allocation </span>
+nh &lt;-<span class="st"> </span><span class="kw">round</span>(n <span class="op">*</span><span class="st"> </span>wh)
+<span class="co">#sum of stratum sample sizes is 41, we want 40, so we reduce largest stratum sample size by 1</span>
+nh[<span class="dv">1</span>] &lt;-<span class="st"> </span>nh[<span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
+units&lt;-<span class="kw">strata</span>(grdVoorst,<span class="dt">stratanames=</span><span class="st">&quot;stratum&quot;</span>,<span class="dt">size=</span>nh[<span class="kw">unique</span>(grdVoorst<span class="op">$</span>stratum)],<span class="dt">method=</span><span class="st">&quot;srswor&quot;</span>)
+mysample&lt;-<span class="kw">getdata</span>(grdVoorst,units)</code></pre></div>
+<p>The 40 sampling units are apportioned proportionally to the size (area, number of pixels) of the strata. The larger a stratum, the more units are selected from this stratum.</p>
+<div class="figure" style="text-align: center"><span id="fig:SampleSTSI"></span>
+<img src="SpatialSampling_files/figure-html/SampleSTSI-1.png" alt="Stratified simple random sample of size 40 from Voorst" width="100%" />
+<p class="caption">
+Figure 4.1: Stratified simple random sample of size 40 from Voorst
+</p>
+</div>
+<div id="estimation-of-the-mean-and-its-sampling-variance" class="section level2">
+<h2><span class="header-section-number">4.1</span> Estimation of the mean and its sampling variance</h2>
+<p>With simple random sampling within strata, the estimator of the mean for simple random sampling (Eq. <a href="SI.html#eq:HTMeanSI">(3.4)</a>) is applied at the level of the strata. The estimated stratum means are then pooled (averaged), using the relative sizes (relative areas) of the strata as weights:</p>
+<span class="math display" id="eq:HTMeanSTSI">\[\begin{equation}
+\hat{\bar{z}}_{\text{STSI}}= \sum\limits_{h=1}^{H} w_{h}\,\hat{\bar{z}}_{h} \;,
+\tag{4.1}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(H\)</span> is the number of strata, <span class="math inline">\(w_{h}\)</span> are the relative sizes (areas) of the strata (stratum weights): <span class="math inline">\(w_h = N_h/N\)</span>, and <span class="math inline">\(\hat{\bar{z}}_{h}\)</span> is the estimated mean of stratum <span class="math inline">\(h\)</span> estimated by the sample mean for stratum <span class="math inline">\(h\)</span>.</p>
+The same estimator is found when the Horvitz-Thompson estimator is worked out for stratified simple random sampling. With stratified simple random sampling and different sampling fractions for the strata the inclusion probabilities differ between the strata and equal <span class="math inline">\(\pi_{hi} = n_h/N_h\)</span> for all <span class="math inline">\(i\)</span> in stratum <span class="math inline">\(h\)</span>. Inserting this in the Horvitz-Thompson-estimator gives for the estimator of the mean
+<span class="math display" id="eq:HTMeanSTSI2">\[\begin{equation}
+\hat{\bar{z}}_{\text{STSI}}= \frac{1}{N}\sum\limits_{h=1}^{H}\sum\limits_{i=1}^{n_h} \frac{z_{hi}}{\pi_{hi}} = \frac{1}{N}\sum\limits_{h=1}^{H} \frac{N_h}{n_h}\sum\limits_{i=1}^{n_h} z_{hi} = \sum\limits_{h=1}^{H} w_{h}\,\hat{\bar{z}}_{h} \;.
+\tag{4.2}
+\end{equation}\]</span>
+<p>The sampling variance of the estimated mean is estimated by first estimating the sampling variances of the estimated stratum means, and then pooling. Take care, for the sampling variance we must square the stratum weights:</p>
+<span class="math display" id="eq:EstVarMeanSTSI">\[\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\text{STSI}}\right)=\sum\limits_{h=1}^{H}w_{h}^{2}\,\widehat{V}\!\left(\hat{\bar{z}}_{h}\right)\;,
+\tag{4.3}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\widehat{V}\!\left(\hat{\bar{z}}_{h}\right)\)</span> is the estimated sampling variance of <span class="math inline">\(\hat{\bar{z}}_{h}\)</span>:</p>
+<span class="math display" id="eq:EstVarStratumMean">\[\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{h}\right)= \frac{\widehat{S^2}_h(z)}{n_h}\;,
+\tag{4.4}
+\end{equation}\]</span>
+<p>with <span class="math inline">\(\widehat{S^2}_h(z)\)</span> the estimated spatial variance of <span class="math inline">\(z\)</span> within stratum <span class="math inline">\(h\)</span>:</p>
+<span class="math display" id="eq:EstStratumVar">\[\begin{equation}
+\widehat{S^2}_h(z)=\frac{1}{n_h-1}\sum\limits_{i=1}^{n_h}\left(z_{hi}-\hat{\bar{z}}_{h}\right)^{2}\;,
+\tag{4.5}
+\end{equation}\]</span>
+<p>and <span class="math inline">\(n_{h}\)</span> is the number of sampling locations in stratum <span class="math inline">\(h\)</span>. Note that the sampling variance is for infinite populations and simple random sampling <em>with replacement</em> from finite population. For without replacement the variances of the estimated stratum means must be multiplied by the fpc’s <span class="math inline">\(1- (n_h/N_h)\)</span>.</p>
+<p>For the stratified sample of Fig <a href="STSI.html#fig:SampleSTSI">4.1</a> the estimated mean equals 7.81 and the estimated sampling variance of this estimate equals 0.3.</p>
+<p>Why should we stratify? There can be two reasons:</p>
+<ol style="list-style-type: decimal">
+<li>We are interested in the means (totals) per stratum .</li>
+<li>We want to increase the precision of the estimated mean (total) for the entire population.</li>
+</ol>
+<p>Figure <a href="STSI.html#fig:SamplingDistributionSTSI">4.2</a> shows the sampling distributions of the estimated mean for stratified simple random sampling and simple random sampling, both of size 40, obtained by repeating the random sampling with each design and estimation 10^{4} times.</p>
+<div class="figure" style="text-align: center"><span id="fig:SamplingDistributionSTSI"></span>
+<img src="SpatialSampling_files/figure-html/SamplingDistributionSTSI-1.png" alt="Sampling distribution of estimated mean for STSI and SI of size 40" width="70%" />
+<p class="caption">
+Figure 4.2: Sampling distribution of estimated mean for STSI and SI of size 40
+</p>
+</div>
+<p>The sampling distributions of the estimated means with the two designs are not very different; with stratified random sampling the spread of the estimated means is somewhat smaller. The horizontal red line is at the population mean. The gain in precision due to the statification, referred to as the stratification effect, can be quantified by the variance with simple random sampling divided by the variance with stratified simple random sampling. So when this variance ratio is larger than 1, stratified simple random sampling is more precise than simple random sampling. For Voorst the stratification effect with proportional allocation equals 1.196.</p>
+Stratified simple random sampling with proportional allocation (see Section <a href="STSI.html#STSIallocation">4.5</a> hereafter) is more precise than simple random sampling when <span class="citation">(Lohr 1999)</span>
+<span class="math display" id="eq:STSImoreprecisewhen">\[\begin{equation}
+SSB &gt; \sum_{h=1}^H (1-\frac{N_h}{N})S^2_h \;,
+\tag{4.6}
+\end{equation}\]</span>
+with SSB the weighted sum-of-squares between the stratum-means:
+<span class="math display" id="eq:SSB">\[\begin{equation}
+SSB= \sum_{h=1}^H N_h (\bar{z}_h-\bar{z})^2 \;.
+\tag{4.7}
+\end{equation}\]</span>
+<p>So the smaller the differences in the stratum-means and the larger the variances within the strata, the smaller the stratification effect will be. Figure <a href="STSI.html#fig:boxplotsSOMstrata">4.3</a> shows boxplots of SOM per stratum (soil-landuse combination). The stratum means are equal to 8.98, 5.29, 6.39, 9.25, 11.27. The stratum variances are 27.9, 3.4, 9.4, 18.8, 36.5. The rather small differences in stratum means, in combination with the large stratum variances explain the modest gain in precision realized by stratified simple random sampling compared to simple random sampling.</p>
+<div class="figure" style="text-align: center"><span id="fig:boxplotsSOMstrata"></span>
+<img src="SpatialSampling_files/figure-html/boxplotsSOMstrata-1.png" alt="Boxplots of SOM per landuse-soil combination" width="100%" />
+<p class="caption">
+Figure 4.3: Boxplots of SOM per landuse-soil combination
+</p>
+</div>
+</div>
+<div id="confidence-interval-estimate" class="section level2">
+<h2><span class="header-section-number">4.2</span> Confidence interval estimate</h2>
+The <span class="math inline">\(100(1-\alpha )\)</span>% confidence interval for <span class="math inline">\(\bar{z}\)</span> is given by:
+<span class="math display" id="eq:CISTSI">\[\begin{equation}
+\hat{\bar{z}}_{\text{STSI}} \pm t_{1-\alpha /2}^{(df)}\cdot
+\sqrt{\widehat{V}\!\left(\hat{\bar{y}}_{\text{STSI}}\right)} \;,
+\tag{4.8}
+\end{equation}\]</span>
+where <span class="math inline">\(t_{1-\alpha /2}^{(df)}\)</span> is the <span class="math inline">\((1-\alpha /2)\)</span> quantile of the Student <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(df\)</span> degrees of freedom. <span class="math inline">\(df\)</span> can simply be taken as <span class="math inline">\(n-H\)</span>, as proposed by <span class="citation">Lohr (1999)</span>. This is the number of the degrees of freedom if the spatial variances within the strata are equal. With unequal spatial variances within strata <span class="math inline">\(df\)</span> can be approximated by Sattherwaites method <span class="citation">(Nanthakumar and Selvavel 2004)</span>:
+<span class="math display" id="eq:dfSattherwaite">\[\begin{equation}
+df \approx \frac {\left(\sum_{h=1}^H a_h^2
+\frac{\widehat{S^2}_h(z)}{n_h}\right)^2} {\sum_{h=1}^H a_h^4
+\left(\frac{\widehat{S^2}_h(z)}{n_h}\right)^2 \frac {1}{n_h-1}} \;.
+\tag{4.9}
+\end{equation}\]</span>
+<div id="exercise-stsi.r" class="section level4 unnumbered">
+<h4>Exercise (STSI.R)</h4>
+<ol style="list-style-type: decimal">
+<li>Write an R script to select a stratified simple random sample of size 40 from Voorst (data are in <code>Voorst.RData</code>). Use variable <code>stratum</code>in the dataframe as a stratification variable, and use proportional allocation. Take care that the total sample size is 40.</li>
+<li>Estimate the population mean and its standard error<br />
+</li>
+<li>Compute the lower- and upperbound of the 95-percent confidence interval using the Student t distribution, and check whether the population mean SOM is covered by the interval</li>
+</ol>
+</div>
+</div>
+<div id="cumrootf" class="section level2">
+<h2><span class="header-section-number">4.3</span> Optimal stratification</h2>
+<p>When we have a quantitative covariate related to the study variable and known for all units in the population, optimal strata can be constructed with the cumrootf method <span class="citation">(Cochran 1977)</span>. Sampling units with similar values for the stratification variable are grouped into a stratum. Optimal strata are computed as follows:<br />
+1. Compute a histogram of the stratification variable using a large number of bins. 2. Compute the square root of the histogram frequencies.<br />
+3. Cumulate the square root of the frequencies, i.e. compute <span class="math inline">\(\sqrt{f_1}\)</span>, <span class="math inline">\(\sqrt{f_1} + \sqrt{f_2}\)</span>, <span class="math inline">\(\sqrt{f_1} + \sqrt{f_2} + \sqrt{f_3}\)</span>, et cetera.<br />
+4. Divide the total of the square root of the frequencies by the number of strata, multiply this value by 1, 2, <span class="math inline">\(\cdots\)</span>, <em>H</em>-1, and select the boundaries of the histogram bins closest to these values.</p>
+<p>This method is illustrated with a survey of soil salinity at a cotton farm of about 80 ha in Khorezm, Uzbekistan <span class="citation">(Akramkhanov, Brus, and Walvoort 2013)</span>. For this farm a covariate map is available, depicting the apparent electrical conductivity as measured by an electromagnetic induction device (EM38), see Figure <a href="STSI.html#fig:EMCottonFarm">4.4</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:EMCottonFarm"></span>
+<img src="SpatialSampling_files/figure-html/EMCottonFarm-1.png" alt="EM38 measurements at cotton farm in Khorezm, Uzbekistan" width="100%" />
+<p class="caption">
+Figure 4.4: EM38 measurements at cotton farm in Khorezm, Uzbekistan
+</p>
+</div>
+<p>The optimal strata can be constructed with the <code>R</code> package <code>stratification</code> <span class="citation">(Baillargeon and Rivest 2011)</span>. Take care that the data are sorted in ascending order by the columns used for optimal stratification, see help of function <code>strata.cumrootf</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stratification)
+grdUzbekistan &lt;-<span class="st"> </span>grdUzbekistan[<span class="kw">order</span>(grdUzbekistan<span class="op">$</span>EM),]
+<span class="co">#set sample size. This has no effect on the stratification</span>
+n&lt;-<span class="dv">40</span>
+<span class="co">#set number of strata</span>
+H&lt;-<span class="dv">10</span>
+<span class="co">#compute optimal strata</span>
+Nu&lt;-<span class="kw">length</span>(<span class="kw">unique</span>(grdUzbekistan<span class="op">$</span>EM))
+<span class="co">#number of classes used in computing the histogram</span>
+nclass&lt;-<span class="kw">min</span>(H<span class="op">*</span><span class="dv">100</span>,Nu)
+optstrata&lt;-<span class="kw">strata.cumrootf</span>(<span class="dt">x=</span>grdUzbekistan<span class="op">$</span>EM,<span class="dt">n=</span>n,<span class="dt">Ls=</span>H,<span class="dt">nclass=</span>nclass)
+bh &lt;-<span class="st"> </span>optstrata<span class="op">$</span>bh <span class="co">#stratum boundaries</span>
+grdUzbekistan<span class="op">$</span>optstrata&lt;-optstrata<span class="op">$</span>stratumID</code></pre></div>
+<p>Stratum boundaries are threshold values of the stratification variable EM; these boundaries are equal to 25.2, 32.5, 38.9, 45.2, 52.1, 59.8, 69, 81, 99.2. Note that the number of stratum boundaries is one less than the number of strata. The resulting stratification is shown in Figure <a href="STSI.html#fig:optstrata">4.5</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:optstrata"></span>
+<img src="SpatialSampling_files/figure-html/optstrata-1.png" alt="Optimal strata obtained with cumrootf" width="100%" />
+<p class="caption">
+Figure 4.5: Optimal strata obtained with cumrootf
+</p>
+</div>
+<div id="exercise-stsicumrootf.r" class="section level4 unnumbered">
+<h4>Exercise (STSIcumrootf.R)</h4>
+<ol style="list-style-type: decimal">
+<li>Write an R script to compute ten cumrootf strata for the cotton farm in Uzbekistan using EM as stratification variable (data are in <code>CottonFarmUzbekistan.RData</code>).<br />
+</li>
+<li>Select a stratified simple random sample of size 40 (use function <code>strata</code> of package <code>sampling</code>). Use the stratum sample sizes as computed by the function <code>strata.cumrootf</code>. What allocation is used for computing the stratum sample sizes?<br />
+</li>
+<li>Estimate the population mean of ECe and its variance.<br />
+</li>
+<li>Compute the true sampling variance of the mean for this sampling design (Hint: compute the population variances of ECe per stratum, and divide these by the stratum sample sizes).<br />
+</li>
+<li>Compute the stratification effect (gain in precision) (Hint: compute the sampling variance for simple random sampling by computing the population variance of ECe and divide this by the total sample size).</li>
+</ol>
+</div>
+</div>
+<div id="geographical-stratification" class="section level2">
+<h2><span class="header-section-number">4.4</span> Geographical stratification</h2>
+<p>When no covariate is available, we may still decide to apply a <em>geographical stratification</em>. For instance, a square study area can be divided into <span class="math inline">\(4 \times 4\)</span> equally sized subsquares that are used as strata. When we select one or two points per subsquare, we avoid strong spatial clustering of the sampling points. The geographical stratification improves the <em>spatial coverage</em>. When the study variable is spatially structured, think for instance of a spatial trend, then geographical stratification will lead to more precise estimated means (smaller sampling variances).</p>
+<p>A simple method for constructing geographical strata is k-means clustering <span class="citation">(Brus, Spatjens, and Gruijter 1999)</span> . In this approach the study area is discretized by a large number of pixels (raster cells). These pixels are the objects that are clustered. The clustering variables are simply the x-coordinate and y-coordinate of the centres of the pixels. This method leads to <em>compact</em> geographical strata. The method is implemented in the <code>R</code> package <code>spcosa</code> <span class="citation">(Walvoort, Brus, and Gruijter 2010)</span>. Figure <a href="STSI.html#fig:GeoStrata">4.6</a> shows 20 compact geostrata of equal area<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. In each geostratum two points are selected by simple random sampling. Note that the sampling points are well spread throughout the study area.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(spcosa)
+<span class="co">#Choose number of geostrata</span>
+H&lt;-<span class="dv">20</span>
+<span class="kw">set.seed</span>(<span class="dv">31415</span>)
+<span class="kw">gridded</span>(grdVoorst)&lt;-<span class="er">~</span>s1<span class="op">+</span>s2
+mygeostrata &lt;-<span class="st"> </span><span class="kw">stratify</span>(<span class="dt">object =</span> grdVoorst,<span class="dt">nStrata =</span> H,<span class="dt">nTry =</span> <span class="dv">1</span>,<span class="dt">equalArea=</span>F)
+grdVoorst &lt;-<span class="st"> </span><span class="kw">as</span>(grdVoorst,<span class="st">&quot;data.frame&quot;</span>)
+<span class="co">#select two points per stratum by simple random sampling</span>
+mysample&lt;-<span class="kw">spsample</span>(mygeostrata,<span class="dt">n=</span><span class="dv">2</span>)
+<span class="kw">save</span>(mygeostrata,mysample,<span class="dt">file=</span><span class="st">&quot;Geostrata_Voorst.RData&quot;</span>)
+<span class="co">#plot(mygeostrata,mysample)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:GeoStrata"></span>
+<img src="SpatialSampling_files/figure-html/GeoStrata-1.png" alt="Compact geostrata of equal size in Voorst" width="100%" />
+<p class="caption">
+Figure 4.6: Compact geostrata of equal size in Voorst
+</p>
+</div>
+<div id="questions-4" class="section level4 unnumbered">
+<h4>Questions</h4>
+<ol style="list-style-type: decimal">
+<li>Why is it attractive to select at least two points per geostratum?<br />
+</li>
+<li>The alternative to 20 geostrata and two points per geostratum is 40 geostrata and one point per geostratum. Which sampling strategy will be more precise?<br />
+</li>
+<li>The geostrata in the figure above have equal area, which can be enforced by argument <code>equalArea=TRUE</code>. Why are equal areas attractive? Work out the estimator of the population mean for strata of equal size.</li>
+</ol>
+</div>
+<div id="exercise-stsigeostrata.r" class="section level4 unnumbered">
+<h4>Exercise (STSIgeostrata.R)</h4>
+<ol style="list-style-type: decimal">
+<li>Write an R script to construct 20 compact geographical strata of equal area for Farmsum. Read the shapefile <code>farmsum</code> using function <code>readOGR</code> of the add-on package <code>rgdal</code>.</li>
+<li>Select two locations per geostratum, using function <code>spsample</code> of package <code>spcosa</code>.<br />
+</li>
+<li>Now construct 40 strata of equal area and randomly select one point per stratum.</li>
+</ol>
+</div>
+<div id="questions-5" class="section level4 unnumbered">
+<h4>Questions</h4>
+<ol style="list-style-type: decimal">
+<li>If only one location per stratum is selected, the sampling variance can be approximated by the collapsed strata estimator. In this method pairs of strata are formed, and the two strata of a pair are joined. In each new stratum we now have two points. With an odd number of strata there will be one group of three strata and three points. The sample is then analyzed as if it were a random sample from the new collapsed strata. Suppose we group the strata on the basis of the measurements of the target variable. Do you think this is a proper way of grouping?<br />
+</li>
+<li>How would you group the strata?<br />
+</li>
+<li>Will the estimated sampling variance estimator be unbiased? If not, will it be overestimated or underestimated?</li>
+</ol>
+</div>
+<div id="exercise-stsigeostrata_composite.r" class="section level4 unnumbered">
+<h4>Exercise (STSIgeostrata_composite.R)</h4>
+<p>Laboratory costs for measuring the study variable can be saved by bulking the soil aliquots (composite sampling). There are two options: bulking all soil aliquots from the same stratum (bulking within strata) or bulking by selecting one aliquot from each stratum (bulking across strata). In <code>spcosa</code> bulking across strata is implemented.</p>
+<ol style="list-style-type: decimal">
+<li>Write an R script to construct 20 compact geographical strata for study area Voorst. Use the argument <code>equalArea = TRUE</code>.<br />
+</li>
+<li>Select four points per stratum using argument <code>type=&quot;composite&quot;</code>, and change class of resulting object in SpatialPoints<br />
+</li>
+<li>Extract the z-values in grdVoorst at the selected sampling points using function <code>%over%</code>. Add a column to the resulting dataframe indicating the composite (points 1 to 4 are from the first stratum, points 5 to 8 from the second stratum <em>et cetera</em>), and estimate the means for the four composites using functin <code>tapply</code>.<br />
+</li>
+<li>Estimate the population mean and its standard error.</li>
+</ol>
+</div>
+<div id="questions-6" class="section level4 unnumbered">
+<h4>Questions</h4>
+<ol style="list-style-type: decimal">
+<li>Can the sampling variance of the estimated mean be estimated for bulking within the strata?<br />
+</li>
+<li>The alternative is to analyze all <span class="math inline">\(20 \times 4\)</span> aliquots separately, instead of the four composites only. The strata have equal area, so the inclusion probabilities are equal. As a consequence the sample mean is an unbiased estimate of the population mean. Is the precision of this estimated population mean equal to the estimated population mean with composite sampling? If not, is it smaller or larger, and why?<br />
+</li>
+<li>If you use argument <code>equalArea = FALSE</code> in combination with argument <code>type=&quot;composite&quot;</code>, you get an error message. Why does this not work?</li>
+</ol>
+</div>
+</div>
+<div id="STSIallocation" class="section level2">
+<h2><span class="header-section-number">4.5</span> Allocation of sample size to strata</h2>
+After we have decided on the total sample size <span class="math inline">\(n\)</span>, we must decide on how to apportion these to the strata. It is reasonable to allocate more sampling units to large strata, and fewer to small strata. This leads to proportional allocation:
+<span class="math display" id="eq:propallocation">\[\begin{equation}
+n_{h}=n \cdot \frac{N_{h}}{\sum N_{h}}\;,
+\tag{4.10}
+\end{equation}\]</span>
+with <span class="math inline">\(N_h\)</span> the total number of sampling units (size) of stratum <span class="math inline">\(h\)</span>. With infinite populations <span class="math inline">\(N_h\)</span> is replaced by the area <span class="math inline">\(A_h\)</span>. Besides, if we have prior information on the variance of the study variable within the strata, then it makes sense to account for differences in spatial variance. Heterogeneous strata should receive more sampling units than homogeneous strata. Finally, costs of sampling may differ between strata. It can be relatively expensive to sample nearly inaccessible strata, and we do not want to sample many units there. This leads to optimal allocation:
+<span class="math display" id="eq:optallocation">\[\begin{equation}
+n_{h}= n \cdot \frac{\frac{N_{h}\,S_{h}}{\sqrt{c_{h}}}}{\sum\limits_{h=1}^{H} \frac{N_{h}\,S_{h}}{\sqrt{c_{h}}}} \;,
+\tag{4.11}
+\end{equation}\]</span>
+with <span class="math inline">\(S_h\)</span> the spatial standard deviation (square root of spatial variance) of stratum <span class="math inline">\(h\)</span>, and <span class="math inline">\(c_h\)</span> the costs per sampling unit in stratum <span class="math inline">\(h\)</span>. Optimal means that given the total costs this allocation type leads to minimum sampling variance (assuming a linear costs model). So the more variable a stratum and the lower the costs, the more units will be selected from this stratum. If we take equal costs per sampling unit for all strata, then optimal allocation reduces to so-called Neyman allocation:
+<span class="math display" id="eq:Neymanallocation">\[\begin{equation}
+n_{h}= n \cdot \frac{N_{h}\,S_{h}}{\sum\limits_{h=1}^{H} N_{h}\,S_{h}} \;.
+\tag{4.12}
+\end{equation}\]</span>
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="2">
+<li id="fn2"><p>If the total number of pixels divided by the number of strata is an integer, the stratum sizes are exactly equal, otherwise the difference is 1 pixel.<a href="STSI.html#fnref2">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="SI.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="SY.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial sampling with R</title>
+  <meta name="description" content="Spatial sampling with R">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial sampling with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial sampling with R" />
+  
+  
+  
+
+<meta name="author" content="Dick J. Brus">
+
+
+<meta name="date" content="2018-06-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="Cl.html">
+<link rel="next" href="RegressionEstimator.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Foreword</a></li>
+<li class="chapter" data-level="1" data-path="GeneralIntro.html"><a href="GeneralIntro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.1</b> Simulated population</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
+<li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
+<li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="STSI.html"><a href="STSI.html"><i class="fa fa-check"></i><b>4</b> Stratified random sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="STSI.html"><a href="STSI.html#estimation-of-the-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>4.1</b> Estimation of the mean and its sampling variance</a></li>
+<li class="chapter" data-level="4.2" data-path="STSI.html"><a href="STSI.html#confidence-interval-estimate"><i class="fa fa-check"></i><b>4.2</b> Confidence interval estimate</a></li>
+<li class="chapter" data-level="4.3" data-path="STSI.html"><a href="STSI.html#cumrootf"><i class="fa fa-check"></i><b>4.3</b> Optimal stratification</a></li>
+<li class="chapter" data-level="4.4" data-path="STSI.html"><a href="STSI.html#geographical-stratification"><i class="fa fa-check"></i><b>4.4</b> Geographical stratification</a></li>
+<li class="chapter" data-level="4.5" data-path="STSI.html"><a href="STSI.html#STSIallocation"><i class="fa fa-check"></i><b>4.5</b> Allocation of sample size to strata</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="SY.html"><a href="SY.html"><i class="fa fa-check"></i><b>5</b> Systematic random sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="SY.html"><a href="SY.html#EstVarSY"><i class="fa fa-check"></i><b>5.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="pps.html"><a href="pps.html"><i class="fa fa-check"></i><b>6</b> Sampling with probabilities proportional to size</a><ul>
+<li class="chapter" data-level="6.1" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-with-replacement-ppswr"><i class="fa fa-check"></i><b>6.1</b> Probability-proportional-to-size sampling with replacement (ppswr)</a></li>
+<li class="chapter" data-level="6.2" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-without-replacement-ppswor"><i class="fa fa-check"></i><b>6.2</b> Probability-proportional-to-size sampling without replacement (ppswor)</a></li>
+<li class="chapter" data-level="6.3" data-path="pps.html"><a href="pps.html#spatial-version-of-ppswor"><i class="fa fa-check"></i><b>6.3</b> Spatial version of ppswor</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
+<li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.1.1</b> Regression estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator"><i class="fa fa-check"></i><b>9.2</b> Ratio estimator</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.2.1</b> Ratio estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-with-unknown-mean-of-covariate"><i class="fa fa-check"></i><b>9.3</b> Regression estimator with unknown mean of covariate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="Balanced.html"><a href="Balanced.html"><i class="fa fa-check"></i><b>10</b> Balanced sampling</a><ul>
+<li class="chapter" data-level="10.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sample-versus-balanced-sampling-design"><i class="fa fa-check"></i><b>10.1</b> Balanced sample versus balanced sampling design</a></li>
+<li class="chapter" data-level="10.2" data-path="Balanced.html"><a href="Balanced.html#unequal-inclusion-probabilities"><i class="fa fa-check"></i><b>10.2</b> Unequal inclusion probabilities</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial sampling with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Twostage" class="section level1">
+<h1><span class="header-section-number">Chapter 8</span> Two-stage random sampling</h1>
+<p>This sampling design is also referred to as two-stage cluster random sampling <span class="citation">(Lohr 1999)</span>. The difference with (single-stage) cluster random sampling (Chapter <a href="Cl.html#Cl">7</a>) is that not all sampling units of the selected clusters are observed, but only some of them. Also, here the clusters will generally be contiguous groups of sampling units, for instance all locations in a single polygon, whereas in single-stage cluster random sampling the clusters generally are non-contiguous. The sampling units to be observed are selected by random subsampling of the randomly selected clusters. In two-stage sampling the clusters are commonly referred to as primary sampling units (psu’s) or shortly primary units (pu’s), and the units selected in the second stage as the secondary sampling units (ssu’s) or secondary units (su’s).</p>
+<p>As with cluster random sampling, two-stage random sampling may lead to a strong spatial clustering of the selected sampling units (ssu’s) in the study area. This may save considerable time for fieldwork, and more sampling units can be observed for the same budget. However, due to the spatial clustering the precision of the estimates will generally be less precise compared to samples of the same size selected by a design that leads to a much better spreading of the sampling units throughout the study area, such as systematic random sampling.</p>
+<p>In two-stage random sampling in principle any type of sampling design can be used at the two stages, leading to numerous combinations. A simple version is (SI,SI), in which both psu’s and ssu’s are selected by simple random sampling.</p>
+<p>Commonly the psu’s have unequal size, i.e., the number of ssu’s (finite population) or the area (infinite population) are not equal for all psu’s. Think for instance of the agricultural fields, forest stands, lakes, river sections <em>et cetera</em> in an area. If the psu’s are of unequal size, then psu’s can best be selected with probabilities proportional to their size (pps). If the total of a psu is related to its size, then pps-sampling leads to more precise estimates compared to simple ranmdom sampling of psu’s. Also, with pps-sampling of psu’s the estimation of means or totals and of their sampling variances is much simpler compared to selection with equal probabilities. Implementation of selection with probabilities proportional to size is easiest `when units are replaced (pps with replacement, ppswr). This implies that a psu might be selected more than once, especially if the total number of psu’s in the population is small compared to the number of psu draws (large sampling fraction in first stage).</p>
+<p>The following algorithm can be used to select <span class="math inline">\(d\)</span> times a psu by ppswr from a total of <span class="math inline">\(N\)</span> psu’s in the population:<br />
+1. Select randomly one ssu from the list with <span class="math inline">\(M=\sum_{i=1}^N M_i\)</span> ssu’s, and determine the psu of the selected ssu 2. Repeat step 1 until <span class="math inline">\(d\)</span> selections have been made.</p>
+<p>This sampling algorithm makes use of a list of all sampling units as a sampling frame. An alternative algorithm works with a geographical representation of the study area (shape file) and its psu’s:</p>
+<ol style="list-style-type: decimal">
+<li>Select a random point in the area, as in SI.<br />
+</li>
+<li>Use a point-in-polygon routine to determine in which psu the point falls, and select this psu.<br />
+</li>
+<li>Repeat steps 1 and 2 until <span class="math inline">\(d\)</span> selections have been made.</li>
+</ol>
+<p>In the second stage, a <em>pre-determined</em> number of secondary sampling units, <span class="math inline">\(m_{i}\)</span>, is selected every time psu <span class="math inline">\(i\)</span> is selected. Secondary sample sizes Predetermined means that it is not allowed to decide on the secondary sample sizes (number of ssu’s) per selected psu <em>after the selection of the psu’s</em>.</p>
+<p>The <code>R</code> code below shows the selection of a two-stage random sample from Voorst. Primary units are 24 blocks of 0.5 km <span class="math inline">\(\times\)</span> 0.5 km. Note that these blocks have unequal size, i.e. the number of pixels within the blocks differs due to build-up area, roads <em>et cetera</em>. Four times a psu is selected, with probabilities proportional to size and with replacement. The second stage sample size <span class="math inline">\(m_i\)</span> equals 10 for all psu’s. These units ssu’s are selected by SIR.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="dv">4</span> <span class="co">#number of psu selections</span>
+m &lt;-<span class="st"> </span><span class="dv">10</span> <span class="co">#fixed number of ssu selections per psu-draw</span>
+<span class="co">#define function for two-stage random sampling</span>
+twostage &lt;-<span class="st"> </span><span class="cf">function</span>(sframe,psu,d,m) {
+  units&lt;-<span class="kw">sample.int</span>(<span class="kw">nrow</span>(sframe),<span class="dt">size=</span>d,<span class="dt">replace=</span><span class="ot">TRUE</span>)
+  mypsusample&lt;-sframe[units,psu]
+  i&lt;-<span class="dv">1</span>
+  ssunits &lt;-<span class="st"> </span><span class="ot">NULL</span>
+  <span class="cf">for</span> (psunit <span class="cf">in</span> mypsusample) {
+    ssunit &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x =</span> <span class="kw">which</span>(sframe[,psu] <span class="op">==</span><span class="st"> </span>psunit), <span class="dt">size =</span> m, <span class="dt">replace=</span><span class="ot">TRUE</span>)
+    ssunits &lt;-<span class="st"> </span><span class="kw">c</span>(ssunits, ssunit)
+    i&lt;-i<span class="op">+</span><span class="dv">1</span>
+  }
+  mysample &lt;-<span class="st"> </span>sframe[ssunits,]
+  <span class="kw">return</span>(mysample)
+}
+<span class="kw">set.seed</span>(<span class="dv">314</span>)
+mysample &lt;-<span class="st"> </span><span class="kw">twostage</span>(<span class="dt">sframe=</span>grdVoorst,<span class="dt">psu=</span><span class="st">&quot;psu&quot;</span>,<span class="dt">d=</span>d,<span class="dt">m=</span>m)
+psumeans &lt;-<span class="st"> </span><span class="kw">tapply</span>(mysample<span class="op">$</span>z,<span class="dt">INDEX=</span>mysample<span class="op">$</span>psu,<span class="dt">FUN=</span>mean)
+meanz &lt;-<span class="st"> </span><span class="kw">mean</span>(psumeans)
+Vmeanz &lt;-<span class="st"> </span><span class="kw">var</span>(psumeans) <span class="op">/</span><span class="st"> </span>d</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-15"></span>
+<img src="SpatialSampling_files/figure-html/unnamed-chunk-15-1.png" alt="Two-stage random sample from Voorst" width="100%" />
+<p class="caption">
+Figure 8.1: Two-stage random sample from Voorst
+</p>
+</div>
+<div id="estimation-of-mean-and-its-sampling-variance-1" class="section level2">
+<h2><span class="header-section-number">8.1</span> Estimation of mean and its sampling variance</h2>
+If the psu’s are selected with replacement and with probabilities proportional to size (ppswr), then the population mean can be estimated by the simple estimator:
+<span class="math display" id="eq:EstMeanTwostage">\[\begin{equation}
+\hat{\bar{z}}_{\mathrm{(pps,SI)}}=
+\frac{1}{d}\sum\limits_{i=1}^{d}\hat{\bar{z}}_{i} \;,
+\tag{8.1}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(d\)</span> is the number of psu selections, and <span class="math inline">\(\hat{\bar{z}}_{i}\)</span> is the sample mean of the psu selected in the <span class="math inline">\(i^{th}\)</span> draw. The strategy ((pps,SI), <span class="math inline">\(\hat{\bar{z}}_{\mathrm{(pps,SI)}}\)</span>) is design-unbiased.</p>
+The sampling variance of the estimated mean can simply be estimated by:
+<span class="math display" id="eq:VarEstMeanTwostage">\[\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\mathrm{(pps,SI)}}\right)=\frac{\widehat{S^2}_{\mathrm{psu}}}{d}  \;.
+\tag{8.2}
+\end{equation}\]</span>
+with <span class="math inline">\(\widehat{S^2}_{\mathrm{psu}}\)</span> the estimated variance of estimated primary unit means (between primary unit variance)
+<span class="math display" id="eq:S2psumeans">\[\begin{equation}
+\widehat{S^2}_{\mathrm{psu}} = \frac{1}{d-1}\sum_{i=1}^{d}(\hat{\bar{z}}_{i}-\hat{\bar{z}}_{\mathrm{(pps,SI)}})^2 \;,
+\tag{8.3}
+\end{equation}\]</span>
+<p>Note that neither the sizes of the psu’s, i.e. the number of ssu’s per primary unit, nor the secondary sample sizes <span class="math inline">\(m_{i}\)</span> occur in these formulas. This simplicity is due to the fact that the psu’s are selected with replacement and with probabilities proportional to size. The effect of the secondary sample sizes on the variance is implicitly accounted for. To understand this, note that the larger <span class="math inline">\(n_{i}\)</span>, the less variable <span class="math inline">\(\hat{\bar{z}}_{i}\)</span>, and the smaller its contribution to the variance.</p>
+<p>Figure <a href="Twostage.html#fig:SamplingDistributionTwostage">8.2</a> shows the sampling distributions of the estimated mean with two-stage random sampling and simple random sampling, obtained by repeating the random sampling with each design and estimation 10,000 times.</p>
+<div class="figure" style="text-align: center"><span id="fig:SamplingDistributionTwostage"></span>
+<img src="SpatialSampling_files/figure-html/SamplingDistributionTwostage-1.png" alt="Sampling distribution of estimated mean with Twostage random sampling and SI" width="70%" />
+<p class="caption">
+Figure 8.2: Sampling distribution of estimated mean with Twostage random sampling and SI
+</p>
+</div>
+<p>The variance of the 10^{4} means with two-stage random sampling equals 1.383. This is considerably larger than with SI: 0.592. The average of the estimated variances equals 1.431.</p>
+<div id="exercise-twostage.r" class="section level4 unnumbered">
+<h4>Exercise (TwoStage.R)</h4>
+<ol style="list-style-type: decimal">
+<li>Write an R script to select a two-stage random sample from Voorst. Select four times a psu by ppswr, and ten points (ssu’s) per psu-draw by SI.<br />
+</li>
+<li>Estimate the population mean, and its standard error<br />
+</li>
+<li>Compare the standard error with that of the Horvitz-Thompson estimator for simple random sampling of the same size; explain the difference<br />
+</li>
+<li>Is the standard error of the estimated mean for <span class="math inline">\(10 \times 4\)</span> units larger or smaller than with <span class="math inline">\(4 \times 10\)</span>?</li>
+</ol>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="Cl.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="RegressionEstimator.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
