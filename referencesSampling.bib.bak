@@ -1,0 +1,911 @@
+% Encoding: UTF-8
+
+@Article{Baillargeon2011,
+  author  = {S. Baillargeon and L. -P. Rivest},
+  title   = {{The construction of stratified designs in R with the package stratification}},
+  journal = {Survey Methodology},
+  year    = {2011},
+  volume  = {37},
+  pages   = {53-65},
+  url     = {http://www.statcan.gc.ca/pub/12-001-x/2011001/article/11447-eng.pdf},
+}
+
+@Manual{Baillargeon2014,
+  title  = {stratification: Univariate Stratification of Survey Populations},
+  author = {Sophie Baillargeon and Louis-Paul Rivest},
+  year   = {2014},
+  note   = {R package version 2.2-5},
+  url    = {https://CRAN.R-project.org/package=stratification},
+}
+
+@Article{bog99,
+  author  = {P. Bogaert and D. Russo},
+  title   = {Optimal spatial sampling design for the estimation of the variogram based on a least squares approach},
+  journal = {Water Resources Research},
+  year    = {1999},
+  volume  = {35},
+  pages   = {1275-1289},
+}
+
+@Article{bra08,
+  author    = {ter Braak, C. J. F. and D. J. Brus and E. J. Pebesma},
+  title     = {Comparing sampling patterns for kriging the spatial mean temporal trend},
+  journal   = {Journal of Agricultural, Biological and Environmental Statistics},
+  year      = {2008},
+  volume    = {13},
+  pages     = {159-176},
+  owner     = {brus003},
+  timestamp = {2008.07.28},
+}
+
+@Article{Brus2014b,
+  author    = {D.J. Brus},
+  title     = {Statistical sampling approaches for soil monitoring},
+  journal   = {European Journal of Soil Science},
+  year      = {2014},
+  volume    = {65},
+  pages     = {779-791},
+  doi       = {10.1111/ejss.12176},
+  owner     = {brus003},
+  timestamp = {2014.03.19},
+}
+
+@Article{bru00b,
+  author    = {D.J. Brus and M.J.W. Jansen and W.F. de Haan},
+  title     = {Designing efficient sampling schemes for reconnaissance surveys of contaminated bed sediments in water courses},
+  journal   = {Geologie en Mijnbouw/Netherlands Journal of Geosciences},
+  year      = {2000},
+  volume    = {79},
+  pages     = {441-447},
+  owner     = {brus003},
+  timestamp = {2009.06.11},
+}
+
+@Article{Brus2018,
+  author  = {Dick Brus and Lin Yang and A-Xing Zhu},
+  title   = {Accounting for access costs in optimal stratification for validation of soil maps},
+  journal = {European Journal of Soil Science},
+  year    = {2018},
+}
+
+@Article{bru00,
+  author  = {D. J. Brus},
+  title   = {Using regression models in design-based estimation of spatial means of soil properties},
+  journal = {European Journal of Soil Science},
+  year    = {2000},
+  volume  = {51},
+  pages   = {159-172},
+}
+
+@Article{bru94a,
+  author  = {D. J. Brus},
+  title   = {Improving design-based estimation of spatial means by soil map stratification. {A} case study of phosphate saturation},
+  journal = {Geoderma},
+  year    = {1994},
+  volume  = {62},
+  pages   = {233-246},
+}
+
+@Article{Brus2015,
+  author    = {Brus, D. J.},
+  title     = {{Balanced sampling: A versatile sampling approach for statistical soil surveys}},
+  journal   = {Geoderma},
+  year      = {2015},
+  volume    = {253-254},
+  pages     = {111-121},
+  owner     = {brus003},
+  timestamp = {2016.03.02},
+}
+
+@Article{bru03a,
+  author  = {D. J. Brus and J. J. de Gruijter},
+  title   = {A method to combine non-probability sample data with probability sample data in estimating spatial means of environmental variables},
+  journal = {Environmental Monitoring and Assessment},
+  year    = {2003},
+  volume  = {83},
+  pages   = {303-317},
+}
+
+@Article{bru93,
+  author  = {D. J. Brus and J. J. de Gruijter},
+  title   = {Design-based versus model-based estimates of spatial means. {Theory} and application in environmental soil science},
+  journal = {Environmetrics},
+  year    = {1993},
+  volume  = {4},
+  pages   = {123-152},
+}
+
+@Article{bru94b,
+  author  = {D. J. Brus and J. J. de Gruijter},
+  title   = {Estimation of nonergodic variograms and their sampling variance by design-based sampling strategies},
+  journal = {Mathematical Geology},
+  year    = {1994},
+  volume  = {26},
+  pages   = {437-454},
+}
+
+@Article{bru97,
+  author  = {D. J. Brus and J. J. de Gruijter},
+  title   = {Random sampling or geostatistical modelling? {C}hoosing between design-based and model-based sampling strategies for soil (with {D}iscussion)},
+  journal = {Geoderma},
+  year    = {1997},
+  volume  = {80},
+  pages   = {1-59},
+}
+
+@Article{Brus2011,
+  author    = {D. J. Brus and J. J. de Gruijter},
+  title     = {Design-based {Generalized Least Squares} estimation of status and trend of soil properties from monitoring data},
+  journal   = {Geoderma},
+  year      = {2011},
+  volume    = {164},
+  pages     = {172-180},
+  doi       = {10.1016/j.geoderma.2011.06.001},
+  owner     = {brus003},
+  timestamp = {2009.12.11},
+}
+
+@Article{Brus2012,
+  author    = {D. J. Brus and J. J. de Gruijter},
+  title     = {A hybrid design-based and model-based sampling approach to estimate the temporal trend of spatial means},
+  journal   = {Geoderma},
+  year      = {2012},
+  volume    = {173-174},
+  pages     = {241-248},
+  doi       = {10.1016/j.geoderma.2011.12.010},
+  owner     = {brus003},
+  timestamp = {2009.12.11},
+}
+
+@Article{Brus2013,
+  author    = {D. J. Brus and J. J. {de Gruijter}},
+  title     = {Effects of spatial pattern persistence on the performance of sampling designs for regional trend monitoring, analyzed by simulation of space-time fields},
+  journal   = {Computers \& Geosciences},
+  year      = {2013},
+  volume    = {61},
+  pages     = {175-183},
+  owner     = {brus003},
+  timestamp = {2013.09.09},
+}
+
+@InCollection{bru07c,
+  author    = {D. J. Brus and J. J. de Gruijter and J. W. van Groenigen},
+  title     = {Designing spatial coverage samples using the k-means clustering algorithm},
+  booktitle = {Digital Soil Mapping. An introductory perspective},
+  publisher = {Elsevier},
+  year      = {2007},
+  editor    = {P. Lagacherie and A.B. McBratney and M. Voltz},
+  pages     = {183-192},
+  owner     = {brus003},
+  timestamp = {2008.06.11},
+}
+
+@Article{brus2011d,
+  author    = {D. J. Brus and B. Kempen and G. B. M. Heuvelink},
+  title     = {Sampling for validation of digital soil maps},
+  journal   = {European Journal of Soil Science},
+  year      = {2011},
+  volume    = {62(3)},
+  pages     = {394-407},
+  doi       = {10.1111/j.1365-2389.2011.01364.x},
+  owner     = {brus003},
+  timestamp = {2010.09.17},
+}
+
+@Article{bru08b,
+  author    = {Brus, D. J. and Knotters, M.},
+  title     = {Sampling design for compliance monitoring of surface water quality: A case study in a polder area.},
+  journal   = {Water Resources Research},
+  year      = {2008},
+  volume    = {44},
+  pages     = {W11410},
+  doi       = {10.1029/2007WR006123},
+  owner     = {brus003},
+  timestamp = {2008.12.17},
+}
+
+@Article{bru01,
+  author  = {D. J. Brus and W. J. M. te Riele},
+  title   = {Design-based regression estimators for spatial means of soil properties: the use of two-phase sampling when the means of the auxiliary variables are unknown},
+  journal = {Geoderma},
+  year    = {2001},
+  volume  = {104},
+  pages   = {257-279},
+}
+
+@Article{Brus2016c,
+  author       = {D. J. Brus and N. P. A. Saby},
+  title        = {{Approximating the variance of estimated means for systematic random sampling, illustrated with data of the French Soil Monitoring Network}},
+  year         = {2016},
+  volume       = {279},
+  pages        = {77-86},
+  doi          = {http://dx.doi.org/10.1016/j.geoderma.2016.05.016},
+  journaltitle = {Geoderma},
+}
+
+@Article{bru99,
+  author  = {D. J. Brus and L. E. E. M. Spatjens and J. J. de Gruijter},
+  title   = {A sampling scheme for estimating the mean extractable phosphorus concentration of fields for environmental regulation},
+  journal = {Geoderma},
+  year    = {1999},
+  volume  = {89},
+  pages   = {129-148},
+}
+
+@Article{BURGESS1981,
+  author    = {T.M. Burgess and R. Websterand A.B. McBratney},
+  title     = {Optimal interpolation and isarithmic mapping of soil properties .4. Sampling strategy},
+  journal   = {{JOURNAL OF SOIL SCIENCE}},
+  year      = {{1981}},
+  volume    = {{32}},
+  number    = {{4}},
+  pages     = {{643-659}},
+  issn      = {{0022-4588}},
+  owner     = {brus003},
+  timestamp = {2011.08.17},
+  unique-id = {{ISI:A1981NA11300015}},
+}
+
+@Book{coc77,
+  title     = {Sampling Techniques},
+  publisher = {Wiley},
+  year      = {1977},
+  author    = {W. G. Cochran},
+  address   = {New York},
+  owner     = {brus003},
+  timestamp = {2008.06.09},
+}
+
+@Article{cor94,
+  author  = {L. C. A. Corsten and A. Stein},
+  title   = {Nested sampling for estimating spatial semivariograms compared to other designs},
+  journal = {Applied Stochastic Models and Data Analysis},
+  year    = {1994},
+  volume  = {10},
+  pages   = {103-122},
+}
+
+@Article{Corwin2010,
+  author       = {D.L. Corwin and S. M. Lesch and E. Segal and T. H. Skaggs and S. A. Bradford},
+  title        = {Comparison of Sampling Strategies for Characterizing Spatial Variability with Apparent Soil Electrical Conductivity Directed Soil Sampling},
+  year         = {2010},
+  volume       = {15},
+  pages        = {147-162.},
+  journaltitle = {??? Journal of Environmental Enginering and Geophysics ????},
+}
+
+@Article{corwin2005,
+  author    = {Corwin,D. L. and Lesch,S. M.},
+  title     = {Characterizing soil spatial variability with apparent soil electrical conductivity: Part II. Case study},
+  journal   = {Computers and Electronics in Agriculture},
+  year      = {2005},
+  volume    = {46},
+  number    = {1-3 SPEC. ISS.},
+  pages     = {135-152},
+  note      = {Cited By (since 1996): 7},
+  owner     = {brus003},
+  timestamp = {2010.03.05},
+  url       = {www.scopus.com},
+}
+
+@Article{corwin2006,
+  author    = {Corwin,D. L. and Lesch,S. M. and Oster,J. D. and Kaffka,S. R.},
+  title     = {Monitoring management-induced spatio-temporal changes in soil quality through soil sampling directed by apparent electrical conductivity},
+  journal   = {Geoderma},
+  year      = {2006},
+  volume    = {131},
+  number    = {3-4},
+  pages     = {369-387},
+  note      = {Cited By (since 1996): 10},
+  owner     = {brus003},
+  timestamp = {2010.03.05},
+  url       = {www.scopus.com},
+}
+
+@Article{corwin2003,
+  author    = {Corwin,D. L. and Lesch,S. M. and Shouse,P. J. and Soppe,R. and Ayars,J. E.},
+  title     = {Identifying soil properties that influence cotton yield using soil sampling directed by apparent soil electrical conductivity},
+  journal   = {Agronomy Journal},
+  year      = {2003},
+  volume    = {95},
+  number    = {2},
+  pages     = {352-364},
+  note      = {Cited By (since 1996): 27},
+  owner     = {brus003},
+  timestamp = {2010.03.05},
+  url       = {www.scopus.com},
+}
+
+@Article{Dorazio03,
+  author    = {M. D'Orazio},
+  title     = {Estimating the variance of the sample mean in two-dimensional systematic sampling},
+  journal   = {Journal of Agricultural, Biological, and Environmental Statistics},
+  year      = {2003},
+  volume    = {8},
+  pages     = {280-295},
+  owner     = {brus003},
+  timestamp = {2009.02.11},
+}
+
+@Article{Deville1998,
+  author      = {Deville, J.-C and Tille, Y},
+  title       = {{Unequal probability sampling without replacement through a splitting method}},
+  journal     = {{Biometrika}},
+  year        = {{1998}},
+  volume      = {{85}},
+  number      = {{1}},
+  pages       = {{89-101}},
+  month       = {{MAR}},
+  issn        = {{0006-3444}},
+  abstract    = {{A very general class of sampling methods without replacement and
+	with unequal probabilities is proposed. It consists of splitting
+	the inclusion probability vector into several new inclusion probability
+	vectors. One of these vectors. is chosen randomly;:thus, the initial
+	problem is reduced to another sampling problem with unequal probabilities.
+	This splitting is then repeated on; these new vectors of inclusion
+	probabilities; at each step,he sampling problem is reduced to a simpler
+	problem. The simplicity of this technique allows one to generate
+	easily new sampling procedures with unequal probabilities. The splitting
+	method also generalises well-known methods such as the Midzuno method,
+	the elimination procedure and the Chao procedure. Next, a sufficient
+	condition is given in order that a splitting method satisfies the
+	Sen-Yates-Grundy condition; Finally, it is shown that the elimination
+	procedure satisfies the Gabler sufficient condition.}},
+  doi         = {{10.1093/biomet/85.1.89}},
+  owner       = {brus003},
+  times-cited = {{19}},
+  timestamp   = {2013.02.11},
+  unique-id   = {{ISI:000072996300007}},
+}
+
+@Article{Deville2004,
+  author    = {Deville, J.-C and Tille, Y},
+  title     = {Efficient balanced sampling: The cube method.},
+  journal   = {Biometrika},
+  year      = {2004},
+  volume    = {91},
+  pages     = {893-912},
+  owner     = {brus003},
+  timestamp = {2013.10.07},
+}
+
+@Article{Diggle2006,
+  author       = {P.J. Diggle and Lophaven},
+  title        = {Bayesian geostatistical design},
+  year         = {2006},
+  volume       = {?},
+  pages        = {?-?},
+  journaltitle = {Scandinavian Journal of Statistics},
+}
+
+@Article{Diggle2010,
+  author  = {P.J. Diggle and R. Menezes and T. Su},
+  title   = {Geostatistical inference under preferential sampling},
+  journal = {Applied Statistics},
+  year    = {2010},
+  pages   = {191-232},
+}
+
+@Article{dom94,
+  author  = {P. Domburg and J. J. de Gruijter and D. J. Brus},
+  title   = {A structured approach to designing soil survey schemes with prediction of sampling error from variograms},
+  journal = {Geoderma},
+  year    = {1994},
+  volume  = {62},
+  pages   = {151-164},
+}
+
+@Article{eng94,
+  author  = {E. J. Englund and N. Heravi},
+  title   = {Phased sampling for soil remediation},
+  journal = {Environmental and Ecological Statistics},
+  year    = {1994},
+  volume  = {1},
+  pages   = {247-263},
+}
+
+@Article{fitzgerald2006,
+  author    = {Fitzgerald,G. J. and Lesch,S. M. and Barnes,E. M. and Luckett,W. E.},
+  title     = {Directed sampling using remote sensing with a response surface sampling design for site-specific agriculture},
+  journal   = {Computers and Electronics in Agriculture},
+  year      = {2006},
+  volume    = {53},
+  number    = {2},
+  pages     = {98-112},
+  owner     = {brus003},
+  timestamp = {2010.03.05},
+  url       = {www.scopus.com},
+}
+
+@Article{Gelfand2012,
+  author    = {Gelfand, A.E. and Sahu, S.K. and Holland, D.M.},
+  title     = {On the effect of preferential sampling in spatial prediction},
+  journal   = {Environmetrics},
+  year      = {2012},
+  volume    = {23},
+  pages     = {565-578},
+  owner     = {brus003},
+  timestamp = {2014.12.16},
+}
+
+@Manual{Grafstrom2016,
+  title  = {BalancedSampling: Balanced and Spatially Balanced Sampling},
+  author = {Anton Grafstr{\"o}m and Jonathan Lisic},
+  year   = {2016},
+  note   = {R package version 1.5.1},
+  url    = {https://CRAN.R-project.org/package=BalancedSampling},
+}
+
+@Article{vgr00,
+  author    = {J. W. van Groenigen and G. Pieters and A. Stein},
+  title     = {Optimizing spatial sampling for multivariate contamination in urban areas},
+  journal   = {Environmetrics},
+  year      = {2000},
+  volume    = {11},
+  pages     = {227-244},
+  owner     = {brus003},
+  timestamp = {2008.05.30},
+}
+
+@Article{vgr99,
+  author    = {J. W. van Groenigen and W. Siderius and A. Stein},
+  title     = {Constrained optimisation of soil sampling for minimisation of the kriging variance},
+  journal   = {Geoderma},
+  year      = {1999},
+  volume    = {87},
+  pages     = {239-259},
+  owner     = {brus003},
+  timestamp = {2008.06.09},
+}
+
+@Article{vgr98,
+  author  = {J. W. van Groenigen and A. Stein},
+  title   = {Constrained optimization of spatial sampling using continuous simulated annealing},
+  journal = {Journal of Environmental Quality},
+  year    = {1998},
+  volume  = {27},
+  pages   = {1078-1086},
+}
+
+@Article{dgr90,
+  author    = {J. J. de Gruijter and C. J. F. ter Braak},
+  title     = {Model-free estimation from spatial samples: a reappraisal of classical sampling theory},
+  journal   = {Mathematical Geology},
+  year      = {1990},
+  volume    = {22},
+  pages     = {407-415},
+  owner     = {brus003},
+  timestamp = {2010.12.22},
+}
+
+@Book{gru06,
+  title     = {Sampling for Natural Resource Monitoring},
+  publisher = {Springer},
+  year      = {2006},
+  author    = {J. J. de Gruijter and D. J. Brus and M. F. P. Bierkens and M. Knotters},
+  address   = {Berlin},
+  owner     = {brus003},
+  timestamp = {2009.02.27},
+}
+
+@InProceedings{dgr85,
+  author    = {J. J. de Gruijter and B. A. Marsman},
+  title     = {Transect sampling for reliable information on mapping units},
+  booktitle = {Proceedings of the SSSA-ISSS Workshop on Spatial Variability, Las Vegas, U.S.A., Nov. 30 - Dec. 1, 1984},
+  year      = {1985},
+  editor    = {D.R. Nielson and J. Bouma},
+  pages     = {150-163},
+  publisher = {Pudoc, Wageningen},
+}
+
+@Article{deGruijter2015,
+  author  = {de Gruijter, J. J. and Minasny, B. and McBratney, A. B.},
+  title   = {Optimizing Stratification and Allocation for Design-Based Estimation of Spatial Means Using Predictions with Error},
+  journal = {Journal of Survey Statistics and Methodology},
+  year    = {2015},
+  volume  = {3},
+  pages   = {19-42},
+}
+
+@InCollection{heu07,
+  author    = {G.B.M. Heuvelink and D. J. Brus and J. J. de Gruijter},
+  title     = {Optimization of sample configurations for digital mapping of soil properties},
+  booktitle = {Digital Soil Mapping. An introductory perspective},
+  publisher = {Elsevier},
+  year      = {2007},
+  editor    = {P. Lagacherie and A.B. McBratney and M. Voltz},
+  pages     = {1020-1030},
+  owner     = {brus003},
+  timestamp = {2008.06.11},
+}
+
+@Article{Knotters2010d,
+  author        = {M. Knotters and D. J. Brus},
+  title         = {Estimating space-time mean concentrations of nutrients in surface waters of variable depth},
+  journal       = {Water Resources Research},
+  year          = {2010},
+  volume        = {46},
+  pages         = {W08502},
+  art_number    = {W09901},
+  document_type = {Erratum},
+  doi           = {10.1029/2009WR008350},
+  owner         = {brus003},
+  source        = {Scopus},
+  timestamp     = {2011.02.25},
+}
+
+@Article{Knotters2013,
+  author    = {M. Knotters and D. J. Brus},
+  title     = {{Purposive versus random sampling for map validation: a case study on ecotope maps of floodplains in the Netherlands}},
+  journal   = {Ecohydrology},
+  year      = {2013},
+  volume    = {6},
+  pages     = {425--434},
+  doi       = {10.1002/eco.1289},
+  owner     = {brus003},
+  timestamp = {2012.04.12},
+}
+
+@Article{lar00,
+  author    = {R.M. Lark},
+  title     = {Designing sampling grids from imprecise information on soil variability, an approach based on the fuzzy kriging variance},
+  journal   = {Geoderma},
+  year      = {2000},
+  volume    = {98},
+  pages     = {35-59},
+  owner     = {brus003},
+  timestamp = {2008.06.04},
+}
+
+@Article{Lark2016,
+  author   = {R.M. Lark},
+  title    = {Multi-objective optimization of spatial sampling},
+  journal  = {Spatial Statistics},
+  year     = {2016},
+  volume   = {18, Part B},
+  pages    = {412 - 430},
+  issn     = {2211-6753},
+  abstract = {Abstract The optimization of spatial sampling by simulated annealing has been demonstrated and applied for a range of objective functions. In practice more than one objective function may be important for sampling, and there may be complex trade-offs between them. In this paper it is shown how a multi-objective optimization algorithm can be applied to a spatial sampling problem. This generates a set of solutions which is non-dominated (no one solution does better than any other on all objective functions). These solutions represent different feasible trade-offs between the objective functions, and a subset might be practically acceptable. The algorithm is applied to a hypothetical example of sampling for a regional mean with the variance of the mean and the total distance travelled between sample points as the two objective functions. The solutions represent a transition of sample arrays from a loose grid to a tight loop. The potential to develop this approach and apply it to other spatial sampling problems is discussed. },
+  doi      = {http://dx.doi.org/10.1016/j.spasta.2016.09.001},
+  keywords = {Spatial sampling, Multi-objective, Pareto set },
+  url      = {http://www.sciencedirect.com/science/article/pii/S2211675316300562},
+}
+
+@Article{lar00b,
+  author  = {R. M. Lark},
+  title   = {Estimating variograms of soil properties by the method-of-moments and maximum likelihood},
+  journal = {European Journal of Soil Science},
+  year    = {2000},
+  volume  = {51},
+  pages   = {717-728},
+}
+
+@Article{lar02,
+  author  = {R. M. Lark},
+  title   = {Optimized spatial sampling of soil for estimation of the variogram by maximum likelihood},
+  journal = {Geoderma},
+  year    = {2002},
+  volume  = {105},
+  pages   = {49-80},
+}
+
+@Article{lark2009,
+  author    = {R. M. Lark},
+  title     = {Estimating the regional mean status and change of soil properties: two distinct objectives for soil survey},
+  journal   = {European Journal of Soil Science},
+  year      = {2009},
+  volume    = {60},
+  pages     = {748-756},
+  owner     = {brus003},
+  timestamp = {2009.12.08},
+}
+
+@Article{Lark2012,
+  author    = {Lark, R. M.},
+  title     = {{Some considerations on aggregate sample supports for soil inventory and monitoring}},
+  journal   = {{European Journal of Soil Science}},
+  year      = {{2012}},
+  volume    = {{63}},
+  number    = {{1}},
+  pages     = {{86-95}},
+  month     = {{FEB}},
+  issn      = {{1351-0754}},
+  abstract  = {{Soil monitoring and inventory require a sampling strategy. One component
+	of this strategy is the support of the basic soil observation: the
+	size and shape of the volume of material that is collected and then
+	analysed to return a single soil datum. Many, but not all, soil sampling
+	schemes use aggregate supports in which material from a set of more
+	than one soil cores, arranged in a given configuration, is aggregated
+	and thoroughly mixed prior to analysis. In this paper, it is shown
+	how the spatial statistics of soil information, collected on an aggregate
+	support, can be computed from the covariance function of the soil
+	variable on a core support (treated as point support). This is done
+	via what is called here the discrete regularization of the core-support
+	function. It is shown how discrete regularization can be used to
+	compute the variance of soil sample means and to quantify the consistency
+	of estimates made by sampling then re-sampling a monitoring network,
+	given uncertainty in the precision with which sample sites are relocated.
+	These methods are illustrated using data on soil organic carbon content
+	from a transect in central England. Two aggregate supports, both
+	based on a 20 m 20 m square, are compared with core support. It is
+	shown that both the precision and the consistency of data collected
+	on an aggregate support are better than data on a core support. This
+	has implications for the design of sampling schemes for soil inventory
+	and monitoring.}},
+  doi       = {{10.1111/j.1365-2389.2011.01415.x}},
+  owner     = {brus003},
+  timestamp = {2012.08.30},
+  unique-id = {{ISI:000299155000011}},
+}
+
+@Article{Lark2011CAGEO,
+  author               = {Lark, R. M.},
+  title                = {{Spatially nested sampling schemes for spatial variance components: Scope for their optimization}},
+  journal              = {Computers \& Geosciences},
+  year                 = {{2011}},
+  volume               = {{37}},
+  number               = {{10}},
+  pages                = {{1633-1641}},
+  month                = {{OCT}},
+  issn                 = {{0098-3004}},
+  abstract             = {{Efficient designs for nested sampling are needed in many areas of
+   science. In the geosciences they are used to discover the important
+   spatial scales on which properties vary. However, while the practical
+   advantages and disadvantages of various nested designs have been
+   discussed, no attempt has been made to optimize nested sampling schemes.
+   This paper shows how an optimal nested sampling design can be found by a
+   method of numerical combinatorial optimization: simulated annealing. The
+   sample design is optimized over a space of possible designs for a fixed
+   sample size and predetermined levels (spatial scales). The objective
+   function for optimization is based on the expected covariance matrix for
+   errors in the estimates of variance components, and so depends on what
+   those components are. By simulation it was shown that optimized sampling
+   schemes can detect scale-dependent variance components with common
+   requirements for statistical power on smaller total sample sizes than
+   are required with commonly used spatially nested sample designs such as
+   the balanced design. Although the optimized design depends on the
+   underlying covariance structure, sampling designs can be identified that
+   perform better than the commonly used ones over a wide range of
+   conditions. (C) 2011 Elsevier Ltd. All rights reserved.}},
+  doi                  = {{10.1016/j.cageo.2010.12.010}},
+  orcid-numbers        = {{Lark, Richard/0000-0003-2571-8521}},
+  researcherid-numbers = {{Lark, Richard/G-6744-2012}},
+  unique-id            = {{ISI:000295768900012}},
+}
+
+@Article{lark2006,
+  author    = {R. M. Lark and B. R. Cullis and S. J. Welham},
+  title     = {{On spatial prediction of soil properties in the presence of a spatial trend: the empirical best linear unbiased predictor (E-BLUP) with REML}},
+  journal   = {European Journal of Soil Science},
+  year      = {2006},
+  volume    = {57},
+  pages     = {787-799},
+  owner     = {brus003},
+  timestamp = {2015.06.30},
+}
+
+@Article{Lark2017,
+  author  = {R. M. Lark and E. M. Hamilton and B. Kaninga and K. K. Maseka and M. Mutondo and G. M. Sakala and M. J. Watts},
+  title   = {Planning spatial sampling of the soil from an uncertain reconnaissance variogram},
+  journal = {SOIL},
+  year    = {2017},
+}
+
+@Article{ISI:000409483900003,
+  author               = {Lark, R. M. and Hamilton, E. M. and Kaninga, B. and Maseka, K. K. and Mutondo, M. and Sakala, G. M. and Watts, M. J.},
+  title                = {{Nested sampling and spatial analysis for reconnaissance investigations of soil: an example from agricultural land near mine tailings in Zambia}},
+  journal              = {{EUROPEAN JOURNAL OF SOIL SCIENCE}},
+  year                 = {{2017}},
+  volume               = {{68}},
+  number               = {{5}},
+  pages                = {{605-620}},
+  month                = {{SEP}},
+  issn                 = {{1351-0754}},
+  abstract             = {{A reconnaissance survey was undertaken on soil near mine tailings to
+   investigate variation in the content of copper, chromium and uranium. A
+   nested sampling design was used. The data showed significant relations
+   between the content of copper and uranium in the soil and its organic
+   matter content, and a significant spatial trend in uranium content with
+   distance from the tailings. Soil pH was not significantly related to any
+   of the metals. The variance components associated with different scales
+   of the sample design had large confidence intervals, but it was possible
+   to show that the random variation was spatially dependent for all
+   spatial models, whether for variation around a constant mean, or with a
+   mean given by a linear effect of organic matter or distance to the
+   tailings. For copper, we showed that a fractal or multifractal random
+   model, with equal variance components for scales in a logarithmic
+   progression, could be rejected for the model of variation around the
+   fixed mean. The inclusion of organic matter as an explanatory factor
+   meant that the fractal model could no longer be rejected, suggesting
+   that the effect of organic matter results in spatial variation that is
+   not scale invariant. It was shown, taking uranium as a case study, that
+   further spatially nested sampling to estimate scale-dependent variance
+   components, or to test a non-fractal model with adequate power, would
+   require in the order of 200-250 samples in total.
+   Highlights
+   Sampling was undertaken to investigate spatial variation of metal
+   content in soil near mine tailings.
+   Chromium and uranium were related to soil organic matter content;
+   uranium showed a spatial trend.
+   Spatial variation was scale dependent, variation of copper was not
+   scale-invariant.
+   Characterizing random spatial variation requires substantial sample
+   effort.}},
+  doi                  = {{10.1111/ejss.12449}},
+  eissn                = {{1365-2389}},
+  orcid-numbers        = {{BGS University Funding Initiative, BUFI/0000-0003-3097-5530}},
+  researcherid-numbers = {{BGS University Funding Initiative, BUFI/H-4822-2011}},
+  unique-id            = {{ISI:000409483900003}},
+}
+
+@Article{Lark2018,
+  author  = {R. M. Lark and B. Marchant},
+  title   = {How should a spatial-coverage sample design for a geostatistical soil survey be supplemented to support estimation of spatial covariance parameters?},
+  journal = {Geoderma},
+  year    = {2018},
+  volume  = {319},
+  pages   = {89-99},
+  doi     = {https://doi.org/10.1016/j.geoderma.2017.12.022},
+}
+
+@Article{lar06,
+  author    = {R. M. Lark and R. Webster},
+  title     = {Geostatistical mapping of geomorphic variables in the presence of trend},
+  journal   = {Earth Surface Processes and Landforms},
+  year      = {2006},
+  volume    = {31},
+  pages     = {862-874},
+  owner     = {brus003},
+  timestamp = {2008.06.09},
+}
+
+@Manual{Lesch2000ESAPManual,
+  title     = {{ESAP-95 Version 2.01R User Manual and Tutorial Guide}},
+  author    = {Lesch, S.M. and Rhoades, J.D. and Corwin, D.L.},
+  year      = {2000},
+  publisher = {{USDA-ARS, George E. Brown, Jr., Salinity Laboratory}},
+}
+
+@Article{lesch2005,
+  author    = {Lesch, S. M.},
+  title     = {Sensor-directed response surface sampling designs for characterizing spatial variation in soil properties},
+  journal   = {Computers and Electronics in Agriculture},
+  year      = {2005},
+  volume    = {46},
+  number    = {1-3 SPEC. ISS.},
+  pages     = {153-179},
+  owner     = {brus003},
+  timestamp = {2010.03.05},
+  url       = {www.scopus.com},
+}
+
+@Article{lesch95,
+  author    = {Lesch, S. M. and Strauss, D. J. and Rhoades, J. D.},
+  title     = {Spatial prediction of soil salinity using electromagnetic induction techniques 2. {An} efficient spatial sampling algorithm suitable for multiple linear regression model identification and estimation.},
+  journal   = {Water Resources Research},
+  year      = {1995},
+  volume    = {31},
+  pages     = {387-398},
+  owner     = {brus003},
+  timestamp = {2009.11.19},
+}
+
+@Book{loh99,
+  title     = {Sampling: Design and Analysis},
+  publisher = {Duxbury Press},
+  year      = {1999},
+  author    = {S. L. Lohr},
+  address   = {Pacific Grove, USA},
+  owner     = {brus003},
+  timestamp = {2008.06.09},
+}
+
+@InBook{Fitzgerald2010,
+  chapter   = {10},
+  pages     = {121-129},
+  title     = {Response Surface Sampling of Remotely Sensed Imagery for Precision Agriculture},
+  publisher = {Springer Netherlands},
+  year      = {2010},
+  author    = {Fitzgerald, G.J.},
+  editor    = {Viscarra Rossel, R. A. and McBratney, A. B. and Minasny, B.},
+  address   = {Sydney, Australia},
+  booktitle = {Proximal Soil Sensing},
+  owner     = {brus003},
+  timestamp = {2009.11.19},
+}
+
+@InBook{degruijter10,
+  chapter   = {1},
+  pages     = {3-14},
+  title     = {Sampling for High Resolution Soil Mapping},
+  publisher = {Springer Netherlands},
+  year      = {2010},
+  author    = {de Gruijter, J. J. and McBratney, A. B. and Taylor, J.},
+  editor    = {Viscarra Rossel, R. A. and McBratney, A. B. and Minasny, B.},
+  address   = {Sydney, Australia},
+  booktitle = {Proximal Soil Sensing},
+  owner     = {brus003},
+  timestamp = {2009.11.19},
+}
+
+@Article{nan04,
+  author    = {A. Nanthakumar and K. Selvavel},
+  title     = {Estimation of proportion of success from a stratified population: a comparative study},
+  journal   = {Communications in Statistics},
+  year      = {2004},
+  volume    = {33},
+  pages     = {2245-2257},
+  owner     = {brus003},
+  timestamp = {2008.06.09},
+}
+
+@Article{walvoort2010,
+  author    = {D. J. J. Walvoort and D. J. Brus and J. J. de Gruijter},
+  title     = {An {R} package for spatial coverage sampling and random sampling from compact geographical strata by k-means},
+  journal   = {Computers and Geosciences},
+  year      = {2010},
+  volume    = {36},
+  pages     = {1261-1267},
+  doi       = {10.1016/j.cageo.2010.04.005},
+  owner     = {brus003},
+  timestamp = {2010.08.11},
+}
+
+@Article{Akramkhanov2013,
+  author    = {A. Akramkhanov and D. J. Brus and D. J. J. Walvoort},
+  title     = {Geostatistical monitoring of soil salinity in Uzbekistan by repeated EMI surveys},
+  journal   = {Geoderma},
+  year      = {2013},
+  owner     = {brus003},
+  timestamp = {2013.09.09},
+}
+
+@Article{matei2005,
+  author    = {A. Matei and Y. Till{\'e}},
+  title     = {Evaluation of Variance Approximations and Estimators in Maximum Entropy Sampling with Unequal Probability and Fixed Sample Size},
+  journal   = {Journal of Official Statistics},
+  year      = {2005},
+  volume    = {21},
+  pages     = {543-570},
+  owner     = {brus003},
+  timestamp = {2010.03.05},
+}
+
+@Book{Tille2006,
+  title     = {Sampling algorithms},
+  publisher = {Springer},
+  year      = {2006},
+  author    = {Y. Till{\'e}},
+  owner     = {brus003},
+  timestamp = {2013.02.06},
+}
+
+@Article{Grafstrom2012,
+  author    = {Grafstr{\"o}m, A. and Lundstr{\"o}m, N.L.P. and Schelin, L.},
+  title     = {Spatially balanced sampling through the pivotal method},
+  journal   = {Biometrics},
+  year      = {2012},
+  volume    = {68},
+  pages     = {514-520.},
+  owner     = {brus003},
+  timestamp = {2014.09.30},
+}
+
+@Article{Grafstrom2013,
+  author    = {Grafstr{\"o}m, Anton and Till{\'e}, Yves},
+  title     = {Doubly balanced spatial sampling with spreading and restitution of auxiliary totals},
+  journal   = {Environmetrics},
+  year      = {2013},
+  volume    = {24},
+  number    = {2},
+  pages     = {120--131},
+  issn      = {1099-095X},
+  doi       = {10.1002/env.2194},
+  keywords  = {balanced sampling, pivotal method, spatially balanced sampling, spatial correlation},
+  owner     = {brus003},
+  publisher = {John Wiley \& Sons, Ltd},
+  timestamp = {2013.03.07},
+  url       = {http://dx.doi.org/10.1002/env.2194},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}

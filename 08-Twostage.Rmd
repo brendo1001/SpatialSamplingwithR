@@ -1,0 +1,124 @@
+# Two-stage random sampling {#Twostage}
+
+This sampling design is also referred to as two-stage cluster random sampling [@loh99]. The difference with (single-stage) cluster random sampling (Chapter \@ref(Cl)) is that not all sampling units of the selected clusters are observed, but only some of them. Also, here the clusters will generally be contiguous groups of sampling units, for instance all locations in a single polygon, whereas in single-stage cluster random sampling the clusters generally are non-contiguous. The sampling units to be observed are selected by random subsampling of the randomly selected clusters. In two-stage sampling the clusters are commonly referred to as primary sampling units (psu's) or shortly primary units (pu's), and the units selected in the second stage as the secondary sampling units (ssu's) or secondary units (su's).
+
+As with cluster random sampling, two-stage random sampling may lead to a strong spatial clustering of the selected sampling units (ssu's) in the study area. This may save considerable time for fieldwork, and more sampling units can be observed for the same budget. However, due to the spatial clustering the precision of the estimates will generally be less precise compared to samples of the same size selected by a design that leads to a much better spreading of the sampling units throughout the study area, such as systematic random sampling.
+
+In two-stage random sampling in principle any type of sampling design can be used at the two stages, leading to numerous combinations. A simple version is (SI,SI), in which both psu's and ssu's are selected by simple random sampling.
+
+Commonly the psu's have unequal size, i.e., the number of ssu's (finite population) or the area (infinite population) are not equal for all psu's. Think for instance of the agricultural fields, forest stands, lakes, river sections *et cetera* in an area. If the psu's are of unequal size, then psu's can best be selected with probabilities proportional to their size (pps). If the total of a psu is related to its size, then pps-sampling leads to more precise estimates compared to simple ranmdom sampling of psu's. Also, with pps-sampling of psu's the estimation of means or totals and of their sampling variances is much simpler compared to selection with equal probabilities. Implementation of selection with probabilities proportional to size is easiest `when units are replaced (pps with replacement, ppswr). This implies that a psu might be selected more than once, especially if the total number of psu's in the population is small compared to the number of psu draws (large sampling fraction in first stage).
+ 
+The following algorithm can be used to select $d$ times a psu by ppswr from a total of $N$ psu's in the population:  
+1. Select randomly one ssu from the list with $M=\sum_{i=1}^N M_i$ ssu's, and determine the psu of the selected ssu 
+2. Repeat step 1 until $d$ selections have been made.
+
+This sampling algorithm makes use of a list of all sampling units as a sampling frame.  An alternative algorithm works with a geographical representation of the study area (shape file) and its psu's:  
+
+1. Select a random point in the area, as in SI.  
+2. Use a point-in-polygon routine to determine in which psu the point falls, and select this psu.  
+3. Repeat steps 1 and 2 until $d$ selections have been made.  
+
+In the second stage, a *pre-determined* number of secondary sampling units, $m_{i}$, is selected every time psu $i$ is selected. Secondary sample sizes Predetermined means that it is not allowed to decide on the secondary sample sizes (number of ssu's) per selected psu *after the selection of the psu's*.
+
+The `R` code below shows the selection of a two-stage random sample from Voorst. Primary units are 24 blocks of 0.5 km $\times$ 0.5 km. Note that these blocks have unequal size, i.e. the number of pixels within the blocks differs due to build-up area, roads *et cetera*.  Four times a psu is selected, with probabilities proportional to size and with replacement. The second stage sample size $m_i$ equals 10 for all psu's. These units ssu's are selected by SIR. 
+
+```{r}
+d <- 4 #number of psu selections
+m <- 10 #fixed number of ssu selections per psu-draw
+#define function for two-stage random sampling
+twostage <- function(sframe,psu,d,m) {
+  units<-sample.int(nrow(sframe),size=d,replace=TRUE)
+  mypsusample<-sframe[units,psu]
+  i<-1
+  ssunits <- NULL
+  for (psunit in mypsusample) {
+    ssunit <- sample(x = which(sframe[,psu] == psunit), size = m, replace=TRUE)
+    ssunits <- c(ssunits, ssunit)
+    i<-i+1
+  }
+  mysample <- sframe[ssunits,]
+  return(mysample)
+}
+set.seed(314)
+mysample <- twostage(sframe=grdVoorst,psu="psu",d=d,m=m)
+psumeans <- tapply(mysample$z,INDEX=mysample$psu,FUN=mean)
+meanz <- mean(psumeans)
+Vmeanz <- var(psumeans) / d
+```
+
+```{r,echo=F,out.width='100%', fig.asp=.333, fig.cap="Two-stage random sample from Voorst"}
+ggplot(data=grdVoorst) +        
+  geom_raster(mapping = aes(x = s1/1000, y = s2/1000,fill=as.factor(grdVoorst$psu))) +
+  geom_point(data=mysample, mapping = aes(x=s1/1000, y = s2/1000), size = 2) +
+  scale_x_continuous(name = "Easting (km)") +
+  scale_y_continuous(name = "Northing (km)") +
+  coord_fixed()+
+  theme(legend.position = "none")
+```
+
+## Estimation of mean and its sampling variance
+If the psu's are selected with replacement and with probabilities proportional to size (ppswr), then the population mean can be estimated by the simple estimator:
+\begin{equation}
+\hat{\bar{z}}_{\mathrm{(pps,SI)}}=
+\frac{1}{d}\sum\limits_{i=1}^{d}\hat{\bar{z}}_{i} \;,
+(\#eq:EstMeanTwostage)
+\end{equation}
+where $d$ is the number of psu selections, and $\hat{\bar{z}}_{i}$ is the sample mean of the psu selected in the $i^{th}$ draw. The strategy ((pps,SI), $\hat{\bar{z}}_{\mathrm{(pps,SI)}}$) is design-unbiased.
+
+The sampling variance of the estimated mean can simply be estimated by:
+\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\mathrm{(pps,SI)}}\right)=\frac{\widehat{S^2}_{\mathrm{psu}}}{d}  \;.
+(\#eq:VarEstMeanTwostage)
+\end{equation}
+with $\widehat{S^2}_{\mathrm{psu}}$ the estimated variance of estimated primary unit means (between primary unit variance)
+\begin{equation}
+\widehat{S^2}_{\mathrm{psu}} = \frac{1}{d-1}\sum_{i=1}^{d}(\hat{\bar{z}}_{i}-\hat{\bar{z}}_{\mathrm{(pps,SI)}})^2 \;,
+(\#eq:S2psumeans)
+\end{equation}
+Note that neither the sizes of the psu's, i.e. the number of ssu's per primary unit, nor the secondary sample sizes $m_{i}$ occur in these formulas. This simplicity is due to the fact that the psu's are selected with replacement and with probabilities proportional to size. The effect of the secondary sample sizes on the variance is implicitly accounted for. To understand this, note that the larger $n_{i}$, the less variable $\hat{\bar{z}}_{i}$, and the smaller its contribution to the variance.
+
+Figure \@ref(fig:SamplingDistributionTwostage) shows the sampling distributions of the estimated mean with two-stage random sampling and simple random sampling, obtained by repeating the random sampling with each design and estimation 10,000 times.
+
+```{r SamplingDistributionTwostage, out.width='70%', fig.asp=.8, fig.cap="Sampling distribution of estimated mean with Twostage random sampling and SI", echo = F, cache=T}
+NUMBER_OF_SAMPLES <- 10000
+meanz <- Vmeanz <- meanzSI <- numeric(length=NUMBER_OF_SAMPLES)
+
+set.seed(31415)
+SI <- function(sframe, n) {
+    units <- sample.int(nrow(sframe), size = n, replace = FALSE)
+    mysample <- sframe[units,]
+    return(mysample)
+}
+
+for (i in 1:NUMBER_OF_SAMPLES) {
+  mysample <- twostage(grdVoorst,"psu",d,m)
+  psumeans <- tapply(mysample$z,INDEX=mysample$psu,FUN=mean)
+  meanz[i] <- mean(psumeans)
+  Vmeanz[i] <- var(psumeans) / d
+  mySIsample <- SI(grdVoorst,n=d*m)
+  meanzSI[i] <- mean(mySIsample$z)
+}
+
+estimates<-data.frame(meanz,meanzSI)
+names(estimates)<-c("Twostage","SI")
+estimateslf<-melt(estimates)
+
+ggplot(data = estimateslf) +
+    geom_boxplot(aes(y=value,x=variable)) +
+    geom_hline(yintercept=mean(grdVoorst$z),colour="red")+
+    scale_x_discrete(name = "Sampling design") +
+    scale_y_continuous(name = "Estimated mean SOM")
+
+meanmeanz <- mean(meanz)
+varmeanz <- var(meanz)
+meanvarmean <- mean(Vmeanz)
+varmeanzSI <- var(meanzSI)
+```
+
+The variance of the `r NUMBER_OF_SAMPLES` means with two-stage random sampling equals `r round(varmeanz,3)`. This is considerably larger than with SI: `r round(varmeanzSI,3)`. The average of the estimated variances equals `r round(meanvarmean,3)`. 
+
+#### Exercise (TwoStage.R) {-}
+1. Write an R script to select a two-stage random sample from Voorst. Select four times a psu by ppswr, and ten points (ssu's) per psu-draw by SI.  
+2. Estimate the population mean, and its standard error  
+3. Compare the standard error with that of the Horvitz-Thompson estimator for simple random sampling of the same size; explain the difference   
+4. Is the standard error of the estimated mean for $10 \times 4$ units larger or smaller than with $4 \times 10$?  

@@ -1,0 +1,203 @@
+# Systematic random sampling {#SY}
+
+A simple way of drawing probability samples whose locations are spread uniformly over the study area, is systematic random sampling (SY). Figure \@ref(fig:sampleSY) shows a square grid randomly placed on Voorst.
+
+```{r }
+set.seed(314)
+n <- 40 #expected sample size
+#change class of grdVoorst to SpatialPixelsDataFrame
+gridded(grdVoorst) <- ~s1+s2
+mysample<-spsample(x=grdVoorst,n=n,type="regular")
+mysample<-as(mysample,"data.frame")
+```
+
+```{r sampleSY, out.width='100%',fig.asp=.333, fig.cap="Systematic random sample from Voorst",echo=F}
+ggplot()+
+  geom_raster(data=as(grdVoorst,"data.frame"),mapping = aes(x = s1/1000, y = s2/1000), fill="grey")+
+  geom_point(data=mysample,mapping = aes(x = x1/1000,y = x2/1000), size = 2) +
+  scale_x_continuous(name = "Easting (km)") +
+  scale_y_continuous(name = "Northing (km)") +
+  coord_fixed()
+```
+
+I used the argument `n` in function `spsample` to set the sample size. Note that this is the *expected* sample size, i.e. on average over repeated sampling the sample size is 40. In Figure \@ref(fig:sampleSY) the number of selected sampling points equals `r nrow(mysample)`. Alternative shapes for the grid cells are triangular and hexagonal. Triangular grids can be selected with function `spsample` with the argument `type = hexagonal` (which, I admit, is confusing). The triangular shape was shown to be most efficient in general. Besides the shape of the grid cells, we must decide on the size of the grid cells (grid spacing) and on the orientation of the grid. The grid spacing determines the number of sampling locations in the study area. So, if we have decided on the required (allowed) number of sampling locations, then we may use this number to calculate the grid spacing. For square grids, the grid spacing (m) can be calculated with $\sqrt{A/n}$, where $A$ is the area in m$^2$, and $n$ is the number of sampling locations. Instead of argument `n` of function `spsample` we may use argument argument `cellsize` to select a grid with a specified spacing.
+
+The grid is randomly placed over the study area as follows. One location is selected by simple random sampling from the study area. Given the chosen orientation of the grid, the grid is extended in all directions using the selected location as a starting node. Finally, all nodes are selected that fall within the study area. There is no strict need for random selection of the orientation of the grid, random selection of the first node suffices for design-based statistical inference (estimation).
+
+In general, the spatial coverage with random grid sampling is better than with a stratified random sample using compact geographical strata, even with one location per geostratum. Consequently, in general systematic random sampling will give on average more precise estimates of the mean or total.
+
+There are two disadvantages of systematic random sampling compared to geographically stratified random sampling. First, for systematic random sampling no unbiased estimator of the sampling variance exists. This is because we do not have independent replicates of the sample: the grid basically is one 'cluster' of sampling locations. Second, the number of sampling locations with random grid sampling is not fixed, but varies between randomly drawn samples. We may choose the grid spacing such that *on average* the number of sampling locations equals the required (allowed) number of sampling locations, but for the actually drawn sample, this number can be several locations smaller or larger. When the sample size shows strong variation, this may worsen the quality of the estimated mean. 
+
+In Voorst the variation of the sample size is very large when the orientation of the grid is parallel to the sides of the rectangular study area (Figure \@ref(fig:samplesizeSY)). The histogram shows a bimodal distribution. The smaller sample sizes are of square grids with only two rows of points instead of three rows.
+
+```{r samplesizeSY, out.width='70%',fig.asp=1, fig.cap="Sampling distribution of sample size of SY", echo=F, cache=T}
+sampleSizes<-numeric(length=NUMBER_OF_SAMPLES)
+set.seed(314)
+for (i in 1:NUMBER_OF_SAMPLES) {
+        mysample<-spsample(x=grdVoorst,n=n,type="regular")
+        sampleSizes[i]<-length(mysample)
+}
+
+df <- data.frame(size=sampleSizes)
+
+ggplot(data = df) +
+  geom_histogram(aes(x=size),binwidth=1,colour="orange") +
+  scale_y_continuous(name = "Number of samples") +
+  scale_x_continuous(name = "Sample size",limits=c(20,49))
+```
+
+A large variation in sample size leads to a large sampling variance of the estimated mean, and therefore should be avoided. A random sample size may also be undesirable when this size is prescribed, for instance, in regulations.  For voorst the variation in sample size can be reduced by changing the orientation. The R chunk below shows how to select a systematic random sample with a user-defined orientation. Figure \@ref(fig:sampleSY2) shows the selected square grid with orientation N60E.
+
+```{r}
+gridtop <- as(getGridTopology(grdVoorst),"data.frame")
+A <- nrow(grdVoorst)*gridtop$cellsize[1]*gridtop$cellsize[2]
+spacing <- sqrt(A/n)
+nx <- floor((gridtop$cellsize[1]*gridtop$cells.dim[1])/spacing)+1
+ny <- floor((gridtop$cellsize[2]*gridtop$cells.dim[2])/spacing)+1
+#choose angle
+angle<- -pi/6
+#construct square grid. Note large number of rows with negative y-coordinates
+x <- seq(from=0,to=nx*2,by=1)*spacing
+y <- seq(from=ny*-10,to=ny,by=1)*spacing
+xygrd <- expand.grid(x,y)
+names(xygrd) <- c("s1","s2")
+#compute coordinates on rotated axes 
+xygrd$s1r <- xygrd$s1*cos(angle)+xygrd$s2*sin(angle)
+xygrd$s2r <- -xygrd$s1*sin(angle)+xygrd$s2*cos(angle)
+#select random start
+origin <- gridtop$cellcentre.offset
+start <- data.frame(s1=runif(1,0,spacing)+origin[1],s2=runif(1,0,spacing)+origin[2])
+#add start to coordinates
+xygrd$s1rs <- xygrd$s1r+start$s1
+xygrd$s2rs <- xygrd$s2r+start$s2
+#intersect rotated grid with SpatialPixelsDataFrame to see which gridpoints are in study area
+coordinates(xygrd) <- ~s1rs+s2rs
+res <- (xygrd %over% grdVoorst)
+mysample <- xygrd[!is.na(res$z),]
+mysample$z <- res$z[!is.na(res$z)]
+```
+
+```{r sampleSY2, out.width='100%', fig.asp=.333, fig.cap="Systematic random sample with orientation N60E", echo=F}
+mysample <- as(mysample,"data.frame")
+ggplot(data=as(grdVoorst,"data.frame")) +
+  geom_raster(mapping = aes(x = s1/1000, y = s2/1000),fill="grey") +
+  geom_point(data=mysample, mapping = aes(x = s1rs/1000, y = s2rs/1000), size=2) +
+  scale_x_continuous(name = "Easting (km)") +
+  scale_y_continuous(name = "Northing (km)") +
+  coord_fixed()
+```
+
+## Estimation of mean and its sampling variance {#EstVarSY}
+With systematic random sampling all units have an equal inclusion probability. Consequently, the unweighted sample average is a design-unbiased estimator of the mean:
+\begin{equation}
+\hat{\bar{z}}_{\text{SY}}=\frac{1}{n}\sum_{i=1}^{n}z_{i} \;.
+(\#eq:HTMeanSY)
+\end{equation}
+
+An unbiased estimator of the sampling variance of the estimated mean is not available. A simple, often applied procedure is to calculate the sampling variance as if the sample were a simple random sample (Eq. \#eq:HTMeanSI). In general this procedure over-estimates the sampling variance, so that we are on the safe side.
+
+Alternatively, the sampling variance can be estimated by treating the SY sample as if it were a stratified simple random sample (Eq. \#eq:HTMeanSTSI). The sampling units are clustered on the basis of their spatial coordinates into $H=n/2$ clusters ($n$ even) or $H=(n-1)/2$ clusters ($n$ odd). The two (or three) sampling units of a cluster are then treated as a simple random sample from an undefined stratum, and the variance estimator for stratified random sampling is used. With $n$ even the stratum weights are $1/H$ for all strata, with $n$ odd the weights are computed as $w_h=n_h/n$. See @Brus2016c for a comparison of various variance approximations for SY.
+
+```{r varapproxSY, out.width='100%', fig.asp=.333, echo=F, fig.cap="Clustering of grid points for variance approximation"}
+estimatedMean <- mean(mysample$z)
+
+approxVarMeanSI <- var(mysample$z)/nrow(mysample)
+
+mysample <- as(mysample,"data.frame")
+numberofStrata<-floor(nrow(mysample)/2)
+gridded(mysample) <- ~s1+s2
+myStrata<-stratify(mysample,nStrata=numberofStrata,equalArea=TRUE,nTry=100)
+myStrata.df<-as(myStrata,"data.frame")
+
+mysample <- as(mysample,"data.frame")
+mysample$stratum<-myStrata.df$stratumId
+S2h<-tapply(mysample$z,INDEX=mysample$stratum,FUN=var)
+nh<-tapply(mysample$z,INDEX=mysample$stratum,FUN=length)
+varmeanh<-S2h/nh
+wh<-nh/sum(nh)
+approxVarMeanSTSI<-sum(wh^2*varmeanh)
+
+ggplot(as(grdVoorst,"data.frame")) +
+  geom_raster(mapping = aes(x = s1/1000, y = s2/1000),fill="grey") +
+  geom_point(mysample, mapping=aes(x=s1rs/1000,y=s2rs/1000,colour=as.factor(stratum)),size=3) +
+  scale_x_continuous(name = "Easting") +
+  scale_y_continuous(name = "Northing") +
+  theme(legend.position = "none") +
+  coord_equal()
+
+NUMBER_OF_SAMPLES<-1000
+```
+
+Figure \@ref(fig:SamplingDistributionSY) shows the sampling distributions of the estimated mean for systematic random sampling with orientation N60E and an expected sample size of 40, and simple random sampling, obtained by repeating the random sampling with each design and estimation `r NUMBER_OF_SAMPLES` times. For each systematic random sample the sampling variance of the estimated mean is approximated by the two estimators described above.
+
+```{r SamplingDistributionSY,  out.width='70%',fig.asp=.8, fig.cap="Sampling distribution of estimated mean with SY and SI", warning=FALSE, echo=F, cache=T}
+estimatedMeansSY<-estimatedMeansSI<-numeric(length=NUMBER_OF_SAMPLES)
+approxVarofMeanSI<-numeric(length=NUMBER_OF_SAMPLES)
+approxVarofMeanSTSI<-numeric(length=NUMBER_OF_SAMPLES)
+sampleSizes<-numeric(length=NUMBER_OF_SAMPLES)
+set.seed(314)
+xygrd <- as(xygrd,"data.frame")
+for (i in 1:NUMBER_OF_SAMPLES) {
+  start <- data.frame(s1=runif(1,0,spacing)+origin[1],s2=runif(1,0,spacing)+origin[2])
+
+  xygrd$s1rs <- xygrd$s1r+start$s1
+  xygrd$s2rs <- xygrd$s2r+start$s2
+
+  coordinates(xygrd) <- ~s1rs+s2rs
+  res <- (xygrd %over% grdVoorst)
+  mysample <- xygrd[!is.na(res$z),]
+  mysample$z <- res$z[!is.na(res$z)]
+
+  sampleSizes[i]<-nrow(mysample)
+  estimatedMeansSY[i] <- mean(mysample$z)
+  approxVarofMeanSI[i] <- var(mysample$z)/nrow(mysample)
+  
+  numberofStrata<-floor(nrow(mysample)/2)
+
+  mysample <- as(mysample,"data.frame")
+  coordinates(mysample) <- ~s1+s2
+  gridded(mysample) <- TRUE
+  myStrata<-stratify(mysample,nStrata=numberofStrata,equalArea=TRUE,nTry=10)
+  myStrata.df<-as(myStrata,"data.frame")
+  mysample <- as(mysample,"data.frame")
+  mysample$stratum<-myStrata.df$stratumId
+  S2h<-tapply(mysample$z,INDEX=mysample$stratum,FUN=var)
+  nh<-tapply(mysample$z,INDEX=mysample$stratum,FUN=length)
+  varmeanh<-S2h/nh
+  wh<-nh/sum(nh)
+  approxVarofMeanSTSI[i]<-sum(wh^2*varmeanh)
+  ids<-sample.int(nrow(grdVoorst), size = n, replace = FALSE)
+  estimatedMeansSI[i]<-mean(grdVoorst$z[ids])
+  
+  xygrd <- as(xygrd,"data.frame")
+}
+
+estimates<-data.frame(estimatedMeansSY,estimatedMeansSI)
+names(estimates)<-c("SY","SI")
+estimateslf<-melt(estimates)
+ggplot(data = estimateslf) +
+  geom_boxplot(aes(y=value,x=variable)) +
+  geom_hline(yintercept=mean(grdVoorst$z),colour="red")+
+  scale_x_discrete(name = "Sampling design") +
+  scale_y_continuous(name = "Estimated mean SOM")
+
+grdVoorst <- as(grdVoorst,"data.frame")
+NUMBER_OF_SAMPLES<-10000
+```
+
+The boxplots of the estimated means indicate that SY is more precise than SI. The variance of the `r NUMBER_OF_SAMPLES` estimated means equals `r round(var(estimatedMeansSY),3)`, whereas for SI this is `r round(var(estimatedMeansSI),3)`. The average of the `r NUMBER_OF_SAMPLES` SI-approximated variances equals `r round(mean(approxVarofMeanSI),3)`, and of the STSI-approximated variances `r round(mean(approxVarofMeanSTSI),3)`. So the STSI approximation is slightly better, but in this case still strongly overestimates the sampling variance.
+
+The variation in sample size is much smaller compared to an NS-EW oriented grid, compare Figures \@ref(fig:samplesizeSY) and \@ref(fig:samplesizeSY2).
+
+```{r samplesizeSY2,  out.width='70%',fig.asp=1, fig.cap="Sampling distribution of sample size of SY with orientation N60E", echo=F}
+ggplot() +
+  geom_histogram(aes(x=sampleSizes),binwidth=1,colour="orange") +
+  scale_y_continuous(name = "Frequency") +
+  scale_x_continuous(name = "Sample size")
+summary(sampleSizes)
+```
+
+#### Exercise (SY.R) {-}  
+1. Write an R script to select a systematic random sample (square grid) with an expected size of 40 from Voorst (data are in `Voorst.RData`). 
+2. Overlay the selected points with `grdVoorst` using function `%over%` and extract the *z*-values at the selected SY sample.  Estimate the population mean, and approximate its standard error by treating the SY sample as a simple random sample.  
+3. Cluster the gridpoints using function `stratify` of package `spcosa`, and approximate the standard error by treating the sample as a stratified random sample. 

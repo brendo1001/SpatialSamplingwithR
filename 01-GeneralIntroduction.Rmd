@@ -1,0 +1,74 @@
+# Introduction {#GeneralIntro}
+
+```{r loadlibraries, echo=F}
+library(reshape2)
+library(ggplot2)
+library(plyr)
+
+library(e1071)
+library(maptools)
+library(rgdal)
+
+library(sp)
+library(gstat)
+library(fields)
+
+library(stratification)
+library(spcosa)
+library(sampling)
+library(BalancedSampling)
+library(spsann)
+```
+
+This book is about sampling for spatial **surveys**. Survey is defined as [`the gathering of a sample of data or opinions considered to be representative of a whole'](http://www.thefreedictionary.com/survey). So survey is an inventory of a population by collecting data on a part of the population. Examples are a survey of the organic carbon stored in the soil of an area, of the water quality in a lake, of the wood volume in a forest, of the total annual yield of rice in a country, et cetera. So this book is about **observational research**, not about experiments. In experiments observations are done under controlled circumstances, think of an experiment on crop yields as a function of application rates of fertilizer. Several levels of fertilizer application rate are chosen and randomly assigned to experimental plots. In observational research factors that influence the study variable are not controlled. This implies that in observational research no conclusions can be drawn on causal relations.
+
+In general we cannot afford a census in which all units of the population are observed. Some units of the population are selected and properties of the study variable are observed (measured) on these selected units only. These observations are subsequently used to derive characteristics of the whole population. For instance, to estimate the wood volume in a forest, we cannot afford to measure the wood volume of every tree in the forest. Instead, some trees are selected, the wood volume of these trees is measured, and based on these measurements the total wood volume of all trees in the forest is estimated.
+
+The selection of several units from all units in the population is referred to as **sampling**. Note that in the literature sampling is also used for the collection of material (e.g. soil, water, plant tissue) from a selected population unit. The material is taken to the lab for measurements. In this book sampling refers to the selection of a subset of population units from the entire population.
+
+Two types of populations can be distinguished: discrete and continuous populations. **Discrete populations** consist of a set of discrete, natural objects, think of trees, agricultural fields, lakes *et cetera*. In **continuous populations** such discrete objects do not exist, think of the soil in an agricultural field, or the water in a lake. The total number of units in a discrete population is finite, so a discrete population is a finite population. These units naturally serve as basic sampling unit. However in continuous populations no discrete objects exist that can serve as sampling unit. We must define the sampling units, e.g. 1 km by 1 km squares, or points. The total number of sampling units in a continuous population can be finite (e.g. all disjoint 1 km by 1 km squares in an area) or infinite  (e.g. all points in an area).
+
+In this book the populations of interest have a spatial dimension, i.e. spatial coordinates are assigned to the population units. In sampling of spatial populations one may account for the spatial coordinates of the units, but this is not strictly needed. Examples are sampling designs spreading out the units throughout the study area, hopefully leading to more precise estimates of the population mean or total, and designs selecting spatial clusters of samples, leading to a reduced travel time.
+
+The sample data are used to estimate characteristics of the whole population, e.g. the population mean or total, some percentile (e.g. the median or 90$^{th}$ percentile), or even the entire frequency distribution. In surveys of spatial populations the aim can also be to make a map of the population. As we have observed only a (small) part of the population, we are uncertain about the estimates and map. By using statistical methods we can quantify how uncertain we are about these results. In decision making it can be important to take this uncertainty into account. An example is a survey of water quality. In Europe the concentration levels of nutrients are regulated in the European Waterframework Directive. To test whether the mean concentration of a nutrient complies with its standard, it is important to account for the uncertainty in the estimated mean. When the estimated mean is just below the standard, there is still a large probability that the population mean exceeds the standard. This example shows that it is important to distinguish computing descriptive statistics from characterizing the population using the sample data. For instance, we can compute the sample mean (average of the sample data) without error, but if we use this sample mean as an estimate of the population mean, there is certainly an error in this estimate.
+
+Many sampling methods are available. At the highest level one may distinguish random from non-random sampling methods. In random sampling a subset of population units is randomly selected from the population, using a random number generator. Examples of non-random sampling are convenience sampling e.g. along roads, arbitrary sampling i.e. sampling without a specific purpose in mind, and targeted sampling e.g. at sites suspected of soil pollution.
+
+In the literature the term random sampling is often used for arbitrary sampling, i.e sampling without a specific purpose in mind. To avoid confusion the term **probability sampling** is used for random sampling using a random number generator, so that for any unit in the population the probabilities of selecting that unit is known.
+
+## Design-based versus model-based approach
+Which sampling method, probability or non-probability sampling, is best largely depends on the aim of the survey, see @bru97 and @gru06. Broadly speaking the following aims can be distinguished:
+
+1. To estimate parameters (mean, total, proportion, percentile) for the population  
+2. To estimate parameters (mean, total, proportion, percentile) for several subpopulations  
+3. To map the study variable 
+
+The choice between probability or non-probability sampling is closely connected with the choice between a design-based or model-based approach for sampling and statistical inference (estimation, hypothesis testing).
+
+```{r approach, tidy=FALSE, echo=F}
+approach <- data.frame(Approach=c("Design-based","Model-based"),Sampling=c("Probability sampling","Probability sampling not required"),Inference=c("Design-based","Model-based"))
+
+knitr::kable(
+  head(approach, 20), caption = 'Statistical approaches for sampling and inference',
+  booktabs = TRUE
+)
+```
+
+In the design-based approach units are selected by probability sampling (Table \@ref(tab:approach)). Estimates are based on the selection probabilities of the sampling units as determined by the sampling design (design-based inference). No model is used in estimation. On the contrary, in a model-based approach a stochastic model is used in estimation, for instance a regression model. As the model already contains a random error term, probability sampling is not required in this approach, which opens up the possibility of optimized non-probability sampling.
+
+When the aim is to map the study variable, a model-based approach is the only option^[With mapping I mean prediction at the points of a very fine grid.] This implies that for this aim probability sampling is not required. For estimating (sub)population parameters in principle both approaches are suitable. The more subpopulations are distinguished, the more attractive a model-based approach becomes. If the units are selected by probability sampling, then estimates of the population parameters can be obtained by design-based or model-based inference. This flexibility can be attractive, for instance when the sample size is rather small for model building. When the sampling units are not selected by probability sampling, model-free, design-based estimation is impossible, and model-based estimation is the only option.
+
+#### Questions {-}
+1. Suppose a reseacher selects a sample of points from a study area by throwing darts on a map depicting the study area. Is the resulting sample a probability sample? If not, why not? 
+2. Suppose we have a population of $N$ units, numbered $1 \cdots N$. Can you think of a simple but proper way of selecting a probability sample of $n$ units? What is the probability of selecting any given unit? 
+
+```{r, echo=F}
+#load simulated data files
+load(file="Voorst.RData")
+load(file="CottonFarmUzbekistan.RData")
+load(file="Kandahar.RData")
+#load("CovariatesThreeWoredasEthiopia.RData")
+#load(file="DataThreeWoredasEthiopia.RData")
+#load(file="HunterValley4Practicals.RData")
+```
+

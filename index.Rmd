@@ -1,0 +1,30 @@
+---
+title: "Spatial sampling with R"
+author: "Dick J. Brus"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+output: bookdown::gitbook
+#cover-image: "images/cover.png"
+#papersize: b5
+#fontsize: 10pt
+bibliography: [referencesSampling.bib]
+#biblio-style: plain
+biblio-style: apalike
+link-citations: no
+#url: (zie pag 55)
+#github-repo:
+#config:
+#  edit: (pag 54; heb ik nu in _bookdown.yml gezet, zie pag 74)
+---
+
+```{r setup, include=F}
+library(knitr)
+opts_chunk$set(tidy=FALSE, message=FALSE, fig.align="center",out.width="80%", warning=FALSE, echo=T)
+```
+
+\frontmatter
+
+# Foreword {-}
+
+To be written

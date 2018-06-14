@@ -1,0 +1,220 @@
+# Sampling with probabilities proportional to size {#pps}
+
+In simple random sampling the inclusion probabilities are equal for all sampling units. The advantage of this is simple and straightforward statistical inference. With equal inclusion probabilities the unweighted sample average is an unbiased estimator of the spatial mean, i.e. the sampling design is *self-weighting*. However, in some situations equal probability sampling will not be very efficient, i.e. given the sample size the precision of the estimated mean or total will be relatively low. An example is the following. In order to estimate the total area of a given crop in a country, a raster of square cells of, for instance, 10 km x 10 km is constructed and projected on the country. The square cells serve as the sampling units. Note that near the country border cells cross the border. Some of them may contain only a few hectares of the target population, the country under study. We do not want to select many of these squares with only a few hectares of the study area, as intuitively it is clear that this will result in low precision of the estimated crop area. In such situation it can be more efficient to select sampling units with probabilities proportional to the area of the target population within the squares, so that small sampling units near the border have smaller probability of being selected than interior sampling units. Actually, the sampling units are not the square cells, but the pieces of land obtained by overlaying the cells and the GIS file of the country under study. This entails that the sampling units have unequal size. These sampling units of unequal size are selected by probabilities proportional to their size.
+
+If we have a GIS file of land use categories such as agriculture, build-up areas, water bodies, forests *et cetera*, we may use this file to further adapt the selection probabilities. The crop will be grown in agricultural areas only, so in cells largely covered by non-agricultural land, we expect small crop areas only. As a size measure in computing the selection probabilities we may use the agricultural area (as represented in the GIS file) in the country under study within the cells. Note that size now has a different meaning. It does not refer to the area of the sampling units anymore, but to an ancillary variable that is hopefully related to the target variable, i.e. the crop area. When the crop area per cell is proportional to the agricultural area per cell, then it can be shown that the precision of the estimated total area of the crop can be increased by selecting the cells with probabilities proportional to the agricultural area.
+
+In this example the sampling units have an area. However, sampling with probabilities proportional to size is not restricted to areal sampling units, but can also be used for selecting points. If we have a map depicting an ancillary variable that is expected to be related to the target variable, this ancillary variable can be used as a size measure. For instance, in areas where soil organic carbon is related to (relative) elevation, it can be efficient to select sampling locations proportional to  this environmental variable. The ancillary variable must be strictly positive for all locations.
+
+Sampling units can be selected with probabilities proportional to their size *with* or *without* replacement. This distinction is immaterial for infinite populations.
+
+Probability-proportional-to-size sampling is illustrated with a simulated field of poppy area per 5 km $\times$ 5 km square in the province of Kandahar, Afghanistan^[The field is simulated with a model calibrated on sample data of poppy area. The field was simulated *unconditionally* on these sample data. The simulated field may therefore differ substantially from the real-world]. The agricultural area within the squares is used as a size variable. The scatter plot shows that there is a positive relation between the simulated poppy area and the agricultural area within the sampling units. Clearly the residual variance is not constant, but increases with the agricultural area.
+
+```{r pps, out.width='80%', fig.asp=0.6, echo=F, fig.cap="Scatter plot of poppy area against the size variable agricultural area"}
+ggplot(data = grdKandahar) +
+  geom_point(mapping = aes(x = agri, y = poppy),alpha=0.5) +
+  scale_y_continuous(name = "Poppy area (ha)") +
+  scale_x_continuous(name = "Agricultural area (ha)") +
+  coord_equal()
+```
+
+## Probability-proportional-to-size sampling with replacement (ppswr)
+In the first draw a sampling unit is selected with probability $p_i = x_i/t(x)$, with $x_i$ the size variable for sampling unit $i$ and $t(x) = \sum_{i=1}^N x_i$ the population total of the size variable. The selected unit is then replaced, and these two steps are repeated $d$ times. Note that with this sampling design sampling units can be selected more than once, especially with large sampling fractions $d/N$. For infinite populations this probability density is 0. 
+
+With this design the spatial mean can be estimated design-unbiased by
+\begin{equation}
+\hat{\bar{z}}_{\mathrm{pps}}=\frac{1}{Nd}\sum_{i=1}^{d}\frac{z_{i}}{p_{i}} \;,
+(\#eq:HHMeanppswr)
+\end{equation}
+where $d$ is the number of draws. This estimator is referred to as the *Hansen-Hurwitz estimator*. The sampling variance can be estimated by
+\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\mathrm{pps}}\right)=
+\frac{1}{N^2\,d\,(d-1)}\sum_{i=1}^{d}\left( \frac{z_{i}}{p_{i}}-N\,\hat{\bar{z}}_{\mathrm{pps}}\right)^{2} \;.
+(\#eq:VarHHMeanppswr)
+\end{equation}
+
+A ppswr sample of 50 draws is selected. The population total and mean of the poppy area is estimated, as well as their standard errors. As a first step I check whether the size variable is strictly positive (>0). The minimum equals `r min(grdKandahar$agri)`, so this is the case. If this woild not be the case, values equal to or smaller than zero must be replaced by a small number, so that these units also have a positive probability of being selected.
+
+```{r}
+#compute draw-by-draw selection probabilities
+grdKandahar$prob<-grdKandahar$agri/sum(grdKandahar$agri)
+#set number of draws
+d<-40
+#set seed
+set.seed(314)
+N <- nrow(grdKandahar)
+units<-sample.int(N,size=d,replace=TRUE,prob=grdKandahar$prob)
+mysample <- grdKandahar[units,]
+#Hansen-Hurwitz estimator of population total and mean
+zexpand<-mysample$poppy/mysample$prob
+totalz<-mean(zexpand)
+meanz<- totalz/N
+#standard error of estimated population total and mean
+setotal<-sqrt(var(zexpand)/d)
+semean<-setotal/N
+```
+
+The estimated total equals `r round(totalz,1)` ha, with a standard error of `r round(setotal,0)`. Two units are selected twice:
+
+```{r}
+table(units)
+```
+
+Figure \@ref(fig:ppswrKandahar) shows the selected sampling units, plotted on a map of the agricultural area within the units, used as a size variable.
+
+```{r ppswrKandahar, echo=F, out.width='100%', fig.asp=.8, fig.cap="ppswr sample of 40 draws from Kandahar, using agricultural area as size variable"}
+ggplot(data = grdKandahar) +
+  geom_raster(mapping = aes(x = x, y = y, fill = grdKandahar$agri)) +
+  geom_tile(data=mysample,mapping = aes(x = x, y = y), colour="red", width=5, height=5, fill=NA) +
+  scale_fill_gradientn(name="Agriarea",colours=rev(terrain.colors(10))) +
+  scale_y_continuous(name = "Northing (km)") +
+  scale_x_continuous(name = "Easting (km)") +
+  coord_equal()
+```
+
+#### Exercise (pps.R) {-}
+1. Write an R script to select a pps sample with replacement from the cotton farm in Uzbekistan, using EM as a size variable (data are in `CottonFarmUzbekistan.RData`). Draw 40 times a unit.    
+2. Estimate the mean ECe with the Hansen-Hurwitz estimator and its sampling variance  
+3. Challenge: compute the true sampling variances of the the Hansen-Hurwitz estimator and of the Horvitz-Thompson estimator for simple random sampling with replacement and the same sample size. Is there a gain in precision?  
+
+## Probability-proportional-to-size sampling without replacement (ppswor)
+In pps sampling with replacement a sampling unit can be selected more than once, especially with large sampling fractions $n/N$. This may decrease the sampling efficiency. Therefore, pps-sampling without replacement (ppswor) can be an attractive alternative. The selection of sampling units with inclusion probabilities proportional to size without replacement is not straightforward. Various ingenious sampling algorithms have been developed for this, such as Brewer's method, Sampford's method and the pivotal method [@Deville1998], see @Tille2006 for an overview.
+
+In ppswor the inclusion probabilities are equal to the draw-by-draw selection probabilities $p_i$ of ppswr, multiplied by the sample size $n$: $\pi_i= n\;p_i = n\;x_i/t(x)$. In the pivotal method the $N$-vector with inclusion probabilities are successively updated to a vector with indicators.  If the indicator for sampling unit $i$ becomes value 1 then this sampling unit is selected, if it becomes 0 then it is not selected. One step in the updating algorithm can be described as follows:
+
+1. select fully randomly two sampling units $k$ and $l$ with $0<\pi_k<1$ and $0<\pi_l<1$  
+2. If $\pi_k + \pi_l < 1$ then update the probabilities by
+\begin{equation}
+(\pi^{\prime}_k,\pi^{\prime}_l)=\left\{
+\begin{array}{cc}
+(0,\pi_k+\pi_l) & \;\;\;\text{with probability}\frac{\pi_l}{\pi_k+\pi_l} \\
+(\pi_k+\pi_l,0) & \;\;\;\text{with probability}\frac{\pi_k}{\pi_k+\pi_l}
+\end{array}
+\right.
+(\#eq:algppswor1)
+\end{equation}
+and if $\pi_k + \pi_l \geq 1$ then update the probabilities by
+\begin{equation}
+(\pi^{\prime}_k,\pi^{\prime}_l)=\left\{
+\begin{array}{cc}
+(1,\pi_k+\pi_l-1) & \;\;\;\text{with probability}\frac{1-\pi_l}{2-(\pi_k+\pi_l)} \\
+(\pi_k+\pi_l-1,1) & \;\;\;\text{with probability}\frac{1-\pi_k}{2-(\pi_k+\pi_l)}
+\end{array}
+\right.
+(\#eq:algppswor2)
+\end{equation}  
+3. Replace ($\pi_k,\pi_l$) by ($\pi^{\prime}_k,\pi^{\prime}_l$), and repeat the first two steps until all units are either selected or not selected.
+
+In words, when the sum of the inclusion probabilities is smaller than 1, the updated inclusion probability of one of the points will become 0, which means that this point will not be sampled. The inclusion probability of the other point will become the sum of the two inclusion probabilities, which means that the probability that this point will be selected in one of the subsequent iterations increases. The probability of a point of being excluded from the sample is proportional to the inclusion probability of the other point, so that the larger the inclusion probability of the other point, the larger the probability that it will not be selected.
+
+When the sum of the inclusion probabilities of the two points is larger than or equal to 1, then one of the points is selected (updated inclusion probability is 1), while the inclusion probability of the other is lowered by 1 minus the inclusion probability of the selected point. The probability of being selected is proportional to the complement of the inclusion probability of the other point.
+
+With this ppswor design the total can be estimated by the Horvitz-Thompson estimator:
+\begin{equation}
+\hat{t}_{\text{ppswor}}(z)=\sum_{i=1}^{n}\frac{z_{i}}{\pi_{i}} \;,
+(\#eq:HTTotalppswor)
+\end{equation}
+where $n$ is the number of selected sampling units.
+
+Several approximate variance estimators have been developed [@matei2005]. With small sampling fractions the Hansen-Hurwitz variance estimator can be used. In the sampling experiment on poppy area in Kandahar (see R chunk hereafter) this approximation overestimates the sampling variance. With large sampling fractions the variance can be approximated by
+\begin{equation}
+\widehat{V}(\hat{t}_{\text{ppswor}}(z))=\frac{1}{1-\sum_{i\in s} a_i^2}\sum_{i\in s}(1-\pi_i)\left(\breve{z}_i-A\right)^2 \;,
+(\#eq:VarTotalppswor)
+\end{equation}
+where $\breve{z}_i=z_i/\pi_i$, $a_i=(1-\pi_i)/\sum_{j\in s} (1-\pi_j)$, and $A=\sum_{i\in s} a \breve{z}_i$
+
+ppswor samples can be selected with varuious functions in R package `sampling`. I used the function `UPpivotal`.
+
+```{r}
+library(sampling)
+#set sample size
+n <- 40
+eps <- 1e-3
+set.seed(314)
+ppswor <- function(sframe, size, n) {
+    pik <- inclusionprobabilities(size,n)
+    sampleind<-UPpivotal(pik=pik,eps=eps)
+    mysample <- data.frame(sframe[sampleind>eps,],pik=pik[sampleind>eps])
+    return(mysample)
+}
+mysample <- ppswor(sframe=grdKandahar,size=ifelse(grdKandahar$agri<1E-12,0.1,grdKandahar$agri), n=n)
+totppsHT<-sum(mysample$poppy/mysample$pik)
+pk <- mysample$pik/n
+#approximate variance by variance of Hansen-Hurwitz estimator
+vartotHH<-var(mysample$poppy/pk)/n
+```
+
+Figure \@ref(fig:SamplingDistributionPps) shows the sampling distributions of the estimated total poppy area with ppswor  sampling and simple random sampling without replacement of size 40, obtained by repeating the random sampling with each design and estimation 1000 times. For each ppswor sample the variance of the Horvitz-Thompson estimator is approximated by the variance of the Hansen-Hurwitz estimator.
+
+```{r SamplingDistributionPps, echo=F, out.width='70%', fig.asp=.8, fig.cap="Sampling distribution of estimated total poppy area with ppswor and SI",cache=T}
+SI <- function(sframe, n) {
+    units <- sample.int(nrow(sframe), size = n, replace = FALSE)
+    mysample <- sframe[units,]
+    return(mysample)
+}
+
+#number of samples
+NUMBER_OF_SAMPLES <- 1000
+N <- nrow(grdKandahar)
+
+totppsHT <- vartotHH  <- totSI <- samplesize <- numeric(length=NUMBER_OF_SAMPLES)
+set.seed(314)
+for (i in 1:NUMBER_OF_SAMPLES){
+  mysample <- ppswor(sframe=grdKandahar,size=ifelse(grdKandahar$agri<1E-12,0.1,grdKandahar$agri), n=n)
+  samplesize[i] <- nrow(mysample)
+  totppsHT[i]<-sum(mysample$poppy/mysample$pik)
+  pk <- mysample$pik/n
+  #approximate variance by variance of Hansen-Hurwitz estimator (for pps-with replacement)
+  vartotHH[i]<-var(mysample$poppy/pk)/n
+  mySIsample <- SI(sframe=grdKandahar, n=n)
+  totSI[i] <- mean(mySIsample$poppy)*N
+}
+
+estimates<-data.frame(totppsHT,totSI)
+names(estimates)<-c("ppswor","SI")
+estimateslf<-melt(estimates)
+ggplot(data = estimateslf) +
+    geom_boxplot(aes(y=value,x=variable)) +
+    geom_hline(yintercept=mean(grdKandahar$poppy)*N,colour="red")+
+    scale_x_discrete(name = "Sampling design") +
+    scale_y_continuous(name = "Estimated total poppy area")
+
+#standard deviation of estimated totals with ppswor and Horvitz-Thompson estimator
+sdHTppswor <- sqrt(var(totppsHT))
+
+#standard deviation of estimated totals with SI
+sdHTSI <- sqrt(var(totSI))
+
+#mean of square root of estimated approximate variances
+meansdHH <- mean(sqrt(vartotHH))
+```
+
+Sampling design ppswor is clearly much more precise than simple random sampling. The standard deviation of the Horvitz-Thompson estimator of the total poppy area with ppswor equals `r round(sdHTppswor,0)`. The average of the square root of the approximated variances equals `r round(meansdHH,0)`.
+
+#### Questions {-}  
+
+1. A field with poppy was found outside Kandahar in a selected sampling unit crossing the boundary. Should this field be included in the sum of the poppy area of that sampling unit?  
+2. In another sampling unit a poppy field was encountered in Kandahar but in the area represented as non-agriculture in the GIS file. Should this field be included in the sum of that sampling unit?
+
+## Spatial version of ppswor
+
+The units selected with ppswr and ppswor may show strong spatial clustering, which inflates the standard error of the estimated population total and mean. To avoid spatial clustering @Grafstrom2012 developed the so-called local pivotal method for selecting a ppswor sample. The only diffrence with the pivotal method described above is the selection of the pairs of points. In the pivotal method the two points of a pair are selected independently, whereas in the local pivotal method the first point is selected fully randomly and the nearest neighbour of this point is used as its counterpart. Recall that when one point of a pair is included in the sample, the inclusion probability of its counterpart is decreased. This leads to a better spreading of the sampling units in geographic space.
+
+Selecting samples with the local pivotal method can be done with function `lpm` of R package `BalancedSampling`. Figure \@ref(fig:LPMKandahar) shows the sample of `r n` units selected from the sampling frame of Kandahar.
+
+```{r}
+pik <- inclusionprobabilities(grdKandahar$agri,n)
+X<- cbind(grdKandahar$x,grdKandahar$y)
+units <- lpm(pik,X,h=N)
+mysample <- grdKandahar[units,]
+```
+
+```{r LPMKandahar, echo=F, out.width='100%', fig.asp=.8, fig.cap="Spatial ppswor sample selected by local pivotal method, using agricultural area as size variable "}
+ggplot(data = grdKandahar) +
+  geom_raster(mapping = aes(x = x, y = y, fill = grdKandahar$agri)) +
+  geom_tile(data=mysample,mapping = aes(x = x, y = y), colour="red", width=5, height=5, fill=NA) +
+  scale_fill_gradientn(name="Agriarea",colours=rev(terrain.colors(10))) +
+  scale_y_continuous(name = "Northing (km)") +
+  scale_x_continuous(name = "Easting (km)") +
+  coord_equal()
+```

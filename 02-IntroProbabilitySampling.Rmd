@@ -1,0 +1,48 @@
+# Probability sampling for estimating (sub)population parameters {#IntroProbabilitySampling}
+
+To estimate population parameters like the mean or the total, *probability sampling* is most appropriate. Probability sampling is random sampling using a random number generator such that  
+1. All population units have a probability larger than zero of being selected.  
+2. The selection probability of each possible sample is known.
+
+If the selection probability of each possible is known, for any unit in the population the probability that this unit is selected can be calculated as the sum of the selection probabilities over all samples that contains this unit. The selection probability of an individual unit is referred to as the inclusuion probability of that unit.
+
+A common misunderstanding is that with probability sampling the inclusion probabilities must be equal. With many sampling designs they are unequal. This is no problem as long as these probabilities are known.
+
+There are many ways of selecting population units by probability sampling. The following sampling designs are described and illustrated in this book:
+* simple random sampling  
+* stratified random sampling  
+* systematic random sampling  
+* sampling with probabilities proportional to size (pps-sampling)  
+* cluster random sampling  
+* two-stage random sampling  
+* balanced sampling
+
+## Simulated population {#Voorst}
+
+The sampling designs are illustated with a *simulated* population (pseudo-population). The population is an area near Voorst (Netherlands) with simulated soil organic matter (SOM) concentrations (in mass-percentages) in the topsoil (Figure \@ref(fig:Voorst)).
+
+```{r Voorst,  out.width='100%', fig.asp=.333, echo=F, fig.cap="Simulated soil organic matter concentration in Voorst"}
+ggplot(data = grdVoorst) +
+        geom_raster(mapping = aes(x = s1/1000,y = s2/1000,fill = z)) +
+        scale_x_continuous(name = "Easting  (km)") +
+        scale_y_continuous(name = "Northing  (km)") +
+        scale_fill_gradientn(name="SOM",colours=rev(terrain.colors(10))) +
+        coord_equal(ratio = 1)
+```
+
+Figure \@ref(fig:histogramVoorst) shows that SOM is skewed to the right.
+
+```{r histogramVoorst, out.width='70%', fig.asp=1, echo=F, fig.cap="Histogram of SOM in Voorst"}
+ggplot(data = grdVoorst) +
+  geom_histogram(aes(x=z),binwidth=2,color="orange") +
+  scale_y_continuous(name = "Frequency") +
+  scale_x_continuous(name = "z",limits=c(0,50))
+```
+
+Summary statistics are:
+```{r, echo=F}
+summary(grdVoorst$z)
+```
+The standard deviation of SOM in the population equals `r round(sqrt(var(grdVoorst$z)),1)`.
+
+The simulated population is taken as reality. This means that the true values are known everywhere, as if SOM is observed without error everywhere in the area. So we know SOM at any randomly selected location, as well as the population mean and total. So, for any sample selected from the population, the study variable values for the selected sampling units are known, so that we can *estimate*  the population mean or total from this sample. The estimated mean (total) can be compared with the population mean (total). The difference between these two is the *sampling error* in the estimated mean (total).

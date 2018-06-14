@@ -1,0 +1,251 @@
+# Simple random sampling {#SI}
+
+Simple random sampling is the most basic form of probability sampling. There are two subtypes:  
+1. Simple random sampling with replacement (SIR).  
+2. Simple random sampling without replacement (SI).
+
+This distinction is irrelevant for infinite populations. In simple random sampling with replacement a population unit may be selected more than once. 
+
+In ```R``` a simple random sample with or without replacement can be selected by the function ```sample.int``` from the ```base``` package. For instance, a simple random sample without replacement of 10 units from a population of 100 units labeled as 1,2, ... ,100, can be selected by
+
+```{r}
+set.seed(314)
+sample.int(100,size=10,replace=FALSE)
+```
+
+The number of units in the sample is referred to as the sample size ($n=10$ in the chunk above). Use argument ```replace = TRUE``` to select a simple random sample with replacement (SIR).
+
+When the spatial population is  *infinite* we do not have a list of all units in the population that can serve as a sampling frame. In this case we use a map showing the boundaries of the population as a sampling frame. The selection procedure is as follows:
+
+1. Determine the minimum and maximum $s_1$ and $s_2$ coordinates of the field (bounding box).  
+2. Draw two independent (pseudo-)random coordinates $s_{1,\mathrm{ran}}$ and $s_{2,\mathrm{ran}}$.  
+3. Use a point-in-polygon routine to determine wether $(s_{1,\mathrm{ran}}, s_{2,\mathrm{ran}})$ falls within the area.  
+4. Repeat steps 2 and 3 until $n$ locations are selected.
+
+This procedure is implemented in the function ```spsample``` of ```R``` package ```sp```. Alternatively, we may discretize the study area by a very fine grid, make a list of all the grid nodes, and sample from this list as before (see next chunk). So in this case the infinite population is represented as a very large finite population.
+
+In the next chunk a simple random sample without replacement (SI) of size 40 is selected from Voorst. Note that the class of the ```R``` object ```grdVoorst``` is a ```data.frame```, so the infinite population is represented by a very large finite population. The result is shown in Figure \@ref(fig:SampleSI).
+
+```{r }
+n <- 40
+N<-nrow(grdVoorst)
+set.seed(314)
+units <- sample.int(N, size = n, replace = FALSE)
+mysample <- grdVoorst[units,]
+estimatedMean <- mean(mysample$z)
+```
+
+```{r SampleSI, out.width='100%', fig.asp=.333, fig.cap="Simple random sample without replacement of size 40 from Voorst",echo=F}
+ggplot() +
+  geom_raster(data=grdVoorst,mapping = aes(x = s1/1000, y = s2/1000), fill="grey")+
+  geom_point(data=mysample,mapping = aes(x = s1/1000,y = s2/1000), size = 2) +
+  scale_x_continuous(name = "Easting (km)") +
+  scale_y_continuous(name = "Northing (km)") +
+  coord_fixed()+
+  theme(legend.position = "none")
+```
+
+The population mean as estimated by the sample mean, i.e. the average of the measurements on the selected sampling units, equals `r round(estimatedMean,2)`.
+
+#### Drop outs {-}
+What to do with selected units that do not belong to target population, or cannot be observed for whatever reason (e.g. no permission)? In practice it may happen that inspection in the field shows that a selected sampling unit does not belong to the target population. For instance, in a soil survey the sampling location may happen to fall on a road or in a build-up area. Shifting this location to a nearby unit may lead to biased estimates of the population mean, i.e., a systematic error in the estimated mean. This can be avoided by discarding these units and to replace them by sampling units on a reserve list, selected in the same way, i.e., by the same type of sampling design. The order of sampling units in this list must be the order in which they are selected. Do not replace a deleted sampling unit by the nearest sampling unit from the reserve list, but by the first unit, not yet selected, from the reserve list.
+
+## Horvitz-Thompson estimator
+For any probability sampling design the population total can be estimated as a weightd sum of the observations
+
+\begin{equation}
+\hat{t}(z)=\sum_{i=1}^n w_i z_i = \sum_{i=1}^n \frac{1}{\pi_i}z_i \;,
+(\#eq:HTTotal)
+\end{equation}
+
+with $n$ the sample size (number of selected units), $w_i$ the weight attached to unit $i$, $z_i$ the observed study variable for unit $i$, and $\pi_i$ the probability that unit $i$ is included in the sample (in short, inclusion probability). This estimator is referred to as the Horvitz-Thompson estimator or $\pi$-estimator. The $\pi$-estimator for the *mean* is simply the $\pi$-estimator for the total, divided by the total number of units in the population, $N$:
+
+\begin{equation}
+\hat{\bar{z}}=\frac{1}{N} \sum_{i=1}^n w_i z_i \;.
+(\#eq:HTMean)
+\end{equation}
+
+So the observations are multiplied by a weight $w_i$ which equals the inverse of the inclusion probabilities. One may think of the weights as the number of units in the population a selected unit represents. So, in sampling with *unequal* probabilities, the larger this inclusion probability is, the smaller the weight attached to the observation on this unit, whereas if a unit is selected with a small selection probability, then the observation on this unit gets a large weight
+
+For simple random sampling with replacement from a finite population the probability that a unit is selected in one draw equals $1/N$. With $n$ draws the probability that a unit is included in the sample (inclusion probability) equals $n/N$. It can be shown that for simple random sampling without replacement the inclusion probabilities are equal to those with simple random sampling with replacement [@loh99]. Substituting this in the $\pi$-estimator for the total gives for simple random sampling (with or without replacement)
+
+\begin{equation}
+\hat{t}_{\text{SI}}(z)=\frac{N}{n}\sum_{i=1}^n z_i=N \bar{z}_s \;,
+(\#eq:HTTotalSI)
+\end{equation}
+
+with $\bar{z}_s$ the (unweighted) *sample mean*. So for simple random sampling the $\pi$ estimator of the mean is the *unweighted* sample mean:
+
+\begin{equation}
+\hat{\bar{z}}_{\text{SI}} = \bar{z}_s = \frac{1}{n}\sum_{i=1}^n z_i \;.
+(\#eq:HTMeanSI)
+\end{equation}
+
+For *infinite* populations the total can be estimated by the (unweighted) sample mean multiplied by the area of the region of interest $A$:
+
+\begin{equation}
+\hat{t}_{\text{SI}}(z)= \frac{A}{n}\sum_{i=1}^{n}z_{i} \;.
+(\#eq:HTTotalSIInfinite)
+\end{equation}
+
+Comparing this estimator with the estimator for the finite population total (Eq. \@ref(eq:HTTotal)) shows that the inclusion probability $n/N$ in the latter estimator has been replaced by $n/A$, which can be interpreted as the inclusion probability \emph{density}, i.e., the number of sampling units per unit of area, or shortly, the \emph{sampling density}.
+
+The simulated population is now sampled 10000 times. For each sample the mean is estimated, as well as the variance of the estimated mean. How the variance is estimated, is explained hereafter in Section \@ref(VarMeanSI). Figure \@ref(fig:SamplingDistributionSI) shows a histogram of the 10000 estimated means.
+
+```{r SamplingDistributionSI, out.width='60%', fig.asp=1, echo=F, fig.cap="Sampling distribution of estimated mean with SI of size 40"}
+n <- 40
+NUMBER_OF_SAMPLES <- 10000
+
+estimatedMeansSI<-numeric(length=NUMBER_OF_SAMPLES)
+estimatedVarofMeans<-numeric(length=NUMBER_OF_SAMPLES)
+N <- nrow(grdVoorst)
+
+set.seed(314) #set seed so that results can be exactly reproduced
+
+for (i in 1:NUMBER_OF_SAMPLES) {
+  units <- sample.int(N, size = n, replace = FALSE)
+  estimatedMeansSI[i] <- mean(grdVoorst$z[units])
+  estimatedVarofMeans[i] <- (1-n/N)*var(grdVoorst$z[units])/n
+}
+ggplot() +
+  geom_histogram(aes(x=estimatedMeansSI),binwidth=0.2,colour="orange") +
+  scale_y_continuous(name = "Frequency") +
+  scale_x_continuous(name = "Estimated mean SOM")
+```
+
+If we would repeat the sampling an infinite number of times and make the width of the bins in the histogram infinitely small, then we obtain, after scaling so that the sum of the area under the curve equals 1, the *sampling distribution* of the estimated mean. Important summary statistics of this sampling distribution are:  
+1. Expectation (mean)  
+2. Variance, referred to as the *sampling* variance
+
+When the expectation equals the population mean, then the estimator is *p-unbiased* (*design-unbiased*). Do not confuse the *population* variance and the *sampling* variance. The population variance (spatial variance) is a *population characteristic*, whereas the sampling variance is a *characteristic of a sampling strategy*, i.e. a combination of a sampling design and an estimator. The sampling variance quantifies our *uncertainty* about the mean. The sampling variance can be manipulated by changing the sample size $n$, the type of sampling design, and the estimator. This has no effect on the population variance. The average of the `r NUMBER_OF_SAMPLES` estimated means equals `r round(mean(estimatedMeansSI),2)`, so the difference with the true population means equals `r round(mean(estimatedMeansSI)-mean(grdVoorst$z),3)`. The variance of the `r NUMBER_OF_SAMPLES` estimated means equals `r round(var(estimatedMeansSI),2)`.
+
+#### Questions: {-}   
+1. Compare the histogram of the estimated means with the histogram of the `r nrow(grdVoorst)` simulated values in the population (Figure \@ref(fig:histogramVoorst)). Explain the differences.  
+2. What happens with the spread in the histogram (variance of estimated means) when the sample size $n$ is increased?  
+3. Suppose we would repeat the sampling a billion number of times, what would happen with the difference between the average  of the estimated means and the population mean?
+
+In some cases one is interested in the proportion of the population (study area) satisfying a given condition. Think for instance of the proportion of trees in a forest infected by some disease, the proportion of an area in which a soil pollutant exceeds some critical threshold, or the proportion of an area where habitat conditions are suitable for some endangered species. A proportion is defined as the spatial mean of an 0/1 indicator $y$ with value 1 if the condition is satisfied, and 0 else. So for simple random sampling this proportion can be estimated by the same formula as for the mean (Eq. \@ref(eq:HTMeanSI)):
+
+\begin{equation}
+\hat{p}_{\text{SI}} =  \frac{1}{n}\sum_{i=1}^n y_i \;.
+(\#eq:HTProportionSI)
+\end{equation}
+
+
+## Sampling variance of estimated mean, total and proportion {#VarMeanSI}
+For simple random sampling of an infinite population and simple random sampling with replacement (SIR) of a finite population the sampling variance of the estimated mean equals
+
+\begin{equation}
+V\!\left(\hat{\bar{z}}_{\text{SIR}}\right)=\frac{S^{2}(z)}{n} \;,
+(\#eq:VarMean)
+\end{equation}
+
+with $S^{2}(z)$ the *population* variance, also referred to as the spatial variance. For finite populations this population variance is defined as
+
+\begin{equation}
+S^{2}(z)=\frac{1}{N}\sum\limits_{i=1}^{N}\left(z_{i}-\bar{z}\right)^{2} \;,
+(\#eq:PopulationVariance)
+\end{equation}
+
+and for infinite populations as
+
+\begin{equation}
+S^{2}(z) = \frac{1}{A} \int \limits_{\mathbf{s} \in \mathcal{A}} \left(z(\mathbf{s})-\bar{z}\right)^2\text{d}\mathbf{s} \;.
+(\#eq:PopulationVarianceInfinite)
+\end{equation}
+
+In practice we select only one sample, i.e. we do not repeat the sampling many times. Still it is possible to *estimate* the variance of the estimated means if we would repeat the sampling. In other words, we can estimate the sampling variance of the estimated mean from a single sample. We do so by estimating the population variance from the sample, and this estimate can be used on his turn to estimate the *sampling* variance of the estimated mean. For simple random sampling *with replacement* (SIR) from finite populations the sampling variance of the estimated mean can be estimated by
+
+\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\text{SIR}}\right)=\frac{\widehat{S^2}(z)}{n}= \frac{1}{n\,(n-1)}\sum\limits_{i=1}^{n}\left(z_{i}-\hat{\bar{z}}\right)^{2} \;,
+(\#eq:EstVarMeanSIR)
+\end{equation}
+
+with $\widehat{S^2}(z)$ the *estimated* population variance. This estimator can also be used for *infinite* populations. For simple random sampling *without replacement* (SI) from finite populations the sampling variance of the estimated mean can be estimated by
+
+\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\text{SI}}\right)=\left(1-\frac{n}{N}\right)\frac{\widehat{S^2}(z)}{n} \;.
+(\#eq:EstVarMeanSI)
+\end{equation}
+
+#### Questions {-}  
+1. Is the sampling variance for simple random sampling without replacement larger or smaller than for simple random sampling with replacement, given the sample size $n$? Explain your answer.  
+2. What is the effect of the population size $N$ on this difference?
+
+The term $1-\frac{n}{N}$ is referred to as the finite population correction (fpc).
+
+In the sampling experiment described above, the average of the `r NUMBER_OF_SAMPLES` *estimated* sampling variances equals `r round(mean(estimatedVarofMeans),3)`. The true sampling variance equals `r round( (1-n/N) * var(grdVoorst$z)/n,3)`. So the difference is very small, indicating that the estimator of the sampling variance (Eq. \@ref(eq:EstVarMeanSI) is unbiased.
+
+#### Questions {-}  
+1. Above I computed the true sampling variance, i.e. the variance of the estimated means if we would repeat the sampling an infinite number of times. How can this true sampling variance be computed?  
+2. In reality we cannot compute this true sampling variance. Why not?  
+
+The sampling variance of an estimated total of a finite population can be estimated by multiplying the estimated variance of the estimated mean by $N^2$. For simple random sampling without replacement this estimator thus equals
+
+\begin{equation}
+\widehat{V}\!\left(\hat{t}_{\text{SI}}(z)\right)=N^2 (1-\frac{n}{N})\frac{\widehat{S^{2}}(z)}{n} \;.
+(\#eq:EstVarTotalSI)
+\end{equation}
+
+For simple random sampling with replacement (SIR) and simple random sampling of infinite populations the sampling variance of the estimated total can be estimated by
+
+\begin{equation}
+\widehat{V}\!\left(\hat{t}_{\text{SIR}}(z)\right)=A^2\frac{\widehat{S^{2}}(z)}{n} \;.
+(\#eq:EstVarTotalSIR)
+\end{equation}
+
+The sampling variance of an estimated proportion $\hat{p}$ can be estimated by
+
+\begin{equation}
+\widehat{V}\!\left(\hat{p}_{\text{SI}}\right)=\left( 1-\frac{n}{N}\right) \frac{\hat{p}_{\text{SI}}(1-\hat{p}_{\text{SI}})}{n-1} \;.
+(\#eq:EstVarProportionSI)
+\end{equation}
+
+The numerator in this estimator is an estimate of the population variance of the indicator. Note that this estimated population variance is divided by $n-1$, and not by $n$ as in the estimator of the mean.
+
+## Confidence interval estimates
+A second way of expressing our uncertainty about the estimated total or mean (proportion) is to present not merely a single number, but an interval. The wider the interval, the more uncertain we are, and vice versa, the narrower the interval, the more confident we are about the estimate. To learn how to compute a confidence interval, I return to the sampling distribution of the estimated mean soil organic carbon concentration. Suppose we would like to compute the bounds of an interval $[a,b]$ such that 5\% of the estimated means is smaller than $a$, and 5\% is larger than $b$. To compute the lower bound $a$ and upper bound $b$ of this 90\%-interval, we must specify the distribution function. When the distribution of the target variable $z$ is approximately normal, then the sampling distribution of the estimated mean is also approximately normal, regardless of the sample size. The larger the sample size, the smaller the effect of the distribution of $z$ on the sampling distribution of the estimated mean. For instance, even when the distribution of $z$ is far from symmetric, then still the sampling distribution of the estimated mean is approximately normal if the sample size is large, say $n > 100$. This is the essence of the Central Limit Theorem. Above we already noticed that the sampling distribution is much less asymmetric than the histogram of the simulated values, and looks much more like a normal distribution. Assuming a normal distribution, the bounds of the 90\%-interval are given by:
+
+\begin{equation}
+\bar{z} \pm u_{1-(0.10/2)}\cdot \sqrt{V\!\left(\hat{\bar{z}}\right)} \;,
+(\#eq:CIBounds)
+\end{equation}
+
+where $u_{1-(0.10/2)}$ is the $0.95$ quantile of the standard normal distribution. Note that in this equation the population mean $\bar{z}$ and the sampling variance of the estimated mean $V\!\left(\hat{\bar{z}}\right)$ are used. These quantities are unknown in practice, and must be estimated from the sample. Usually the standard normal distribution is replaced by the Student $t$ distribution, which is a bit wider than the standard normal distribution. In this way we account for the unknown population variance. This leads to the following bounds of the $100(\alpha/2)\%$ confidence interval estimate of the mean:
+
+\begin{equation}
+\hat{\bar{z}}_{\text{SI}} \pm t^{(n-1)}_{1-\alpha /2}\cdot
+\sqrt{\widehat{V}\!\left(\hat{\bar{z}}_{\text{SI}}\right)} \;,
+(\#eq:CIBoundsStudent)
+\end{equation}
+
+where $t^{(n-1)}_{1-\alpha /2}$ is the $(1-\alpha /2)$ quantile of the Student $t$ distribution with $(n-1)$ degrees of freedom. The quantity $(1-\alpha)$ is referred to as the confidence level. The larger the number of degrees of freedom $(n-1)$, the closer the Student $t$ distribution is to the standard normal distribution.
+
+The interpretation and definition of a confidence interval is not straightforward. A common misinterpretation is that if the 90\% confidence interval estimate of the mean equals $[a,b]$, then the probability that the population mean is in this interval equals 90\%. This cannot be a correct interpretation, because the population mean is not a random variable, and consequently the probability that the population mean is in an interval does not exist. However, the estimated bounds of the confidence interval are random variables, because the estimated mean and also the estimated sampling variance varies between samples drawn with the sampling design, so it does make sense to attach a probability to this interval. Figure \@ref(fig:coverageconfinterval)  shows the 90\% confidence interval estimates of the mean for the first 100 simple random samples drawn above. Note that both the location and the width of the intervals differ between samples. For each sample I determined whether this interval covers the population mean.
+
+```{r coverageconfinterval, out.width='70%', fig.asp=1, echo=F, fig.cap="Estimated confidence intervals of the population mean"}
+lower<-estimatedMeansSI-qt(0.05,n-1,lower.tail=FALSE)*sqrt(estimatedVarofMeans)
+upper<-estimatedMeansSI+qt(0.05,n-1,lower.tail=FALSE)*sqrt(estimatedVarofMeans)
+truemean <- mean(grdVoorst$z)
+ind<-(truemean >lower & truemean < upper)
+coverage<-mean(ind)
+x<-c(lower[1:100],upper[1:100])
+y<-rep(seq_along(lower[1:100]),times=2)
+id<-y
+df<-data.frame(id,x,y)
+ggplot(data = df) +
+        geom_path(mapping=aes(x=x,y=y,group=id))+
+        scale_x_continuous(name = "90% interval estimate of mean")+
+        scale_y_continuous(name = "Sample\n",limits=c(0,100)) +
+        geom_vline(xintercept=truemean,colour="red")
+```
+
+Out of the `r NUMBER_OF_SAMPLES` samples, `r NUMBER_OF_SAMPLES - NUMBER_OF_SAMPLES*coverage` samples do not cover the population mean. 
+
+## Arbitrary (haphazard) sampling versus probability sampling
+In publications it is commonly stated that the sampling units were selected (more or less) at random (within strata), without further specification of how the sampling units were precisely selected. In statistical inference, the sampling units are subsequently treated as if they were selected by (stratified) simple random sampling. I would like to stress here that the term *random sampling* is often used in the meaning of *arbitrary* or *haphazard sampling* which is not equivalent to *probability sampling*. With probability sampling all units in the population have a positive probability of being selected, and the inclusion probabilities are known for all units. It is highly questionable whether this also holds for arbitrary and haphazard sampling. In arbitrary and haphazard sampling the sampling units are not selected by a probability mechanism. So the selection probabilities of the sampling units and of combinations of sampling units are unknown. This makes design-based estimation (design-based statistical inference) impossible, as this is based on the inclusion probabilities as determined by the sampling design, see the section on the Horvitz-Thompson estimator. The only way of statistical analysis of samples selected arbitrarily or haphazardly is model-based, i.e. a model of the spatial variation must be assumed.
+
+#### Exercise (SI.R) {-}
+1. Write an R script to select a simple random sample of size 100 from Voorst (data are in `Voorst.RData`).
+2. Use the selected sample to estimate the population mean of SOM and its standard error (SOM is in the column z of the dataframe). 
+3. Compute the lower- and upperbound of the 95-percent confidence interval using the Student $t$ distribution, and check whether the population mean SOM is covered by the interval.

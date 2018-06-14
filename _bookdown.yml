@@ -1,0 +1,7 @@
+book_filename: "SpatialSampling"
+language:
+  ui:
+    chapter_name: "Chapter "
+delete_merged_file: false
+output_dir: "docs"
+edit: https://github.com/DickBrus/SpatialSamplingwithR/%s
