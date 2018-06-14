@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial sampling with R</title>
+  <meta name="description" content="Spatial sampling with R">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial sampling with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial sampling with R" />
+  
+  
+  
+
+<meta name="author" content="Dick J. Brus">
+
+
+<meta name="date" content="2018-06-14">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="SY.html">
+<link rel="next" href="Cl.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Foreword</a></li>
+<li class="chapter" data-level="1" data-path="GeneralIntro.html"><a href="GeneralIntro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.1</b> Simulated population</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
+<li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
+<li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="STSI.html"><a href="STSI.html"><i class="fa fa-check"></i><b>4</b> Stratified random sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="STSI.html"><a href="STSI.html#estimation-of-the-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>4.1</b> Estimation of the mean and its sampling variance</a></li>
+<li class="chapter" data-level="4.2" data-path="STSI.html"><a href="STSI.html#confidence-interval-estimate"><i class="fa fa-check"></i><b>4.2</b> Confidence interval estimate</a></li>
+<li class="chapter" data-level="4.3" data-path="STSI.html"><a href="STSI.html#cumrootf"><i class="fa fa-check"></i><b>4.3</b> Optimal stratification</a></li>
+<li class="chapter" data-level="4.4" data-path="STSI.html"><a href="STSI.html#geographical-stratification"><i class="fa fa-check"></i><b>4.4</b> Geographical stratification</a></li>
+<li class="chapter" data-level="4.5" data-path="STSI.html"><a href="STSI.html#STSIallocation"><i class="fa fa-check"></i><b>4.5</b> Allocation of sample size to strata</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="SY.html"><a href="SY.html"><i class="fa fa-check"></i><b>5</b> Systematic random sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="SY.html"><a href="SY.html#EstVarSY"><i class="fa fa-check"></i><b>5.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="pps.html"><a href="pps.html"><i class="fa fa-check"></i><b>6</b> Sampling with probabilities proportional to size</a><ul>
+<li class="chapter" data-level="6.1" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-with-replacement-ppswr"><i class="fa fa-check"></i><b>6.1</b> Probability-proportional-to-size sampling with replacement (ppswr)</a></li>
+<li class="chapter" data-level="6.2" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-without-replacement-ppswor"><i class="fa fa-check"></i><b>6.2</b> Probability-proportional-to-size sampling without replacement (ppswor)</a></li>
+<li class="chapter" data-level="6.3" data-path="pps.html"><a href="pps.html#spatial-version-of-ppswor"><i class="fa fa-check"></i><b>6.3</b> Spatial version of ppswor</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
+<li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.1.1</b> Regression estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator"><i class="fa fa-check"></i><b>9.2</b> Ratio estimator</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.2.1</b> Ratio estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-with-unknown-mean-of-covariate"><i class="fa fa-check"></i><b>9.3</b> Regression estimator with unknown mean of covariate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="Balanced.html"><a href="Balanced.html"><i class="fa fa-check"></i><b>10</b> Balanced sampling</a><ul>
+<li class="chapter" data-level="10.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sample-versus-balanced-sampling-design"><i class="fa fa-check"></i><b>10.1</b> Balanced sample versus balanced sampling design</a></li>
+<li class="chapter" data-level="10.2" data-path="Balanced.html"><a href="Balanced.html#unequal-inclusion-probabilities"><i class="fa fa-check"></i><b>10.2</b> Unequal inclusion probabilities</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial sampling with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="pps" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Sampling with probabilities proportional to size</h1>
+<p>In simple random sampling the inclusion probabilities are equal for all sampling units. The advantage of this is simple and straightforward statistical inference. With equal inclusion probabilities the unweighted sample average is an unbiased estimator of the spatial mean, i.e. the sampling design is <em>self-weighting</em>. However, in some situations equal probability sampling will not be very efficient, i.e. given the sample size the precision of the estimated mean or total will be relatively low. An example is the following. In order to estimate the total area of a given crop in a country, a raster of square cells of, for instance, 10 km x 10 km is constructed and projected on the country. The square cells serve as the sampling units. Note that near the country border cells cross the border. Some of them may contain only a few hectares of the target population, the country under study. We do not want to select many of these squares with only a few hectares of the study area, as intuitively it is clear that this will result in low precision of the estimated crop area. In such situation it can be more efficient to select sampling units with probabilities proportional to the area of the target population within the squares, so that small sampling units near the border have smaller probability of being selected than interior sampling units. Actually, the sampling units are not the square cells, but the pieces of land obtained by overlaying the cells and the GIS file of the country under study. This entails that the sampling units have unequal size. These sampling units of unequal size are selected by probabilities proportional to their size.</p>
+<p>If we have a GIS file of land use categories such as agriculture, build-up areas, water bodies, forests <em>et cetera</em>, we may use this file to further adapt the selection probabilities. The crop will be grown in agricultural areas only, so in cells largely covered by non-agricultural land, we expect small crop areas only. As a size measure in computing the selection probabilities we may use the agricultural area (as represented in the GIS file) in the country under study within the cells. Note that size now has a different meaning. It does not refer to the area of the sampling units anymore, but to an ancillary variable that is hopefully related to the target variable, i.e. the crop area. When the crop area per cell is proportional to the agricultural area per cell, then it can be shown that the precision of the estimated total area of the crop can be increased by selecting the cells with probabilities proportional to the agricultural area.</p>
+<p>In this example the sampling units have an area. However, sampling with probabilities proportional to size is not restricted to areal sampling units, but can also be used for selecting points. If we have a map depicting an ancillary variable that is expected to be related to the target variable, this ancillary variable can be used as a size measure. For instance, in areas where soil organic carbon is related to (relative) elevation, it can be efficient to select sampling locations proportional to this environmental variable. The ancillary variable must be strictly positive for all locations.</p>
+<p>Sampling units can be selected with probabilities proportional to their size <em>with</em> or <em>without</em> replacement. This distinction is immaterial for infinite populations.</p>
+<p>Probability-proportional-to-size sampling is illustrated with a simulated field of poppy area per 5 km <span class="math inline">\(\times\)</span> 5 km square in the province of Kandahar, Afghanistan<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>. The agricultural area within the squares is used as a size variable. The scatter plot shows that there is a positive relation between the simulated poppy area and the agricultural area within the sampling units. Clearly the residual variance is not constant, but increases with the agricultural area.</p>
+<div class="figure" style="text-align: center"><span id="fig:pps"></span>
+<img src="SpatialSampling_files/figure-html/pps-1.png" alt="Scatter plot of poppy area against the size variable agricultural area" width="80%" />
+<p class="caption">
+Figure 6.1: Scatter plot of poppy area against the size variable agricultural area
+</p>
+</div>
+<div id="probability-proportional-to-size-sampling-with-replacement-ppswr" class="section level2">
+<h2><span class="header-section-number">6.1</span> Probability-proportional-to-size sampling with replacement (ppswr)</h2>
+<p>In the first draw a sampling unit is selected with probability <span class="math inline">\(p_i = x_i/t(x)\)</span>, with <span class="math inline">\(x_i\)</span> the size variable for sampling unit <span class="math inline">\(i\)</span> and <span class="math inline">\(t(x) = \sum_{i=1}^N x_i\)</span> the population total of the size variable. The selected unit is then replaced, and these two steps are repeated <span class="math inline">\(d\)</span> times. Note that with this sampling design sampling units can be selected more than once, especially with large sampling fractions <span class="math inline">\(d/N\)</span>. For infinite populations this probability density is 0.</p>
+With this design the spatial mean can be estimated design-unbiased by
+<span class="math display" id="eq:HHMeanppswr">\[\begin{equation}
+\hat{\bar{z}}_{\mathrm{pps}}=\frac{1}{Nd}\sum_{i=1}^{d}\frac{z_{i}}{p_{i}} \;,
+\tag{6.1}
+\end{equation}\]</span>
+where <span class="math inline">\(d\)</span> is the number of draws. This estimator is referred to as the <em>Hansen-Hurwitz estimator</em>. The sampling variance can be estimated by
+<span class="math display" id="eq:VarHHMeanppswr">\[\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\mathrm{pps}}\right)=
+\frac{1}{N^2\,d\,(d-1)}\sum_{i=1}^{d}\left( \frac{z_{i}}{p_{i}}-N\,\hat{\bar{z}}_{\mathrm{pps}}\right)^{2} \;.
+\tag{6.2}
+\end{equation}\]</span>
+<p>A ppswr sample of 50 draws is selected. The population total and mean of the poppy area is estimated, as well as their standard errors. As a first step I check whether the size variable is strictly positive (&gt;0). The minimum equals 3.066310^{-5}, so this is the case. If this woild not be the case, values equal to or smaller than zero must be replaced by a small number, so that these units also have a positive probability of being selected.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#compute draw-by-draw selection probabilities</span>
+grdKandahar<span class="op">$</span>prob&lt;-grdKandahar<span class="op">$</span>agri<span class="op">/</span><span class="kw">sum</span>(grdKandahar<span class="op">$</span>agri)
+<span class="co">#set number of draws</span>
+d&lt;-<span class="dv">40</span>
+<span class="co">#set seed</span>
+<span class="kw">set.seed</span>(<span class="dv">314</span>)
+N &lt;-<span class="st"> </span><span class="kw">nrow</span>(grdKandahar)
+units&lt;-<span class="kw">sample.int</span>(N,<span class="dt">size=</span>d,<span class="dt">replace=</span><span class="ot">TRUE</span>,<span class="dt">prob=</span>grdKandahar<span class="op">$</span>prob)
+mysample &lt;-<span class="st"> </span>grdKandahar[units,]
+<span class="co">#Hansen-Hurwitz estimator of population total and mean</span>
+zexpand&lt;-mysample<span class="op">$</span>poppy<span class="op">/</span>mysample<span class="op">$</span>prob
+totalz&lt;-<span class="kw">mean</span>(zexpand)
+meanz&lt;-<span class="st"> </span>totalz<span class="op">/</span>N
+<span class="co">#standard error of estimated population total and mean</span>
+setotal&lt;-<span class="kw">sqrt</span>(<span class="kw">var</span>(zexpand)<span class="op">/</span>d)
+semean&lt;-setotal<span class="op">/</span>N</code></pre></div>
+<p>The estimated total equals 4.2295810^{4} ha, with a standard error of 7190. Two units are selected twice:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(units)</code></pre></div>
+<pre><code>## units
+##  23  35  37  38  51 104 106 196 201 225 233 237 281 284 286 293 335 338 
+##   1   2   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1 
+## 339 340 354 359 378 382 390 391 407 424 440 447 449 477 488 528 535 564 
+##   1   1   1   2   1   1   1   1   1   1   1   1   1   1   1   1   1   1 
+## 896 898 
+##   1   1</code></pre>
+<p>Figure <a href="pps.html#fig:ppswrKandahar">6.2</a> shows the selected sampling units, plotted on a map of the agricultural area within the units, used as a size variable.</p>
+<div class="figure" style="text-align: center"><span id="fig:ppswrKandahar"></span>
+<img src="SpatialSampling_files/figure-html/ppswrKandahar-1.png" alt="ppswr sample of 40 draws from Kandahar, using agricultural area as size variable" width="100%" />
+<p class="caption">
+Figure 6.2: ppswr sample of 40 draws from Kandahar, using agricultural area as size variable
+</p>
+</div>
+<div id="exercise-pps.r" class="section level4 unnumbered">
+<h4>Exercise (pps.R)</h4>
+<ol style="list-style-type: decimal">
+<li>Write an R script to select a pps sample with replacement from the cotton farm in Uzbekistan, using EM as a size variable (data are in <code>CottonFarmUzbekistan.RData</code>). Draw 40 times a unit.<br />
+</li>
+<li>Estimate the mean ECe with the Hansen-Hurwitz estimator and its sampling variance<br />
+</li>
+<li>Challenge: compute the true sampling variances of the the Hansen-Hurwitz estimator and of the Horvitz-Thompson estimator for simple random sampling with replacement and the same sample size. Is there a gain in precision?</li>
+</ol>
+</div>
+</div>
+<div id="probability-proportional-to-size-sampling-without-replacement-ppswor" class="section level2">
+<h2><span class="header-section-number">6.2</span> Probability-proportional-to-size sampling without replacement (ppswor)</h2>
+<p>In pps sampling with replacement a sampling unit can be selected more than once, especially with large sampling fractions <span class="math inline">\(n/N\)</span>. This may decrease the sampling efficiency. Therefore, pps-sampling without replacement (ppswor) can be an attractive alternative. The selection of sampling units with inclusion probabilities proportional to size without replacement is not straightforward. Various ingenious sampling algorithms have been developed for this, such as Brewer’s method, Sampford’s method and the pivotal method <span class="citation">(Deville and Tille {1998})</span>, see <span class="citation">Y. Tillé (2006)</span> for an overview.</p>
+<p>In ppswor the inclusion probabilities are equal to the draw-by-draw selection probabilities <span class="math inline">\(p_i\)</span> of ppswr, multiplied by the sample size <span class="math inline">\(n\)</span>: <span class="math inline">\(\pi_i= n\;p_i = n\;x_i/t(x)\)</span>. In the pivotal method the <span class="math inline">\(N\)</span>-vector with inclusion probabilities are successively updated to a vector with indicators. If the indicator for sampling unit <span class="math inline">\(i\)</span> becomes value 1 then this sampling unit is selected, if it becomes 0 then it is not selected. One step in the updating algorithm can be described as follows:</p>
+<ol style="list-style-type: decimal">
+<li>select fully randomly two sampling units <span class="math inline">\(k\)</span> and <span class="math inline">\(l\)</span> with <span class="math inline">\(0&lt;\pi_k&lt;1\)</span> and <span class="math inline">\(0&lt;\pi_l&lt;1\)</span><br />
+</li>
+<li>If <span class="math inline">\(\pi_k + \pi_l &lt; 1\)</span> then update the probabilities by
+<span class="math display" id="eq:algppswor1">\[\begin{equation}
+(\pi^{\prime}_k,\pi^{\prime}_l)=\left\{
+\begin{array}{cc}
+(0,\pi_k+\pi_l) &amp; \;\;\;\text{with probability}\frac{\pi_l}{\pi_k+\pi_l} \\
+(\pi_k+\pi_l,0) &amp; \;\;\;\text{with probability}\frac{\pi_k}{\pi_k+\pi_l}
+\end{array}
+\right.
+\tag{6.3}
+\end{equation}\]</span>
+and if <span class="math inline">\(\pi_k + \pi_l \geq 1\)</span> then update the probabilities by
+<span class="math display" id="eq:algppswor2">\[\begin{equation}
+(\pi^{\prime}_k,\pi^{\prime}_l)=\left\{
+\begin{array}{cc}
+(1,\pi_k+\pi_l-1) &amp; \;\;\;\text{with probability}\frac{1-\pi_l}{2-(\pi_k+\pi_l)} \\
+(\pi_k+\pi_l-1,1) &amp; \;\;\;\text{with probability}\frac{1-\pi_k}{2-(\pi_k+\pi_l)}
+\end{array}
+\right.
+\tag{6.4}
+\end{equation}\]</span></li>
+<li>Replace (<span class="math inline">\(\pi_k,\pi_l\)</span>) by (<span class="math inline">\(\pi^{\prime}_k,\pi^{\prime}_l\)</span>), and repeat the first two steps until all units are either selected or not selected.</li>
+</ol>
+<p>In words, when the sum of the inclusion probabilities is smaller than 1, the updated inclusion probability of one of the points will become 0, which means that this point will not be sampled. The inclusion probability of the other point will become the sum of the two inclusion probabilities, which means that the probability that this point will be selected in one of the subsequent iterations increases. The probability of a point of being excluded from the sample is proportional to the inclusion probability of the other point, so that the larger the inclusion probability of the other point, the larger the probability that it will not be selected.</p>
+<p>When the sum of the inclusion probabilities of the two points is larger than or equal to 1, then one of the points is selected (updated inclusion probability is 1), while the inclusion probability of the other is lowered by 1 minus the inclusion probability of the selected point. The probability of being selected is proportional to the complement of the inclusion probability of the other point.</p>
+With this ppswor design the total can be estimated by the Horvitz-Thompson estimator:
+<span class="math display" id="eq:HTTotalppswor">\[\begin{equation}
+\hat{t}_{\text{ppswor}}(z)=\sum_{i=1}^{n}\frac{z_{i}}{\pi_{i}} \;,
+\tag{6.5}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(n\)</span> is the number of selected sampling units.</p>
+Several approximate variance estimators have been developed <span class="citation">(Matei and Tillé 2005)</span>. With small sampling fractions the Hansen-Hurwitz variance estimator can be used. In the sampling experiment on poppy area in Kandahar (see R chunk hereafter) this approximation overestimates the sampling variance. With large sampling fractions the variance can be approximated by
+<span class="math display" id="eq:VarTotalppswor">\[\begin{equation}
+\widehat{V}(\hat{t}_{\text{ppswor}}(z))=\frac{1}{1-\sum_{i\in s} a_i^2}\sum_{i\in s}(1-\pi_i)\left(\breve{z}_i-A\right)^2 \;,
+\tag{6.6}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\breve{z}_i=z_i/\pi_i\)</span>, <span class="math inline">\(a_i=(1-\pi_i)/\sum_{j\in s} (1-\pi_j)\)</span>, and <span class="math inline">\(A=\sum_{i\in s} a \breve{z}_i\)</span></p>
+<p>ppswor samples can be selected with varuious functions in R package <code>sampling</code>. I used the function <code>UPpivotal</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sampling)
+<span class="co">#set sample size</span>
+n &lt;-<span class="st"> </span><span class="dv">40</span>
+eps &lt;-<span class="st"> </span><span class="fl">1e-3</span>
+<span class="kw">set.seed</span>(<span class="dv">314</span>)
+ppswor &lt;-<span class="st"> </span><span class="cf">function</span>(sframe, size, n) {
+    pik &lt;-<span class="st"> </span><span class="kw">inclusionprobabilities</span>(size,n)
+    sampleind&lt;-<span class="kw">UPpivotal</span>(<span class="dt">pik=</span>pik,<span class="dt">eps=</span>eps)
+    mysample &lt;-<span class="st"> </span><span class="kw">data.frame</span>(sframe[sampleind<span class="op">&gt;</span>eps,],<span class="dt">pik=</span>pik[sampleind<span class="op">&gt;</span>eps])
+    <span class="kw">return</span>(mysample)
+}
+mysample &lt;-<span class="st"> </span><span class="kw">ppswor</span>(<span class="dt">sframe=</span>grdKandahar,<span class="dt">size=</span><span class="kw">ifelse</span>(grdKandahar<span class="op">$</span>agri<span class="op">&lt;</span><span class="fl">1E-12</span>,<span class="fl">0.1</span>,grdKandahar<span class="op">$</span>agri), <span class="dt">n=</span>n)
+totppsHT&lt;-<span class="kw">sum</span>(mysample<span class="op">$</span>poppy<span class="op">/</span>mysample<span class="op">$</span>pik)
+pk &lt;-<span class="st"> </span>mysample<span class="op">$</span>pik<span class="op">/</span>n
+<span class="co">#approximate variance by variance of Hansen-Hurwitz estimator</span>
+vartotHH&lt;-<span class="kw">var</span>(mysample<span class="op">$</span>poppy<span class="op">/</span>pk)<span class="op">/</span>n</code></pre></div>
+<p>Figure <a href="pps.html#fig:SamplingDistributionPps">6.3</a> shows the sampling distributions of the estimated total poppy area with ppswor sampling and simple random sampling without replacement of size 40, obtained by repeating the random sampling with each design and estimation 1000 times. For each ppswor sample the variance of the Horvitz-Thompson estimator is approximated by the variance of the Hansen-Hurwitz estimator.</p>
+<div class="figure" style="text-align: center"><span id="fig:SamplingDistributionPps"></span>
+<img src="SpatialSampling_files/figure-html/SamplingDistributionPps-1.png" alt="Sampling distribution of estimated total poppy area with ppswor and SI" width="70%" />
+<p class="caption">
+Figure 6.3: Sampling distribution of estimated total poppy area with ppswor and SI
+</p>
+</div>
+<p>Sampling design ppswor is clearly much more precise than simple random sampling. The standard deviation of the Horvitz-Thompson estimator of the total poppy area with ppswor equals 5757. The average of the square root of the approximated variances equals 6218.</p>
+<div id="questions-7" class="section level4 unnumbered">
+<h4>Questions</h4>
+<ol style="list-style-type: decimal">
+<li>A field with poppy was found outside Kandahar in a selected sampling unit crossing the boundary. Should this field be included in the sum of the poppy area of that sampling unit?<br />
+</li>
+<li>In another sampling unit a poppy field was encountered in Kandahar but in the area represented as non-agriculture in the GIS file. Should this field be included in the sum of that sampling unit?</li>
+</ol>
+</div>
+</div>
+<div id="spatial-version-of-ppswor" class="section level2">
+<h2><span class="header-section-number">6.3</span> Spatial version of ppswor</h2>
+<p>The units selected with ppswr and ppswor may show strong spatial clustering, which inflates the standard error of the estimated population total and mean. To avoid spatial clustering <span class="citation">A. Grafström, Lundström, and Schelin (2012)</span> developed the so-called local pivotal method for selecting a ppswor sample. The only diffrence with the pivotal method described above is the selection of the pairs of points. In the pivotal method the two points of a pair are selected independently, whereas in the local pivotal method the first point is selected fully randomly and the nearest neighbour of this point is used as its counterpart. Recall that when one point of a pair is included in the sample, the inclusion probability of its counterpart is decreased. This leads to a better spreading of the sampling units in geographic space.</p>
+<p>Selecting samples with the local pivotal method can be done with function <code>lpm</code> of R package <code>BalancedSampling</code>. Figure <a href="pps.html#fig:LPMKandahar">6.4</a> shows the sample of 40 units selected from the sampling frame of Kandahar.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pik &lt;-<span class="st"> </span><span class="kw">inclusionprobabilities</span>(grdKandahar<span class="op">$</span>agri,n)
+X&lt;-<span class="st"> </span><span class="kw">cbind</span>(grdKandahar<span class="op">$</span>x,grdKandahar<span class="op">$</span>y)
+units &lt;-<span class="st"> </span><span class="kw">lpm</span>(pik,X,<span class="dt">h=</span>N)
+mysample &lt;-<span class="st"> </span>grdKandahar[units,]</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:LPMKandahar"></span>
+<img src="SpatialSampling_files/figure-html/LPMKandahar-1.png" alt="Spatial ppswor sample selected by local pivotal method, using agricultural area as size variable " width="100%" />
+<p class="caption">
+Figure 6.4: Spatial ppswor sample selected by local pivotal method, using agricultural area as size variable
+</p>
+</div>
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="3">
+<li id="fn3"><p>The field is simulated with a model calibrated on sample data of poppy area. The field was simulated <em>unconditionally</em> on these sample data. The simulated field may therefore differ substantially from the real-world<a href="pps.html#fnref3">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="SY.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Cl.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

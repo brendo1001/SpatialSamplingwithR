@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial sampling with R</title>
+  <meta name="description" content="Spatial sampling with R">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial sampling with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial sampling with R" />
+  
+  
+  
+
+<meta name="author" content="Dick J. Brus">
+
+
+<meta name="date" content="2018-06-14">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="Twostage.html">
+<link rel="next" href="Balanced.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Foreword</a></li>
+<li class="chapter" data-level="1" data-path="GeneralIntro.html"><a href="GeneralIntro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.1</b> Simulated population</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
+<li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
+<li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="STSI.html"><a href="STSI.html"><i class="fa fa-check"></i><b>4</b> Stratified random sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="STSI.html"><a href="STSI.html#estimation-of-the-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>4.1</b> Estimation of the mean and its sampling variance</a></li>
+<li class="chapter" data-level="4.2" data-path="STSI.html"><a href="STSI.html#confidence-interval-estimate"><i class="fa fa-check"></i><b>4.2</b> Confidence interval estimate</a></li>
+<li class="chapter" data-level="4.3" data-path="STSI.html"><a href="STSI.html#cumrootf"><i class="fa fa-check"></i><b>4.3</b> Optimal stratification</a></li>
+<li class="chapter" data-level="4.4" data-path="STSI.html"><a href="STSI.html#geographical-stratification"><i class="fa fa-check"></i><b>4.4</b> Geographical stratification</a></li>
+<li class="chapter" data-level="4.5" data-path="STSI.html"><a href="STSI.html#STSIallocation"><i class="fa fa-check"></i><b>4.5</b> Allocation of sample size to strata</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="SY.html"><a href="SY.html"><i class="fa fa-check"></i><b>5</b> Systematic random sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="SY.html"><a href="SY.html#EstVarSY"><i class="fa fa-check"></i><b>5.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="pps.html"><a href="pps.html"><i class="fa fa-check"></i><b>6</b> Sampling with probabilities proportional to size</a><ul>
+<li class="chapter" data-level="6.1" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-with-replacement-ppswr"><i class="fa fa-check"></i><b>6.1</b> Probability-proportional-to-size sampling with replacement (ppswr)</a></li>
+<li class="chapter" data-level="6.2" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-without-replacement-ppswor"><i class="fa fa-check"></i><b>6.2</b> Probability-proportional-to-size sampling without replacement (ppswor)</a></li>
+<li class="chapter" data-level="6.3" data-path="pps.html"><a href="pps.html#spatial-version-of-ppswor"><i class="fa fa-check"></i><b>6.3</b> Spatial version of ppswor</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
+<li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.1.1</b> Regression estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator"><i class="fa fa-check"></i><b>9.2</b> Ratio estimator</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.2.1</b> Ratio estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-with-unknown-mean-of-covariate"><i class="fa fa-check"></i><b>9.3</b> Regression estimator with unknown mean of covariate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="Balanced.html"><a href="Balanced.html"><i class="fa fa-check"></i><b>10</b> Balanced sampling</a><ul>
+<li class="chapter" data-level="10.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sample-versus-balanced-sampling-design"><i class="fa fa-check"></i><b>10.1</b> Balanced sample versus balanced sampling design</a></li>
+<li class="chapter" data-level="10.2" data-path="Balanced.html"><a href="Balanced.html#unequal-inclusion-probabilities"><i class="fa fa-check"></i><b>10.2</b> Unequal inclusion probabilities</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial sampling with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="RegressionEstimator" class="section level1">
+<h1><span class="header-section-number">Chapter 9</span> Regression and ratio estimator</h1>
+<p>This Chapter is about the use of covariates in design-based estimation from probability samples. In many cases ancillary information is available that could be useful to increase the precision of the estimated mean or total of the study variable. The ancillary variable(s) can be qualitative (i.e., classifications) or quantitative. As we have seen before both types of ancillary variable can be used at the selection stage (design stage) to improve the performance of the sampling strategy, for instance by stratification (Chapter <a href="STSI.html#STSI">4</a>) or selecting sampling units with probabilities proportional to size (Chapter <a href="pps.html#pps">6</a>). In this Chapet I explain how these covariates can be used at the stage of <em>estimation</em>.</p>
+<div id="regression-estimator" class="section level2">
+<h2><span class="header-section-number">9.1</span> Regression estimator</h2>
+Suppose we have observed along with the study variable a quantitative variable that is linearly related to the study variable. Further suppose that we know the population mean of this covariate. Then for simple random sampling the mean of the study variable can be estimated by the regression estimator:
+<span class="math display" id="eq:RegressionEstimatorSI">\[\begin{equation}
+\hat{\bar{z}}_{\text{regr}}= \bar{z}_s+b\left( \bar{x}-\bar{x}_s\right) \;,
+\tag{9.1}
+\end{equation}\]</span>
+where <span class="math inline">\(\bar{z}_s\)</span> is the sample mean of the study variable, <span class="math inline">\(\bar{x}_s\)</span> is the sample mean of the covariate, <span class="math inline">\(\bar{x}\)</span> is the population mean of the covariate, and <span class="math inline">\(b\)</span> is the estimated regression coefficient (estimated slope). Note that for this estimator the population mean of the covariate must be known. So, if we know the covariate values only at the sampling points, then this estimator cannot be used. The regression coefficient <span class="math inline">\(b\)</span> is estimated by the least squares estimator:
+<span class="math display" id="eq:RegressionCoefficientSI">\[\begin{equation}
+b=\frac{\sum_{i=1}^n(x_i-\bar{x}_s)(z_i-\bar{z}_s)}{\sum_{i=1}^n(x_j-\bar{x}_s)^2}
+\tag{9.2}
+\end{equation}\]</span>
+<p>The rationale of the regression estimator is that when the estimated mean of the covariate is, for instance, smaller than the population mean of the covariate, then with a positive correlation between the study variable and covariate, also the estimated mean of the study variable is expected to be smaller than the population mean of the study variable. The difference between the population mean and estimated mean of the covariate can be used to improve the simple random sample estimate of the mean of <span class="math inline">\(z\)</span>, by adding a term proportional to the difference between the estimated mean and population mean of the covariate. As a proportion the slope of the regression line is used.</p>
+The sampling variance of this regression estimator can be estimated by computing first the regression residuals <span class="math inline">\(e_i= z_i - \hat{z}_i, i = 1 \cdots n\)</span> at the sampling points. The sampling variance of the regression estimator is <em>approximately</em> equal to the sampling variance of the estimated mean of these residuals:
+<span class="math display" id="eq:VarianceRegressionEstimatorSI">\[\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\mathrm{regr}}\right)=\frac{\widehat{S^{2}}(e)}{n} \;,
+\tag{9.3}
+\end{equation}\]</span>
+with <span class="math inline">\(\widehat{S^{2}}(e)\)</span> the estimated population variance of the regression residuals
+<span class="math display" id="eq:VarianceResiduals">\[\begin{equation}
+\widehat{S^{2}}(e)=\frac{1}{(n-2)}\sum\limits_{i=1}^{n}\left(e_{i}\right)^{2}
+\tag{9.4}
+\end{equation}\]</span>
+<p>The variance estimator is an approximation because the regression coefficient is also estimated from the sample, which makes the regression estimator nonlinear. For simple random sampling without replacement from finite populations, the variance estimator must be multiplied by <span class="math inline">\(1-n/N\)</span>.</p>
+<p>The regression estimator is illustrated with the electrical conductivity (ECe) data at the cotton farm in Uzbekistan, see Figure <a href="STSI.html#fig:EMCottonFarm">4.4</a>. As a covariate I use the electromagnetic measurements of the apparent electrical conductivity (EM). Figure <a href="RegressionEstimator.html#fig:ExhaustiveScatter">9.1</a> shows a scatter plot for all grid nodes (referred to as the exhaustive scatter plot).</p>
+<div class="figure" style="text-align: center"><span id="fig:ExhaustiveScatter"></span>
+<img src="SpatialSampling_files/figure-html/ExhaustiveScatter-1.png" alt="Exhaustive scatter plot of ECe against EM " width="70%" />
+<p class="caption">
+Figure 9.1: Exhaustive scatter plot of ECe against EM
+</p>
+</div>
+<p>The correlation coefficient equals 0.593. The slope of the fitted line equals 0.041. Now a simple random sample of 40 points is selected, and a simple linear model is fitted.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n&lt;-<span class="dv">40</span>
+<span class="kw">set.seed</span>(<span class="dv">314</span>)
+ids &lt;-<span class="st"> </span><span class="kw">sample.int</span>(<span class="kw">nrow</span>(grdUzbekistan), <span class="dt">size =</span> n, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
+mysample&lt;-grdUzbekistan[ids,<span class="kw">c</span>(<span class="st">&quot;ECe&quot;</span>,<span class="st">&quot;EM&quot;</span>)]
+<span class="co">#fit simple linear model</span>
+lmsample&lt;-<span class="kw">lm</span>(ECe<span class="op">~</span>EM,<span class="dt">data=</span>mysample)
+ab&lt;-<span class="kw">coef</span>(lmsample)</code></pre></div>
+<p>Figure <a href="RegressionEstimator.html#fig:ScatterECevsEM">9.2</a> shows the scatter plot for the sample and the fitted line.</p>
+<div class="figure" style="text-align: center"><span id="fig:ScatterECevsEM"></span>
+<img src="SpatialSampling_files/figure-html/ScatterECevsEM-1.png" alt="Scatterplot and fitted line for simple random sample" width="70%" />
+<p class="caption">
+Figure 9.2: Scatterplot and fitted line for simple random sample
+</p>
+</div>
+<p>The simple random sample is used to estimate the population mean of the study variable ECe by the regression estimator, and to approximate the sampling variance of the regression estimator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">populationmeanx&lt;-<span class="kw">mean</span>(grdUzbekistan<span class="op">$</span>EM) <span class="co">#population mean of covariate</span>
+samplemeanx&lt;-<span class="kw">mean</span>(mysample<span class="op">$</span>EM) <span class="co">#sample mean of covariate</span>
+samplemeanz&lt;-<span class="kw">mean</span>(mysample<span class="op">$</span>ECe) <span class="co">#sample mean of study variable</span>
+regressionestimate&lt;-samplemeanz<span class="op">+</span>ab[<span class="dv">2</span>]<span class="op">*</span>(populationmeanx<span class="op">-</span>samplemeanx) <span class="co">#regression estimate</span>
+e&lt;-<span class="kw">residuals</span>(lmsample)
+S2e&lt;-<span class="kw">sum</span>(e<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span>(n<span class="op">-</span><span class="dv">2</span>) <span class="co">#estimated variance of residuals</span>
+varregressionestimate&lt;-S2e<span class="op">/</span>n <span class="co">#estimated approximate variance of regression estimator</span></code></pre></div>
+<p>The difference <span class="math inline">\(\delta(x)\)</span> between the population mean of the covariate EM (49.947) and its estimated mean (41.984) equals 7.963. We may expect the difference between the unknown population mean of the study variable ECe and its sample mean (2.078) to be equal to <span class="math inline">\(\delta(x)\)</span>, multiplied by the estimated slope of the line, which equals 0.0194. The result (0.1545)is added to the simple random sample estimate. The resulting regression estimate (2.232) is closer to the population spatial mean of <span class="math inline">\(z\)</span> (2.586) than the simple random sample estimate (2.078).</p>
+<p>The estimated approximate variance of the regression estimator equals 0.021.Note that in approximating the variance of the regression estimator, the variance of the residuals is estimated by dividing the sum of squared residuals by <span class="math inline">\(n-2\)</span>, not <span class="math inline">\(n-1\)</span>. The reason is that we estimated two regression coefficients, the intercept and slope, so that we loose two degrees of freedom.</p>
+<p>Figure @(fig:SamplingDistributionRegression) shows the sampling distribution of the simple regression estimator, obtained by repeating the random sampling and estimation 10,000 times.</p>
+<div class="figure" style="text-align: center"><span id="fig:SamplingDistributionRegression"></span>
+<img src="SpatialSampling_files/figure-html/SamplingDistributionRegression-1.png" alt="Sampling distribution of regression and Horvitz-Thompson estimator for SI of size 40" width="70%" />
+<p class="caption">
+Figure 9.3: Sampling distribution of regression and Horvitz-Thompson estimator for SI of size 40
+</p>
+</div>
+<p>The average of the 10,000 regression estimates equals 2.591. The population mean of the study variable ECe equals 2.586. so the estimated bias of the regression estimator equals 0.005. The variance of the 10,000 regression estimates equals 0.037, and the average of the 10,000 estimated approximate variances equals 0.035. The gain in precision due to the regression estimator, quantified by the ratio of the variance of the Horvitz-Thompson estimator to the variance of the regression estimator equals 1.508.</p>
+<div id="exercise-regressionestimator.r" class="section level4 unnumbered">
+<h4>Exercise (RegressionEstimator.R)</h4>
+<p>In this exercise the mean soil salinity (electrical conductivity, ECe) of the field in Uzbekistan is estimated by the simple regression estimator using the electromagnetic measurements (EM) as a covariate. The data are in <code>CottonFarmUzbekistan.RData</code><br />
+1. Select a simple random sample without replacement of size 40 and estimate the mean ECe by the regression estimator<br />
+2. Approximate the sampling variance of the regression estimator<br />
+3. Repeat the sampling 10,000 times in a for-loop, compute the regression estimator for every sample, and compute the variance of the 10,000 regression estimates<br />
+4. Compute the true sampling variance of the Horvitz-Thompson estimator of the same size, and compute the gain in precision achieved by the regression estimator</p>
+</div>
+<div id="regression-estimator-for-stratified-simple-random-sampling" class="section level3">
+<h3><span class="header-section-number">9.1.1</span> Regression estimator for stratified simple random sampling</h3>
+With stratified simple random sampling sampling there are two regression estimators, the <em>separate</em> and the <em>combined</em> regression estimator. In the first estimator the regression estimator for simple random sampling is applied at the level of the strata. This implies that for each stratum separately a regression coefficient <span class="math inline">\(b_h\)</span> is estimated. The regression estimates of the stratum means are then combined by computing the weighted average, usng the relative sizes of the strata as weights:
+<span class="math display" id="eq:SeparateRegressionEstimator">\[\begin{equation}
+\hat{\bar{z}}_{\text{sepreg}}=\sum_{h=1}^H w_h \hat{\bar{z}}_{\text{regr,}h}
+\tag{9.5}
+\end{equation}\]</span>
+with
+<span class="math display" id="eq:RegressionEstimatorStratumMean">\[\begin{equation}
+\hat{\bar{z}}_{\text{regr,}h}= \bar{z}_{s,h}+b_h\left( \bar{x}_h-\bar{x}_{s,h}\right)
+\tag{9.6}
+\end{equation}\]</span>
+<p>with <span class="math inline">\(\bar{z}_{s,h}\)</span> and <span class="math inline">\(\bar{x}_{s,h}\)</span> the stratum sample means of the study variable and covariate, respectively, <span class="math inline">\(\bar{x}_h\)</span> the mean of the covariate in stratum <span class="math inline">\(h\)</span>, and <span class="math inline">\(b_h\)</span> the estimated slope coefficient for stratum <span class="math inline">\(h\)</span>.</p>
+<p>The variance of the seperate regression estimator of the population mean can be estimated by first estimating the variances of the regression estimators of the stratum means using Eq. <a href="RegressionEstimator.html#eq:VarianceRegressionEstimatorSI">(9.3)</a>, and then combining these variances using Eq. <a href="STSI.html#eq:EstVarMeanSTSI">(4.3)</a>.</p>
+The alternative is the combined regression estimator
+<span class="math display" id="eq:CombinedRegressionEstimator">\[\begin{equation}
+\hat{\bar{z}}_{\text{combreg}}= \hat{\bar{z}}_{\text{STSI}}+b_{\text{STSI}}\left( \bar{x}-\hat{\bar{x}}_{\text{STSI}}\right)
+\tag{9.7}
+\end{equation}\]</span>
+with
+<span class="math display" id="eq:CombinedRegressionCoefficient">\[\begin{equation}
+b_{\text{STSI}} = \frac{\sum_{h=1}^H w_h^2 \widehat{S^2}_h(x,z)/n_h}{\sum_{h=1}^H w_h^2 \widehat{S^2}_h(x)/n_h}
+\tag{9.8}
+\end{equation}\]</span>
+with <span class="math inline">\(\widehat{S^2}_h(x,z)\)</span> the estimated covariance of the study variable <span class="math inline">\(z\)</span> and the covariate <span class="math inline">\(x\)</span> in stratum <span class="math inline">\(h\)</span>:
+<span class="math display" id="eq:StratumCovariance">\[\begin{equation}
+\widehat{S}^2_h(x,z)=\frac{1}{n_h\,(n_h-1)}\sum\limits_{i=1}^{n_h} (z_{hi}-\bar{z}_{s,h})(x_{hi}-\bar{x}_{s,h})
+\tag{9.9}
+\end{equation}\]</span>
+and <span class="math inline">\(\widehat{S^2}_h(x)\)</span> the estimated variance of the covariate <span class="math inline">\(x\)</span> in stratum <span class="math inline">\(h\)</span>
+<span class="math display" id="eq:StratumVarianceCovariate">\[\begin{equation}
+\widehat{S^2}_h(x)=\frac{1}{n_h\,(n_h-1)}\sum\limits_{i=1}^{n_h} (z_{hi}-\bar{z}_{s,h})^2
+\tag{9.10}
+\end{equation}\]</span>
+<p>In the combined regression estimator only one regression coefficient <span class="math inline">\(b\)</span> is estimated, which is an estimate of the <em>population</em> regression coefficient (the slope of the line in the exhaustive scatterplot). This combined regression estimator is recommendable when the stratum sample sizes are small, so that the estimated regression coefficients per stratum, <span class="math inline">\(b_h\)</span>, become unreliable. The estimators above are for infinite populations and for stratified simple random sampling with replacement of finite populations. For sampling without replacement from finite populations, finite population corrections <span class="math inline">\(1-n_h/N_h\)</span> must be added to the numerator and denominator of <span class="math inline">\(b_{\text{STSI}}\)</span>, see p. 202 in <span class="citation">Cochran (1977)</span>.</p>
+<p>The variance of the combined regression estimator can be estimated as follows:<br />
+1. estimate the intercept: <span class="math inline">\(a_{\text{STSI}} = \hat{\bar{z}}_{\text{STSI}}-b_{\text{STSI}}\bar{x}\)</span><br />
+2. compute residuals: <span class="math inline">\(e_i = z_i - (a_{\text{STSI}} + b_{\text{STSI}} x_i)\)</span><br />
+3. estimate for each stratum the variance of the estimated mean of the residuals: <span class="math inline">\(\widehat{V}\!\left(\hat{\bar{e}}_h\right)=\widehat{S^{2}}_h(e)/n_h\)</span>, with <span class="math inline">\(\widehat{S^{2}}_h(e)\)</span> the estimated variance of the residuals in stratum <span class="math inline">\(h\)</span><br />
+4. combine the estimated variances per stratum: <span class="math inline">\(\widehat{V}\!\left(\hat{\bar{z}}_{\text{combreg}}\right)=\sum_{h=1}^Hw^2_h\widehat{V}\!\left(\hat{\bar{e}}_h\right)\)</span></p>
+<div id="exercise-regressionestimator_stsi.r" class="section level4 unnumbered">
+<h4>Exercise (RegressionEstimator_STSI.R)</h4>
+<p>In this exercise the mean soil salinity (electrical conductivity, ECe) of the field in Uzbekistan is estimated by stratified simple random sampling in combination with the regression estimator.<br />
+1. Construct two strata on the basis of covariate EM, using as a threshold 50. Then select a stratified simple random sample without replacement of size 40 with proportional allocation<br />
+2. Estimate the mean ECe by the seperate regression estimator and approximate the sampling variance of this regression estimator<br />
+3. Estimate the mean ECe by the combined regression estimator and approximate the sampling variance of this regression estimator</p>
+</div>
+</div>
+</div>
+<div id="ratio-estimator" class="section level2">
+<h2><span class="header-section-number">9.2</span> Ratio estimator</h2>
+<p>In some cases it is reasonable to assume that the fitted line goes through the origin. An example is the case study on poppy area in Kandahar (Chapter <a href="pps.html#pps">6</a>). In this case study the covariate is the agricultural area within the 5 km <span class="math inline">\(\times\)</span> 5 km squares that serve as sampling units. Assuming that this covariate is determined without error, it is reasonable to assume that when the covariate equals zero, also the poppy area is zero. This implies that when in fitting a straight line through a scatter plot of poppy area against agricultural area within sampling units, this line must pass the origin. In other words a model without intercept should be fitted. Hereafter it is shown that when the line is fitted with weights inversely proportional to the covariate, the slope of the fitted line equals the ratio of the population total poppy area and the population total agricultural area.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod&lt;-<span class="kw">lm</span>(poppy<span class="op">~</span>agri<span class="op">-</span><span class="dv">1</span>,<span class="dt">data=</span>grdKandahar,<span class="dt">weights=</span><span class="dv">1</span><span class="op">/</span>agri)
+(slope &lt;-<span class="st"> </span>mod<span class="op">$</span>coef)</code></pre></div>
+<pre><code>##      agri 
+## 0.1315106</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">populationtotalz&lt;-<span class="kw">sum</span>(grdKandahar<span class="op">$</span>poppy)
+populationtotalx&lt;-<span class="kw">sum</span>(grdKandahar<span class="op">$</span>agri)
+(ratio&lt;-populationtotalz<span class="op">/</span>populationtotalx)</code></pre></div>
+<pre><code>## [1] 0.1315106</code></pre>
+So, if we have a random sample, the slope of the regression line through the origin can simply be estimated by the ratio of the estimated total of the covariate <span class="math inline">\(x\)</span> to the estimated total of the study variable <span class="math inline">\(z\)</span>, which is equal to the ratio of the estimated mean of <span class="math inline">\(x\)</span> to the estimated mean of <span class="math inline">\(y\)</span>:
+<span class="math display" id="eq:RatioOfMeans">\[\begin{equation}
+b=\frac{\hat{t}(z)}{\hat{t}(x)}=\frac{\hat{\bar{z}}}{\hat{\bar{x}}}
+\tag{9.11}
+\end{equation}\]</span>
+with <span class="math inline">\(\hat{t}(z)\)</span> and <span class="math inline">\(\hat{t}(x)\)</span> the estimated totals of the study variable and ancillary variable, respectively, and <span class="math inline">\(\hat{\bar{z}}\)</span> and <span class="math inline">\(\hat{\bar{x}}\)</span> the estimated means of the study variable and ancillary variable, respectively. The total of the study variable <span class="math inline">\(z\)</span> can then be estimated by multiplying the total of the covariate <span class="math inline">\(x\)</span> by this ratio:
+<span class="math display" id="eq:RatioEstimatorSI">\[\begin{equation}
+\hat{t}_{\mathrm{ratio}}(z)=b \;t(x)
+\tag{9.12}
+\end{equation}\]</span>
+<p>with <span class="math inline">\(t(x)\)</span> the total of the ancillary variable, which must be known. This is a general estimator that can be used for any sampling design, not only for simple random sampling. For simple random sampling the population means of <span class="math inline">\(z\)</span> and <span class="math inline">\(x\)</span> are estimated by the sample means.</p>
+For simple random sampling the sampling variance of the ratio estimator of the population total can be approximated by
+<span class="math display" id="eq:VarianceRatioEstimatorSI">\[\begin{equation}
+\widehat{V}\!\left(\hat{t}_{\mathrm{ratio}}(z)\right)=N^2\frac{\widehat{S^{2}}(e)}{n} \;,
+\tag{9.13}
+\end{equation}\]</span>
+with <span class="math inline">\(\widehat{S^{2}}(e)\)</span> the estimated variance of the residuals <span class="math inline">\(e=z-bx\)</span>:
+<span class="math display" id="eq:VarianceResidualsRatioEstimator">\[\begin{equation}
+\widehat{S^{2}}(e)=\frac{1}{(n-1)}\sum\limits_{i=1}^{n}e_i^2
+\tag{9.14}
+\end{equation}\]</span>
+<p>For simple random sampling without replacement from finite populations Equation <a href="RegressionEstimator.html#eq:VarianceRatioEstimatorSI">(9.13)</a> must be multiplied by <span class="math inline">\((1-\frac{n}{N})\)</span>.</p>
+<div class="figure" style="text-align: center"><span id="fig:SamplingDistributionRatio"></span>
+<img src="SpatialSampling_files/figure-html/SamplingDistributionRatio-1.png" alt="Sampling distribution of ratio and Horvitz-Thompson estimator for SI of size 50 from Kandahar" width="70%" />
+<p class="caption">
+Figure 9.4: Sampling distribution of ratio and Horvitz-Thompson estimator for SI of size 50 from Kandahar
+</p>
+</div>
+<p>The average of the 10,000 ratio estimates of the total poppy area equals 3.615410^{4}. The population total of poppy equals 3.629510^{4}, so the estimated bias of the ratio estimator equals equals-140.565.The variance of the 10,000 ratio estimates equals 1.230456510^{8}, and the average of the 10,000 estimated approximate variances equals 1.090014310^{8}. The gain in precision due to the ratio estimator, quantified by the ratio of the variance of the Horvitz-Thompson estimator to the variance of the ratio estimator equals 1.698.</p>
+<div id="ratio-estimator-for-stratified-simple-random-sampling" class="section level3">
+<h3><span class="header-section-number">9.2.1</span> Ratio estimator for stratified simple random sampling</h3>
+Similar to the regression estimator there are two options: either estimate the ratios separately for the strata, or estimate a combined ratio. The separate ratio estimator is
+<span class="math display" id="eq:SeparateRatioEstimatorSTSI">\[\begin{equation}
+\hat{t}_{\mathrm{ratio,s}}(z)=\sum_{h=1}^H \hat{t}_{h,\mathrm{ratio}}(z)
+\tag{9.15}
+\end{equation}\]</span>
+with
+<span class="math display" id="eq:RatioEstimatorStratumTotal">\[\begin{equation}
+\hat{t}_{h,\mathrm{ratio}}(z)=\frac{\hat{t}_h(z)}{\hat{t}_h(x)} t_h(x)
+\tag{9.16}
+\end{equation}\]</span>
+<p>in which <span class="math inline">\(\hat{t}_h(z)\)</span> is the estimated total of the study variable for stratum <span class="math inline">\(h\)</span>.</p>
+The combined ratio estimator is
+<span class="math display" id="eq:CombinedRatioEstimatorSTSI">\[\begin{equation}
+\hat{t}_{\mathrm{ratio,c}}(z)=\frac{\sum_{h=1}^H\hat{t}_h(z)}{\sum_{h=1}^H\hat{t}_h(x)} t(x)
+\tag{9.17}
+\end{equation}\]</span>
+</div>
+</div>
+<div id="regression-estimator-with-unknown-mean-of-covariate" class="section level2">
+<h2><span class="header-section-number">9.3</span> Regression estimator with unknown mean of covariate</h2>
+<p>The regression estimator <a href="RegressionEstimator.html#eq:RegressionEstimatorSI">(9.1)</a> requires that the population mean of the ancillary variable <span class="math inline">\(x\)</span> is known. This section is about applying the regression estimator in situations where this mean of <span class="math inline">\(x\)</span> is unknown. A possible application is estimating the soil carbon stock (until a given depth) in an area. To estimate this carbon stock soil samples are collected and analyzed in laboratory. These laboratory measurements are very precise, but also expensive. Proximal sensors can be used to derive soil carbon concentrations from the spectra. Compared to laboratory measurements of soil these proximal sensor determinations are much cheaper, but also less precise. If there is a relation between the laboratory and proximal sensing determinations of SOC, then we expect that the regression estimator of the carbon stock will be more precise than the Horvitz-Thompson estimator which does not exploit the proximal sensing measurements. However, the spatial mean of the proximal sensing determinations is unknow. What we can do is estimate this mean from a large sample. At a subsample of this large sample, SOC concentration is also measured in the laboratory. This type of sampling is referred to as <em>two-phase sampling</em>. The term `phase’ does not refer to a period of time; all data can be collected in one sampling campaign. Intuitively with two-pase sampling the variance of the regression estimator of the total carbon stock will be larger than when the population mean of the proximal sensing determinations would be known. We are more uncertain about the total carbon stock, because we are uncertain about the population mean of the proximal sensing determinations.</p>
+<p>Figure <a href="RegressionEstimator.html#fig:twophaseCottonFarm">9.5</a> shows a two-phase sample from the cotton farm in Uzbekistan. In the first phase 40 points are selected by simple random sampling. In the second phase a subsample of 20 points (the triangles in the plot) are selected from the 40 points by simple random sampling without replacement. At all 40 points of the first-phase sample the covariate EM is measured, whereas the study variable (ECe) is measured at the 20 subsample points only. This sampling design does not require a full-coverage map of EM, which saves costs of fieldwork.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#set sample sizes</span>
+n1 &lt;-<span class="st"> </span><span class="dv">80</span>
+n2 &lt;-<span class="st"> </span><span class="dv">40</span>
+ids&lt;-<span class="kw">sample.int</span>(<span class="kw">nrow</span>(grdUzbekistan),<span class="dt">size=</span>n1,<span class="dt">replace=</span><span class="ot">FALSE</span>)
+mysample &lt;-<span class="st"> </span>grdUzbekistan[ids,]
+<span class="co">#subsample the selected sample, and observe the study variable</span>
+ids2 &lt;-<span class="st"> </span><span class="kw">sample.int</span>(<span class="kw">nrow</span>(mysample), <span class="dt">size =</span> n2, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
+mysubsample&lt;-mysample[ids2,]</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:twophaseCottonFarm"></span>
+<img src="SpatialSampling_files/figure-html/twophaseCottonFarm-1.png" alt="Two-phase sample for regression estimator of mean ECe" width="100%" />
+<p class="caption">
+Figure 9.5: Two-phase sample for regression estimator of mean ECe
+</p>
+</div>
+Estimation of the spatial mean or total by the regression estimator from a two-phase sample is very similar to estimation when the covariate mean is known, as described above. The observations on the <em>subsample</em> can be used to estimate the regression coefficients <span class="math inline">\(b\)</span>. The true spatial mean of the ancillary variable, (<span class="math inline">\(\bar{x}\)</span>), is unknown now. This true mean is replaced by the mean as estimated from the relatively large first-phase sample. The estimated mean <span class="math inline">\(\hat{\bar{x}}_{\mathrm{SI}}\)</span> is estimated from the subsample. This leads to the following estimator
+<span class="math display" id="eq:RegressionEstimatorTwoPhase">\[\begin{equation}
+\hat{\bar{z}}_{\text{regr,2ph}}= \bar{z}_{s2}+b\left( \bar{x}_{s1}-\bar{x}_{s2}\right) \;,
+\tag{9.18}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\bar{z}_{s2}\)</span> is the subsample mean of the study variable, and <span class="math inline">\(\bar{x}_{s1}\)</span> and <span class="math inline">\(\bar{x}_{s2}\)</span> are the means of the covariate in the first-phase sample and subsample (second-phase sample), respectively.</p>
+The sampling variance is larger than that of the regression estimator with known mean of <span class="math inline">\(x\)</span>. The variance can be decomposed into a component equal to the sampling variance of the estimated mean of <span class="math inline">\(z\)</span>, as estimated from the first-phase sample (supposing that the study variable would be observed on all units of the first-phase sample), and a component equal to the sampling variance of the regression estimator of the mean of <span class="math inline">\(z\)</span> in the first-phase sample:
+<span class="math display" id="eq:VarianceRegressionEstimatorTwoPhase">\[\begin{equation}
+\widehat{V}\!\left(\hat{\bar{z}}_{\mathrm{regr,2ph}}\right)=\frac{\widehat{S^{2}}(z)}{n_1} + (1-\frac{n_2}{n_1}) \frac{\widehat{S^{2}}(e)}{n_2} \;,
+\tag{9.19}
+\end{equation}\]</span>
+with <span class="math inline">\(\widehat{S^{2}}(e)\)</span> the variance of the regression residuals as estimated from the subsample
+<span class="math display" id="eq:VarianceResidualsTwoPhase">\[\begin{equation}
+\widehat{S^{2}}(e)=\frac{1}{(n_2-2)}\sum\limits_{i=1}^{n}\left(e_{i}\right)^{2}
+\tag{9.20}
+\end{equation}\]</span>
+<p>Note the finite population correction (fpc) <span class="math inline">\((1-n_2/n_1)\)</span> in the variance estimator. This fpc accounts for the reduced variance due to subsampling the first-phase sample <em>without replacement</em>.</p>
+<div class="figure" style="text-align: center"><span id="fig:SamplingDistributionRegression2phase"></span>
+<img src="SpatialSampling_files/figure-html/SamplingDistributionRegression2phase-1.png" alt="Sampling distribution of regression estimator for two-phase sampling and regression estimator with mean of covariate known" width="70%" />
+<p class="caption">
+Figure 9.6: Sampling distribution of regression estimator for two-phase sampling and regression estimator with mean of covariate known
+</p>
+</div>
+<p>I repeated the two-phase sampling 10,000 times, see Figure <a href="RegressionEstimator.html#fig:SamplingDistributionRegression2phase">9.6</a>. The variance of the regression estimator equals 0.0461. This is larger than for the regression estimator with known mean of the covariate EM (0.0367), but still smaller than the variance of the Horvitz-Thompson estimator (0.0554).</p>
+<div id="exercise-regressionestimator_twophase.r" class="section level4 unnumbered">
+<h4>Exercise (RegressionEstimator_Twophase.R)</h4>
+<p>Similar to the previous Exercise (RegressionEstimator.R) the aim is to estimate the mean electrical conductivity (ECe) of the field in Uzbekistan, using electromagnetic (EM) measurements as a covariate in the regression estimator. Now we do not have a full-coverage map of EM, so that the population mean of EM is unknown. EM is measured at a relatively large first-phase sample. At a subsample soil samples are collected for measurement of ECe.<br />
+1. Select a random sample of 80 points and a subsample of 40 points by simple random sampling without replacement. Estimate the population mean of ECe by the regression estimator for two-phase sampling<br />
+2. Approximate the sampling variance of the regression estimator<br />
+3. Repeat this 10000 times in a for-loop, and compute the variance of the 10000 regression estimates of the mean of ECe<br />
+4. Compare the variance of the regression estimator for this two-phase sampling design with the variance of the regression estimator with known population mean of EM.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="Twostage.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Balanced.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial sampling with R</title>
+  <meta name="description" content="Spatial sampling with R">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial sampling with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial sampling with R" />
+  
+  
+  
+
+<meta name="author" content="Dick J. Brus">
+
+
+<meta name="date" content="2018-06-14">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="STSI.html">
+<link rel="next" href="pps.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Foreword</a></li>
+<li class="chapter" data-level="1" data-path="GeneralIntro.html"><a href="GeneralIntro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.1</b> Simulated population</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
+<li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
+<li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="STSI.html"><a href="STSI.html"><i class="fa fa-check"></i><b>4</b> Stratified random sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="STSI.html"><a href="STSI.html#estimation-of-the-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>4.1</b> Estimation of the mean and its sampling variance</a></li>
+<li class="chapter" data-level="4.2" data-path="STSI.html"><a href="STSI.html#confidence-interval-estimate"><i class="fa fa-check"></i><b>4.2</b> Confidence interval estimate</a></li>
+<li class="chapter" data-level="4.3" data-path="STSI.html"><a href="STSI.html#cumrootf"><i class="fa fa-check"></i><b>4.3</b> Optimal stratification</a></li>
+<li class="chapter" data-level="4.4" data-path="STSI.html"><a href="STSI.html#geographical-stratification"><i class="fa fa-check"></i><b>4.4</b> Geographical stratification</a></li>
+<li class="chapter" data-level="4.5" data-path="STSI.html"><a href="STSI.html#STSIallocation"><i class="fa fa-check"></i><b>4.5</b> Allocation of sample size to strata</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="SY.html"><a href="SY.html"><i class="fa fa-check"></i><b>5</b> Systematic random sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="SY.html"><a href="SY.html#EstVarSY"><i class="fa fa-check"></i><b>5.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="pps.html"><a href="pps.html"><i class="fa fa-check"></i><b>6</b> Sampling with probabilities proportional to size</a><ul>
+<li class="chapter" data-level="6.1" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-with-replacement-ppswr"><i class="fa fa-check"></i><b>6.1</b> Probability-proportional-to-size sampling with replacement (ppswr)</a></li>
+<li class="chapter" data-level="6.2" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-without-replacement-ppswor"><i class="fa fa-check"></i><b>6.2</b> Probability-proportional-to-size sampling without replacement (ppswor)</a></li>
+<li class="chapter" data-level="6.3" data-path="pps.html"><a href="pps.html#spatial-version-of-ppswor"><i class="fa fa-check"></i><b>6.3</b> Spatial version of ppswor</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
+<li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.1.1</b> Regression estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator"><i class="fa fa-check"></i><b>9.2</b> Ratio estimator</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.2.1</b> Ratio estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-with-unknown-mean-of-covariate"><i class="fa fa-check"></i><b>9.3</b> Regression estimator with unknown mean of covariate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="Balanced.html"><a href="Balanced.html"><i class="fa fa-check"></i><b>10</b> Balanced sampling</a><ul>
+<li class="chapter" data-level="10.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sample-versus-balanced-sampling-design"><i class="fa fa-check"></i><b>10.1</b> Balanced sample versus balanced sampling design</a></li>
+<li class="chapter" data-level="10.2" data-path="Balanced.html"><a href="Balanced.html#unequal-inclusion-probabilities"><i class="fa fa-check"></i><b>10.2</b> Unequal inclusion probabilities</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial sampling with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="SY" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Systematic random sampling</h1>
+<p>A simple way of drawing probability samples whose locations are spread uniformly over the study area, is systematic random sampling (SY). Figure <a href="SY.html#fig:sampleSY">5.1</a> shows a square grid randomly placed on Voorst.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">314</span>)
+n &lt;-<span class="st"> </span><span class="dv">40</span> <span class="co">#expected sample size</span>
+<span class="co">#change class of grdVoorst to SpatialPixelsDataFrame</span>
+<span class="kw">gridded</span>(grdVoorst) &lt;-<span class="st"> </span><span class="er">~</span>s1<span class="op">+</span>s2
+mysample&lt;-<span class="kw">spsample</span>(<span class="dt">x=</span>grdVoorst,<span class="dt">n=</span>n,<span class="dt">type=</span><span class="st">&quot;regular&quot;</span>)
+mysample&lt;-<span class="kw">as</span>(mysample,<span class="st">&quot;data.frame&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:sampleSY"></span>
+<img src="SpatialSampling_files/figure-html/sampleSY-1.png" alt="Systematic random sample from Voorst" width="100%" />
+<p class="caption">
+Figure 5.1: Systematic random sample from Voorst
+</p>
+</div>
+<p>I used the argument <code>n</code> in function <code>spsample</code> to set the sample size. Note that this is the <em>expected</em> sample size, i.e. on average over repeated sampling the sample size is 40. In Figure <a href="SY.html#fig:sampleSY">5.1</a> the number of selected sampling points equals 41. Alternative shapes for the grid cells are triangular and hexagonal. Triangular grids can be selected with function <code>spsample</code> with the argument <code>type = hexagonal</code> (which, I admit, is confusing). The triangular shape was shown to be most efficient in general. Besides the shape of the grid cells, we must decide on the size of the grid cells (grid spacing) and on the orientation of the grid. The grid spacing determines the number of sampling locations in the study area. So, if we have decided on the required (allowed) number of sampling locations, then we may use this number to calculate the grid spacing. For square grids, the grid spacing (m) can be calculated with <span class="math inline">\(\sqrt{A/n}\)</span>, where <span class="math inline">\(A\)</span> is the area in m<span class="math inline">\(^2\)</span>, and <span class="math inline">\(n\)</span> is the number of sampling locations. Instead of argument <code>n</code> of function <code>spsample</code> we may use argument argument <code>cellsize</code> to select a grid with a specified spacing.</p>
+<p>The grid is randomly placed over the study area as follows. One location is selected by simple random sampling from the study area. Given the chosen orientation of the grid, the grid is extended in all directions using the selected location as a starting node. Finally, all nodes are selected that fall within the study area. There is no strict need for random selection of the orientation of the grid, random selection of the first node suffices for design-based statistical inference (estimation).</p>
+<p>In general, the spatial coverage with random grid sampling is better than with a stratified random sample using compact geographical strata, even with one location per geostratum. Consequently, in general systematic random sampling will give on average more precise estimates of the mean or total.</p>
+<p>There are two disadvantages of systematic random sampling compared to geographically stratified random sampling. First, for systematic random sampling no unbiased estimator of the sampling variance exists. This is because we do not have independent replicates of the sample: the grid basically is one ‘cluster’ of sampling locations. Second, the number of sampling locations with random grid sampling is not fixed, but varies between randomly drawn samples. We may choose the grid spacing such that <em>on average</em> the number of sampling locations equals the required (allowed) number of sampling locations, but for the actually drawn sample, this number can be several locations smaller or larger. When the sample size shows strong variation, this may worsen the quality of the estimated mean.</p>
+<p>In Voorst the variation of the sample size is very large when the orientation of the grid is parallel to the sides of the rectangular study area (Figure <a href="SY.html#fig:samplesizeSY">5.2</a>). The histogram shows a bimodal distribution. The smaller sample sizes are of square grids with only two rows of points instead of three rows.</p>
+<div class="figure" style="text-align: center"><span id="fig:samplesizeSY"></span>
+<img src="SpatialSampling_files/figure-html/samplesizeSY-1.png" alt="Sampling distribution of sample size of SY" width="70%" />
+<p class="caption">
+Figure 5.2: Sampling distribution of sample size of SY
+</p>
+</div>
+<p>A large variation in sample size leads to a large sampling variance of the estimated mean, and therefore should be avoided. A random sample size may also be undesirable when this size is prescribed, for instance, in regulations. For voorst the variation in sample size can be reduced by changing the orientation. The R chunk below shows how to select a systematic random sample with a user-defined orientation. Figure <a href="SY.html#fig:sampleSY2">5.3</a> shows the selected square grid with orientation N60E.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gridtop &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">getGridTopology</span>(grdVoorst),<span class="st">&quot;data.frame&quot;</span>)
+A &lt;-<span class="st"> </span><span class="kw">nrow</span>(grdVoorst)<span class="op">*</span>gridtop<span class="op">$</span>cellsize[<span class="dv">1</span>]<span class="op">*</span>gridtop<span class="op">$</span>cellsize[<span class="dv">2</span>]
+spacing &lt;-<span class="st"> </span><span class="kw">sqrt</span>(A<span class="op">/</span>n)
+nx &lt;-<span class="st"> </span><span class="kw">floor</span>((gridtop<span class="op">$</span>cellsize[<span class="dv">1</span>]<span class="op">*</span>gridtop<span class="op">$</span>cells.dim[<span class="dv">1</span>])<span class="op">/</span>spacing)<span class="op">+</span><span class="dv">1</span>
+ny &lt;-<span class="st"> </span><span class="kw">floor</span>((gridtop<span class="op">$</span>cellsize[<span class="dv">2</span>]<span class="op">*</span>gridtop<span class="op">$</span>cells.dim[<span class="dv">2</span>])<span class="op">/</span>spacing)<span class="op">+</span><span class="dv">1</span>
+<span class="co">#choose angle</span>
+angle&lt;-<span class="st"> </span><span class="op">-</span>pi<span class="op">/</span><span class="dv">6</span>
+<span class="co">#construct square grid. Note large number of rows with negative y-coordinates</span>
+x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>,<span class="dt">to=</span>nx<span class="op">*</span><span class="dv">2</span>,<span class="dt">by=</span><span class="dv">1</span>)<span class="op">*</span>spacing
+y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span>ny<span class="op">*-</span><span class="dv">10</span>,<span class="dt">to=</span>ny,<span class="dt">by=</span><span class="dv">1</span>)<span class="op">*</span>spacing
+xygrd &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(x,y)
+<span class="kw">names</span>(xygrd) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;s1&quot;</span>,<span class="st">&quot;s2&quot;</span>)
+<span class="co">#compute coordinates on rotated axes </span>
+xygrd<span class="op">$</span>s1r &lt;-<span class="st"> </span>xygrd<span class="op">$</span>s1<span class="op">*</span><span class="kw">cos</span>(angle)<span class="op">+</span>xygrd<span class="op">$</span>s2<span class="op">*</span><span class="kw">sin</span>(angle)
+xygrd<span class="op">$</span>s2r &lt;-<span class="st"> </span><span class="op">-</span>xygrd<span class="op">$</span>s1<span class="op">*</span><span class="kw">sin</span>(angle)<span class="op">+</span>xygrd<span class="op">$</span>s2<span class="op">*</span><span class="kw">cos</span>(angle)
+<span class="co">#select random start</span>
+origin &lt;-<span class="st"> </span>gridtop<span class="op">$</span>cellcentre.offset
+start &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">s1=</span><span class="kw">runif</span>(<span class="dv">1</span>,<span class="dv">0</span>,spacing)<span class="op">+</span>origin[<span class="dv">1</span>],<span class="dt">s2=</span><span class="kw">runif</span>(<span class="dv">1</span>,<span class="dv">0</span>,spacing)<span class="op">+</span>origin[<span class="dv">2</span>])
+<span class="co">#add start to coordinates</span>
+xygrd<span class="op">$</span>s1rs &lt;-<span class="st"> </span>xygrd<span class="op">$</span>s1r<span class="op">+</span>start<span class="op">$</span>s1
+xygrd<span class="op">$</span>s2rs &lt;-<span class="st"> </span>xygrd<span class="op">$</span>s2r<span class="op">+</span>start<span class="op">$</span>s2
+<span class="co">#intersect rotated grid with SpatialPixelsDataFrame to see which gridpoints are in study area</span>
+<span class="kw">coordinates</span>(xygrd) &lt;-<span class="st"> </span><span class="er">~</span>s1rs<span class="op">+</span>s2rs
+res &lt;-<span class="st"> </span>(xygrd <span class="op">%over%</span><span class="st"> </span>grdVoorst)
+mysample &lt;-<span class="st"> </span>xygrd[<span class="op">!</span><span class="kw">is.na</span>(res<span class="op">$</span>z),]
+mysample<span class="op">$</span>z &lt;-<span class="st"> </span>res<span class="op">$</span>z[<span class="op">!</span><span class="kw">is.na</span>(res<span class="op">$</span>z)]</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:sampleSY2"></span>
+<img src="SpatialSampling_files/figure-html/sampleSY2-1.png" alt="Systematic random sample with orientation N60E" width="100%" />
+<p class="caption">
+Figure 5.3: Systematic random sample with orientation N60E
+</p>
+</div>
+<div id="EstVarSY" class="section level2">
+<h2><span class="header-section-number">5.1</span> Estimation of mean and its sampling variance</h2>
+With systematic random sampling all units have an equal inclusion probability. Consequently, the unweighted sample average is a design-unbiased estimator of the mean:
+<span class="math display" id="eq:HTMeanSY">\[\begin{equation}
+\hat{\bar{z}}_{\text{SY}}=\frac{1}{n}\sum_{i=1}^{n}z_{i} \;.
+\tag{5.1}
+\end{equation}\]</span>
+<p>An unbiased estimator of the sampling variance of the estimated mean is not available. A simple, often applied procedure is to calculate the sampling variance as if the sample were a simple random sample (Eq. #eq:HTMeanSI). In general this procedure over-estimates the sampling variance, so that we are on the safe side.</p>
+<p>Alternatively, the sampling variance can be estimated by treating the SY sample as if it were a stratified simple random sample (Eq. #eq:HTMeanSTSI). The sampling units are clustered on the basis of their spatial coordinates into <span class="math inline">\(H=n/2\)</span> clusters (<span class="math inline">\(n\)</span> even) or <span class="math inline">\(H=(n-1)/2\)</span> clusters (<span class="math inline">\(n\)</span> odd). The two (or three) sampling units of a cluster are then treated as a simple random sample from an undefined stratum, and the variance estimator for stratified random sampling is used. With <span class="math inline">\(n\)</span> even the stratum weights are <span class="math inline">\(1/H\)</span> for all strata, with <span class="math inline">\(n\)</span> odd the weights are computed as <span class="math inline">\(w_h=n_h/n\)</span>. See <span class="citation">Brus and Saby (2016)</span> for a comparison of various variance approximations for SY.</p>
+<div class="figure" style="text-align: center"><span id="fig:varapproxSY"></span>
+<img src="SpatialSampling_files/figure-html/varapproxSY-1.png" alt="Clustering of grid points for variance approximation" width="100%" />
+<p class="caption">
+Figure 5.4: Clustering of grid points for variance approximation
+</p>
+</div>
+<p>Figure <a href="SY.html#fig:SamplingDistributionSY">5.5</a> shows the sampling distributions of the estimated mean for systematic random sampling with orientation N60E and an expected sample size of 40, and simple random sampling, obtained by repeating the random sampling with each design and estimation 1000 times. For each systematic random sample the sampling variance of the estimated mean is approximated by the two estimators described above.</p>
+<div class="figure" style="text-align: center"><span id="fig:SamplingDistributionSY"></span>
+<img src="SpatialSampling_files/figure-html/SamplingDistributionSY-1.png" alt="Sampling distribution of estimated mean with SY and SI" width="70%" />
+<p class="caption">
+Figure 5.5: Sampling distribution of estimated mean with SY and SI
+</p>
+</div>
+<p>The boxplots of the estimated means indicate that SY is more precise than SI. The variance of the 10^{4} estimated means equals 0.283, whereas for SI this is 0.601. The average of the 10^{4} SI-approximated variances equals 0.642, and of the STSI-approximated variances 0.588. So the STSI approximation is slightly better, but in this case still strongly overestimates the sampling variance.</p>
+<p>The variation in sample size is much smaller compared to an NS-EW oriented grid, compare Figures <a href="SY.html#fig:samplesizeSY">5.2</a> and <a href="SY.html#fig:samplesizeSY2">5.6</a>.</p>
+<div class="figure" style="text-align: center"><span id="fig:samplesizeSY2"></span>
+<img src="SpatialSampling_files/figure-html/samplesizeSY2-1.png" alt="Sampling distribution of sample size of SY with orientation N60E" width="70%" />
+<p class="caption">
+Figure 5.6: Sampling distribution of sample size of SY with orientation N60E
+</p>
+</div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   32.00   38.00   40.00   39.97   41.00   46.00</code></pre>
+<div id="exercise-sy.r" class="section level4 unnumbered">
+<h4>Exercise (SY.R)</h4>
+<ol style="list-style-type: decimal">
+<li>Write an R script to select a systematic random sample (square grid) with an expected size of 40 from Voorst (data are in <code>Voorst.RData</code>).</li>
+<li>Overlay the selected points with <code>grdVoorst</code> using function <code>%over%</code> and extract the <em>z</em>-values at the selected SY sample. Estimate the population mean, and approximate its standard error by treating the SY sample as a simple random sample.<br />
+</li>
+<li>Cluster the gridpoints using function <code>stratify</code> of package <code>spcosa</code>, and approximate the standard error by treating the sample as a stratified random sample.</li>
+</ol>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="STSI.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pps.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
