@@ -172,7 +172,7 @@ for (i in 1:length(cls)) {
 ggplot(grdVoorst) +        
   geom_raster(mapping = aes(x = s1/1000, y = s2/1000,fill=zonef)) +
   geom_point(data=mysample, mapping = aes(x = s1/1000, y = s2/1000), size = 1.5) +
-  geom_vline(xintercept=c(202.517,204.517,206.517))+
+  geom_vline(xintercept=c(202.5195,204.5195,206.5195))+
   scale_x_continuous(name = "Easting (km)") +
   scale_y_continuous(name = "Northing (km)") +
   coord_fixed()+
