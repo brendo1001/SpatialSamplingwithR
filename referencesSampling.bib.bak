@@ -892,7 +892,7 @@
 }
 
 @Article{Grafstrom2013,
-  author    = {Grafstr{\"o}m, Anton and Till{\'e}, Yves},
+  author    = {Grafstr{\"o}m, A. and Till{\'e}, Y.},
   title     = {Doubly balanced spatial sampling with spreading and restitution of auxiliary totals},
   journal   = {Environmetrics},
   year      = {2013},

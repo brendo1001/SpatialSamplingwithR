@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-15">
+<meta name="date" content="2018-06-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -129,6 +129,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
 <li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
 <li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
@@ -234,7 +235,7 @@ Figure 9.3: Sampling distribution of regression and Horvitz-Thompson estimator f
 </div>
 <p>The average of the 10,000 regression estimates equals 2.591. The population mean of the study variable ECe equals 2.586. so the estimated bias of the regression estimator equals 0.005. The variance of the 10,000 regression estimates equals 0.037, and the average of the 10,000 estimated approximate variances equals 0.035. The gain in precision due to the regression estimator, quantified by the ratio of the variance of the Horvitz-Thompson estimator to the variance of the regression estimator equals 1.508.</p>
 <div id="exercise-regressionestimator.r" class="section level4 unnumbered">
-<h4>Exercise (RegressionEstimator.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator.R">RegressionEstimator.R</a>)</h4>
 <p>In this exercise the mean soil salinity (electrical conductivity, ECe) of the field in Uzbekistan is estimated by the simple regression estimator using the electromagnetic measurements (EM) as a covariate. The data are in <code>CottonFarmUzbekistan.RData</code><br />
 1. Select a simple random sample without replacement of size 40 and estimate the mean ECe by the regression estimator<br />
 2. Approximate the sampling variance of the regression estimator<br />
@@ -282,7 +283,7 @@ and <span class="math inline">\(\widehat{S^2}_h(x)\)</span> the estimated varian
 3. estimate for each stratum the variance of the estimated mean of the residuals: <span class="math inline">\(\widehat{V}\!\left(\hat{\bar{e}}_h\right)=\widehat{S^{2}}_h(e)/n_h\)</span>, with <span class="math inline">\(\widehat{S^{2}}_h(e)\)</span> the estimated variance of the residuals in stratum <span class="math inline">\(h\)</span><br />
 4. combine the estimated variances per stratum: <span class="math inline">\(\widehat{V}\!\left(\hat{\bar{z}}_{\text{combreg}}\right)=\sum_{h=1}^Hw^2_h\widehat{V}\!\left(\hat{\bar{e}}_h\right)\)</span></p>
 <div id="exercise-regressionestimator_stsi.r" class="section level4 unnumbered">
-<h4>Exercise (RegressionEstimator_STSI.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator_STSI.R">RegressionEstimator_STSI.R</a>)</h4>
 <p>In this exercise the mean soil salinity (electrical conductivity, ECe) of the field in Uzbekistan is estimated by stratified simple random sampling in combination with the regression estimator.<br />
 1. Construct two strata on the basis of covariate EM, using as a threshold 50. Then select a stratified simple random sample without replacement of size 40 with proportional allocation<br />
 2. Estimate the mean ECe by the seperate regression estimator and approximate the sampling variance of this regression estimator<br />
@@ -393,7 +394,7 @@ Figure 9.6: Sampling distribution of regression estimator for two-phase sampling
 </div>
 <p>I repeated the two-phase sampling 10,000 times, see Figure <a href="RegressionEstimator.html#fig:SamplingDistributionRegression2phase">9.6</a>. The variance of the regression estimator equals 0.0461. This is larger than for the regression estimator with known mean of the covariate EM (0.0367), but still smaller than the variance of the Horvitz-Thompson estimator (0.0554).</p>
 <div id="exercise-regressionestimator_twophase.r" class="section level4 unnumbered">
-<h4>Exercise (RegressionEstimator_Twophase.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator_Twophase.R">RegressionEstimator_Twophase.R</a>)</h4>
 <p>Similar to the previous Exercise (RegressionEstimator.R) the aim is to estimate the mean electrical conductivity (ECe) of the field in Uzbekistan, using electromagnetic (EM) measurements as a covariate in the regression estimator. Now we do not have a full-coverage map of EM, so that the population mean of EM is unknown. EM is measured at a relatively large first-phase sample. At a subsample soil samples are collected for measurement of ECe.<br />
 1. Select a random sample of 80 points and a subsample of 40 points by simple random sampling without replacement. Estimate the population mean of ECe by the regression estimator for two-phase sampling<br />
 2. Approximate the sampling variance of the regression estimator<br />
@@ -438,7 +439,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR-master/09-RatioRegressionEstimator.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/09-RatioRegressionEstimator.Rmd",
 "text": "Edit"
 },
 "download": null,

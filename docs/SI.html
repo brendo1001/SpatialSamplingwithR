@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-15">
+<meta name="date" content="2018-06-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -129,6 +129,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
 <li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
 <li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
@@ -188,20 +189,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Repeat steps 2 and 3 until <span class="math inline">\(n\)</span> locations are selected.</li>
 </ol>
 <p>This procedure is implemented in the function <code>spsample</code> of <code>R</code> package <code>sp</code>. Alternatively, we may discretize the study area by a very fine grid, make a list of all the grid nodes, and sample from this list as before (see next chunk). So in this case the infinite population is represented as a very large finite population.</p>
-<p>In the next chunk a simple random sample without replacement (SI) of size 40 is selected from Voorst. Note that the class of the <code>R</code> object <code>grdVoorst</code> is a <code>data.frame</code>, so the infinite population is represented by a very large finite population. The result is shown in Figure <a href="SI.html#fig:SampleSI">3.1</a>.</p>
+<p>In the next chunk a simple random sample without replacement (SI) of size 40 is selected from Voorst. Note that the class of the <code>R</code> object <code>grdVoorst</code> is a <code>data.frame</code>, so the infinite population is represented by a large, finite population.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="dv">40</span>
 N&lt;-<span class="kw">nrow</span>(grdVoorst)
 <span class="kw">set.seed</span>(<span class="dv">314</span>)
 units &lt;-<span class="st"> </span><span class="kw">sample.int</span>(N, <span class="dt">size =</span> n, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
-mysample &lt;-<span class="st"> </span>grdVoorst[units,]
-estimatedMean &lt;-<span class="st"> </span><span class="kw">mean</span>(mysample<span class="op">$</span>z)</code></pre></div>
+mysample &lt;-<span class="st"> </span>grdVoorst[units,]</code></pre></div>
+<p>Restricting the sampling locations to the nodes of a discretisation grid can be avoided as follows. The columns s1 and s2 in the <code>data.frame</code> <code>grdVoorst</code> are the spatial coordinates of the centres of gridcells of 25 m by 25 m. Now a simple random sample is selected in two stages. First <em>n</em> times a gridcell is selected by simple random sampling with replacement. Second, every time a gridcell is selected, one point is selected fully randomly within this gridcell. In the chunk below this selection procedure is implemented using function <code>jitter</code>. It adds random noise to the spatial coordinates of the centres of the selected gridcells, by drawing from a continuous uniform distribution unif(<span class="math inline">\(-c,c\)</span>), with <span class="math inline">\(c\)</span> half the sidelength of the square gridcells. With this selection procedure we respect that the population is infinite.</p>
+<pre class="jitter"><code>set.seed(314)
+units &lt;- sample.int(N, size = n, replace = TRUE)
+mysample &lt;- grdVoorst[units,]
+cellsize &lt;- 25
+mysample$s1 &lt;- jitter(mysample$s1,cellsize/2)
+mysample$s2 &lt;- jitter(mysample$s2,cellsize/2)</code></pre>
+<p>The result is shown in Figure <a href="SI.html#fig:SampleSI">3.1</a>.</p>
 <div class="figure" style="text-align: center"><span id="fig:SampleSI"></span>
 <img src="SpatialSampling_files/figure-html/SampleSI-1.png" alt="Simple random sample without replacement of size 40 from Voorst" width="100%" />
 <p class="caption">
 Figure 3.1: Simple random sample without replacement of size 40 from Voorst
 </p>
 </div>
-<p>The population mean as estimated by the sample mean, i.e. the average of the measurements on the selected sampling units, equals 8.33.</p>
 <div id="drop-outs" class="section level4 unnumbered">
 <h4>Drop outs</h4>
 <p>What to do with selected units that do not belong to target population, or cannot be observed for whatever reason (e.g. no permission)? In practice it may happen that inspection in the field shows that a selected sampling unit does not belong to the target population. For instance, in a soil survey the sampling location may happen to fall on a road or in a build-up area. Shifting this location to a nearby unit may lead to biased estimates of the population mean, i.e., a systematic error in the estimated mean. This can be avoided by discarding these units and to replace them by sampling units on a reserve list, selected in the same way, i.e., by the same type of sampling design. The order of sampling units in this list must be the order in which they are selected. Do not replace a deleted sampling unit by the nearest sampling unit from the reserve list, but by the first unit, not yet selected, from the reserve list.</p>
@@ -351,7 +358,7 @@ Figure 3.3: Estimated confidence intervals of the population mean
 <h2><span class="header-section-number">3.4</span> Arbitrary (haphazard) sampling versus probability sampling</h2>
 <p>In publications it is commonly stated that the sampling units were selected (more or less) at random (within strata), without further specification of how the sampling units were precisely selected. In statistical inference, the sampling units are subsequently treated as if they were selected by (stratified) simple random sampling. I would like to stress here that the term <em>random sampling</em> is often used in the meaning of <em>arbitrary</em> or <em>haphazard sampling</em> which is not equivalent to <em>probability sampling</em>. With probability sampling all units in the population have a positive probability of being selected, and the inclusion probabilities are known for all units. It is highly questionable whether this also holds for arbitrary and haphazard sampling. In arbitrary and haphazard sampling the sampling units are not selected by a probability mechanism. So the selection probabilities of the sampling units and of combinations of sampling units are unknown. This makes design-based estimation (design-based statistical inference) impossible, as this is based on the inclusion probabilities as determined by the sampling design, see the section on the Horvitz-Thompson estimator. The only way of statistical analysis of samples selected arbitrarily or haphazardly is model-based, i.e. a model of the spatial variation must be assumed.</p>
 <div id="exercise-si.r" class="section level4 unnumbered">
-<h4>Exercise (SI.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/SI.R">SI.R</a>)</h4>
 <ol style="list-style-type: decimal">
 <li>Write an R script to select a simple random sample of size 100 from Voorst (data are in <code>Voorst.RData</code>).</li>
 <li>Use the selected sample to estimate the population mean of SOM and its standard error (SOM is in the column z of the dataframe).</li>
@@ -396,7 +403,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR-master/03-SI.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/03-SI.Rmd",
 "text": "Edit"
 },
 "download": null,

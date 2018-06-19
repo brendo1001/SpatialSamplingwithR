@@ -15,8 +15,11 @@ n <- 40
 nh <- round(n * wh)
 #sum of stratum sample sizes is 41, we want 40, so we reduce largest stratum sample size by 1
 nh[1] <- nh[1] - 1
-units<-strata(grdVoorst,stratanames="stratum",size=nh[unique(grdVoorst$stratum)],method="srswor")
+units<-strata(grdVoorst,stratanames="stratum",size=nh[unique(grdVoorst$stratum)],method="srswr")
 mysample<-getdata(grdVoorst,units)
+cellsize <- 25
+mysample$s1 <- jitter(mysample$s1,cellsize/2)
+mysample$s2 <- jitter(mysample$s2,cellsize/2)
 ```
 
 The `r n` sampling units are apportioned proportionally to the size (area, number of pixels) of the strata. The larger a stratum, the more units are selected from this stratum.
@@ -95,11 +98,11 @@ Figure \@ref(fig:SamplingDistributionSTSI) shows the sampling distributions of t
 estimatedMeansSTSI<-estimatedMeansSI<-numeric(length=NUMBER_OF_SAMPLES)
 
 for (i in 1:NUMBER_OF_SAMPLES) {
-  units<-strata(grdVoorst,stratanames="stratum",size=nh[unique(grdVoorst$stratum)],method="srswor")
+  units<-strata(grdVoorst,stratanames="stratum",size=nh[unique(grdVoorst$stratum)],method="srswr")
   mysample<-getdata(grdVoorst,units)
   stratumMeans <- tapply(mysample$z,INDEX=mysample$stratum,FUN=mean)
   estimatedMeansSTSI[i] <- sum(wh*stratumMeans)
-  units<-sample.int(nrow(grdVoorst), size = n, replace = FALSE)
+  units<-sample.int(nrow(grdVoorst), size = n, replace = TRUE)
   estimatedMeansSI[i]<-mean(grdVoorst$z[units])
 }
 estimates<-data.frame(estimatedMeansSTSI,estimatedMeansSI)
@@ -157,7 +160,7 @@ df \approx \frac {\left(\sum_{h=1}^H a_h^2
 (\#eq:dfSattherwaite)
 \end{equation}
 
-#### Exercise (STSI.R) {-}
+#### Exercise ([STSI.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSI.R)) {-}
 1. Write an R script to select a stratified simple random sample of size 40 from Voorst (data are in `Voorst.RData`). Use variable `stratum`in the dataframe as a stratification variable, and use proportional allocation. Take care that the total sample size is 40.
 2. Estimate the population mean and its standard error  
 3. Compute the lower- and upperbound of the 95-percent confidence interval using the Student t distribution, and check whether the population mean SOM is covered by the interval  
@@ -210,7 +213,7 @@ ggplot(data = grdUzbekistan) +
   coord_equal()
 ```
 
-#### Exercise (STSIcumrootf.R) {-}
+#### Exercise ([STSIcumrootf.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSIcumrootf.R)) {-}
 1. Write an R script to compute ten cumrootf strata for the cotton farm in Uzbekistan using EM as stratification variable (data are in `CottonFarmUzbekistan.RData`).  
 2. Select a stratified simple random sample of size 40 (use function `strata` of package `sampling`). Use the stratum sample sizes as computed by the function `strata.cumrootf`.  What allocation is used for computing the stratum sample sizes?  
 3. Estimate the population mean of ECe and its variance.  
@@ -253,7 +256,7 @@ ggplot(mygeostrata) +
 2. The alternative to 20 geostrata and two points per geostratum is 40 geostrata and one point per geostratum. Which sampling strategy will be more precise?  
 3. The geostrata in the figure above have equal area, which can be enforced by argument `equalArea=TRUE`. Why are equal areas attractive? Work out the estimator of the population mean for strata of equal size.
 
-#### Exercise (STSIgeostrata.R) {-}
+#### Exercise ([STSIgeostrata.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSIgeostrata.R)) {-}
 1. Write an R script to construct 20 compact geographical strata of equal area for Farmsum. Read the shapefile `farmsum` using function `readOGR` of the add-on package `rgdal`. 
 2. Select two locations per geostratum, using function `spsample` of package `spcosa`.  
 3. Now construct 40 strata of equal area and randomly select one point per stratum.
@@ -263,7 +266,7 @@ ggplot(mygeostrata) +
 2. How would you group the strata?   
 3. Will the estimated sampling variance estimator be unbiased? If not, will it be overestimated or underestimated?  
 
-#### Exercise (STSIgeostrata\_composite.R) {-}
+#### Exercise ([STSIgeostrata\_composite.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSIgeostrata_composite.R)) {-}
 Laboratory costs for measuring the study variable can be saved by bulking the soil aliquots (composite sampling). There are two options: bulking all soil aliquots from the same stratum (bulking within strata) or bulking by selecting one aliquot from each stratum (bulking across strata). In `spcosa` bulking across strata is implemented. 
 
 1. Write an R script to construct 20 compact geographical strata for study area Voorst. Use the argument `equalArea = TRUE`.  

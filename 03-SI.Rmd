@@ -22,9 +22,9 @@ When the spatial population is  *infinite* we do not have a list of all units in
 3. Use a point-in-polygon routine to determine wether $(s_{1,\mathrm{ran}}, s_{2,\mathrm{ran}})$ falls within the area.  
 4. Repeat steps 2 and 3 until $n$ locations are selected.
 
-This procedure is implemented in the function ```spsample``` of ```R``` package ```sp```. Alternatively, we may discretize the study area by a very fine grid, make a list of all the grid nodes, and sample from this list as before (see next chunk). So in this case the infinite population is represented as a very large finite population.
+This procedure is implemented in the function `spsample` of `R` package `sp`. Alternatively, we may discretize the study area by a very fine grid, make a list of all the grid nodes, and sample from this list as before (see next chunk). So in this case the infinite population is represented as a very large finite population.
 
-In the next chunk a simple random sample without replacement (SI) of size 40 is selected from Voorst. Note that the class of the ```R``` object ```grdVoorst``` is a ```data.frame```, so the infinite population is represented by a very large finite population. The result is shown in Figure \@ref(fig:SampleSI).
+In the next chunk a simple random sample without replacement (SI) of size 40 is selected from Voorst. Note that the class of the `R` object `grdVoorst` is a `data.frame`, so the infinite population is represented by a large, finite population.
 
 ```{r }
 n <- 40
@@ -32,8 +32,20 @@ N<-nrow(grdVoorst)
 set.seed(314)
 units <- sample.int(N, size = n, replace = FALSE)
 mysample <- grdVoorst[units,]
-estimatedMean <- mean(mysample$z)
 ```
+
+Restricting the sampling locations to the nodes of a discretisation grid can be avoided as follows. The columns s1 and s2 in the `data.frame` `grdVoorst` are the spatial coordinates of the centres of gridcells of 25 m by 25 m. Now a simple random sample is selected in two stages. First *n* times a gridcell is selected by simple random sampling with replacement. Second, every time a gridcell is selected, one point is selected fully randomly within this gridcell. In the chunk below this selection procedure is implemented using function `jitter`. It adds random noise to the spatial coordinates of the centres of the selected gridcells, by drawing from a continuous uniform distribution unif($-c,c$), with $c$ half the sidelength of the square gridcells. With this selection procedure we respect that the population is infinite.  
+
+```{jitter r}
+set.seed(314)
+units <- sample.int(N, size = n, replace = TRUE)
+mysample <- grdVoorst[units,]
+cellsize <- 25
+mysample$s1 <- jitter(mysample$s1,cellsize/2)
+mysample$s2 <- jitter(mysample$s2,cellsize/2)
+```
+
+The result is shown in Figure \@ref(fig:SampleSI).
 
 ```{r SampleSI, out.width='100%', fig.asp=.333, fig.cap="Simple random sample without replacement of size 40 from Voorst",echo=F}
 ggplot() +
@@ -44,8 +56,6 @@ ggplot() +
   coord_fixed()+
   theme(legend.position = "none")
 ```
-
-The population mean as estimated by the sample mean, i.e. the average of the measurements on the selected sampling units, equals `r round(estimatedMean,2)`.
 
 #### Drop outs {-}
 What to do with selected units that do not belong to target population, or cannot be observed for whatever reason (e.g. no permission)? In practice it may happen that inspection in the field shows that a selected sampling unit does not belong to the target population. For instance, in a soil survey the sampling location may happen to fall on a road or in a build-up area. Shifting this location to a nearby unit may lead to biased estimates of the population mean, i.e., a systematic error in the estimated mean. This can be avoided by discarding these units and to replace them by sampling units on a reserve list, selected in the same way, i.e., by the same type of sampling design. The order of sampling units in this list must be the order in which they are selected. Do not replace a deleted sampling unit by the nearest sampling unit from the reserve list, but by the first unit, not yet selected, from the reserve list.
@@ -245,7 +255,7 @@ Out of the `r NUMBER_OF_SAMPLES` samples, `r NUMBER_OF_SAMPLES - NUMBER_OF_SAMPL
 ## Arbitrary (haphazard) sampling versus probability sampling
 In publications it is commonly stated that the sampling units were selected (more or less) at random (within strata), without further specification of how the sampling units were precisely selected. In statistical inference, the sampling units are subsequently treated as if they were selected by (stratified) simple random sampling. I would like to stress here that the term *random sampling* is often used in the meaning of *arbitrary* or *haphazard sampling* which is not equivalent to *probability sampling*. With probability sampling all units in the population have a positive probability of being selected, and the inclusion probabilities are known for all units. It is highly questionable whether this also holds for arbitrary and haphazard sampling. In arbitrary and haphazard sampling the sampling units are not selected by a probability mechanism. So the selection probabilities of the sampling units and of combinations of sampling units are unknown. This makes design-based estimation (design-based statistical inference) impossible, as this is based on the inclusion probabilities as determined by the sampling design, see the section on the Horvitz-Thompson estimator. The only way of statistical analysis of samples selected arbitrarily or haphazardly is model-based, i.e. a model of the spatial variation must be assumed.
 
-#### Exercise (SI.R) {-}
+#### Exercise ([SI.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/SI.R)) {-}
 1. Write an R script to select a simple random sample of size 100 from Voorst (data are in `Voorst.RData`).
 2. Use the selected sample to estimate the population mean of SOM and its standard error (SOM is in the column z of the dataframe). 
 3. Compute the lower- and upperbound of the 95-percent confidence interval using the Student $t$ distribution, and check whether the population mean SOM is covered by the interval.

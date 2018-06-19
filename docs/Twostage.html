@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-15">
+<meta name="date" content="2018-06-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -129,6 +129,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
 <li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
 <li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
@@ -202,11 +203,14 @@ twostage &lt;-<span class="st"> </span><span class="cf">function</span>(sframe,p
 }
 <span class="kw">set.seed</span>(<span class="dv">314</span>)
 mysample &lt;-<span class="st"> </span><span class="kw">twostage</span>(<span class="dt">sframe=</span>grdVoorst,<span class="dt">psu=</span><span class="st">&quot;psu&quot;</span>,<span class="dt">d=</span>d,<span class="dt">m=</span>m)
+cellsize &lt;-<span class="st"> </span><span class="dv">25</span>
+mysample<span class="op">$</span>s1 &lt;-<span class="st"> </span><span class="kw">jitter</span>(mysample<span class="op">$</span>s1,cellsize<span class="op">/</span><span class="dv">2</span>)
+mysample<span class="op">$</span>s2 &lt;-<span class="st"> </span><span class="kw">jitter</span>(mysample<span class="op">$</span>s2,cellsize<span class="op">/</span><span class="dv">2</span>)
 psumeans &lt;-<span class="st"> </span><span class="kw">tapply</span>(mysample<span class="op">$</span>z,<span class="dt">INDEX=</span>mysample<span class="op">$</span>psu,<span class="dt">FUN=</span>mean)
 meanz &lt;-<span class="st"> </span><span class="kw">mean</span>(psumeans)
 Vmeanz &lt;-<span class="st"> </span><span class="kw">var</span>(psumeans) <span class="op">/</span><span class="st"> </span>d</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-15"></span>
-<img src="SpatialSampling_files/figure-html/unnamed-chunk-15-1.png" alt="Two-stage random sample from Voorst" width="100%" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-16"></span>
+<img src="SpatialSampling_files/figure-html/unnamed-chunk-16-1.png" alt="Two-stage random sample from Voorst" width="100%" />
 <p class="caption">
 Figure 8.1: Two-stage random sample from Voorst
 </p>
@@ -240,7 +244,7 @@ Figure 8.2: Sampling distribution of estimated mean with Twostage random samplin
 </div>
 <p>The variance of the 10^{4} means with two-stage random sampling equals 1.383. This is considerably larger than with SI: 0.592. The average of the estimated variances equals 1.431.</p>
 <div id="exercise-twostage.r" class="section level4 unnumbered">
-<h4>Exercise (TwoStage.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/TwoStage.R">TwoStage.R</a>)</h4>
 <ol style="list-style-type: decimal">
 <li>Write an R script to select a two-stage random sample from Voorst. Select four times a psu by ppswr, and ten points (ssu’s) per psu-draw by SI.<br />
 </li>
@@ -289,7 +293,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR-master/08-Twostage.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/08-Twostage.Rmd",
 "text": "Edit"
 },
 "download": null,

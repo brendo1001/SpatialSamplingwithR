@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-15">
+<meta name="date" content="2018-06-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -129,6 +129,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
 <li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
 <li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
@@ -180,8 +181,11 @@ n &lt;-<span class="st"> </span><span class="dv">40</span>
 nh &lt;-<span class="st"> </span><span class="kw">round</span>(n <span class="op">*</span><span class="st"> </span>wh)
 <span class="co">#sum of stratum sample sizes is 41, we want 40, so we reduce largest stratum sample size by 1</span>
 nh[<span class="dv">1</span>] &lt;-<span class="st"> </span>nh[<span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
-units&lt;-<span class="kw">strata</span>(grdVoorst,<span class="dt">stratanames=</span><span class="st">&quot;stratum&quot;</span>,<span class="dt">size=</span>nh[<span class="kw">unique</span>(grdVoorst<span class="op">$</span>stratum)],<span class="dt">method=</span><span class="st">&quot;srswor&quot;</span>)
-mysample&lt;-<span class="kw">getdata</span>(grdVoorst,units)</code></pre></div>
+units&lt;-<span class="kw">strata</span>(grdVoorst,<span class="dt">stratanames=</span><span class="st">&quot;stratum&quot;</span>,<span class="dt">size=</span>nh[<span class="kw">unique</span>(grdVoorst<span class="op">$</span>stratum)],<span class="dt">method=</span><span class="st">&quot;srswr&quot;</span>)
+mysample&lt;-<span class="kw">getdata</span>(grdVoorst,units)
+cellsize &lt;-<span class="st"> </span><span class="dv">25</span>
+mysample<span class="op">$</span>s1 &lt;-<span class="st"> </span><span class="kw">jitter</span>(mysample<span class="op">$</span>s1,cellsize<span class="op">/</span><span class="dv">2</span>)
+mysample<span class="op">$</span>s2 &lt;-<span class="st"> </span><span class="kw">jitter</span>(mysample<span class="op">$</span>s2,cellsize<span class="op">/</span><span class="dv">2</span>)</code></pre></div>
 <p>The 40 sampling units are apportioned proportionally to the size (area, number of pixels) of the strata. The larger a stratum, the more units are selected from this stratum.</p>
 <div class="figure" style="text-align: center"><span id="fig:SampleSTSI"></span>
 <img src="SpatialSampling_files/figure-html/SampleSTSI-1.png" alt="Stratified simple random sample of size 40 from Voorst" width="100%" />
@@ -218,7 +222,7 @@ The same estimator is found when the Horvitz-Thompson estimator is worked out fo
 \tag{4.5}
 \end{equation}\]</span>
 <p>and <span class="math inline">\(n_{h}\)</span> is the number of sampling locations in stratum <span class="math inline">\(h\)</span>. Note that the sampling variance is for infinite populations and simple random sampling <em>with replacement</em> from finite population. For without replacement the variances of the estimated stratum means must be multiplied by the fpc’s <span class="math inline">\(1- (n_h/N_h)\)</span>.</p>
-<p>For the stratified sample of Fig <a href="STSI.html#fig:SampleSTSI">4.1</a> the estimated mean equals 7.81 and the estimated sampling variance of this estimate equals 0.3.</p>
+<p>For the stratified sample of Fig <a href="STSI.html#fig:SampleSTSI">4.1</a> the estimated mean equals 7.6 and the estimated sampling variance of this estimate equals 0.35.</p>
 <p>Why should we stratify? There can be two reasons:</p>
 <ol style="list-style-type: decimal">
 <li>We are interested in the means (totals) per stratum .</li>
@@ -266,7 +270,7 @@ df \approx \frac {\left(\sum_{h=1}^H a_h^2
 \tag{4.9}
 \end{equation}\]</span>
 <div id="exercise-stsi.r" class="section level4 unnumbered">
-<h4>Exercise (STSI.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSI.R">STSI.R</a>)</h4>
 <ol style="list-style-type: decimal">
 <li>Write an R script to select a stratified simple random sample of size 40 from Voorst (data are in <code>Voorst.RData</code>). Use variable <code>stratum</code>in the dataframe as a stratification variable, and use proportional allocation. Take care that the total sample size is 40.</li>
 <li>Estimate the population mean and its standard error<br />
@@ -310,7 +314,7 @@ Figure 4.5: Optimal strata obtained with cumrootf
 </p>
 </div>
 <div id="exercise-stsicumrootf.r" class="section level4 unnumbered">
-<h4>Exercise (STSIcumrootf.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSIcumrootf.R">STSIcumrootf.R</a>)</h4>
 <ol style="list-style-type: decimal">
 <li>Write an R script to compute ten cumrootf strata for the cotton farm in Uzbekistan using EM as stratification variable (data are in <code>CottonFarmUzbekistan.RData</code>).<br />
 </li>
@@ -356,7 +360,7 @@ Figure 4.6: Compact geostrata of equal size in Voorst
 </ol>
 </div>
 <div id="exercise-stsigeostrata.r" class="section level4 unnumbered">
-<h4>Exercise (STSIgeostrata.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSIgeostrata.R">STSIgeostrata.R</a>)</h4>
 <ol style="list-style-type: decimal">
 <li>Write an R script to construct 20 compact geographical strata of equal area for Farmsum. Read the shapefile <code>farmsum</code> using function <code>readOGR</code> of the add-on package <code>rgdal</code>.</li>
 <li>Select two locations per geostratum, using function <code>spsample</code> of package <code>spcosa</code>.<br />
@@ -375,7 +379,7 @@ Figure 4.6: Compact geostrata of equal size in Voorst
 </ol>
 </div>
 <div id="exercise-stsigeostrata_composite.r" class="section level4 unnumbered">
-<h4>Exercise (STSIgeostrata_composite.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSIgeostrata_composite.R">STSIgeostrata_composite.R</a>)</h4>
 <p>Laboratory costs for measuring the study variable can be saved by bulking the soil aliquots (composite sampling). There are two options: bulking all soil aliquots from the same stratum (bulking within strata) or bulking by selecting one aliquot from each stratum (bulking across strata). In <code>spcosa</code> bulking across strata is implemented.</p>
 <ol style="list-style-type: decimal">
 <li>Write an R script to construct 20 compact geographical strata for study area Voorst. Use the argument <code>equalArea = TRUE</code>.<br />
@@ -459,7 +463,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR-master/04-STSI.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/04-STSI.Rmd",
 "text": "Edit"
 },
 "download": null,

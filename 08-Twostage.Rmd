@@ -41,6 +41,9 @@ twostage <- function(sframe,psu,d,m) {
 }
 set.seed(314)
 mysample <- twostage(sframe=grdVoorst,psu="psu",d=d,m=m)
+cellsize <- 25
+mysample$s1 <- jitter(mysample$s1,cellsize/2)
+mysample$s2 <- jitter(mysample$s2,cellsize/2)
 psumeans <- tapply(mysample$z,INDEX=mysample$psu,FUN=mean)
 meanz <- mean(psumeans)
 Vmeanz <- var(psumeans) / d
@@ -117,7 +120,7 @@ varmeanzSI <- var(meanzSI)
 
 The variance of the `r NUMBER_OF_SAMPLES` means with two-stage random sampling equals `r round(varmeanz,3)`. This is considerably larger than with SI: `r round(varmeanzSI,3)`. The average of the estimated variances equals `r round(meanvarmean,3)`. 
 
-#### Exercise (TwoStage.R) {-}
+#### Exercise ([TwoStage.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/TwoStage.R)) {-}
 1. Write an R script to select a two-stage random sample from Voorst. Select four times a psu by ppswr, and ten points (ssu's) per psu-draw by SI.  
 2. Estimate the population mean, and its standard error  
 3. Compare the standard error with that of the Horvitz-Thompson estimator for simple random sampling of the same size; explain the difference   

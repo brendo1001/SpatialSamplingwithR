@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-15">
+<meta name="date" content="2018-06-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -129,6 +129,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
 <li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
 <li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
@@ -258,7 +259,7 @@ Figure 5.6: Sampling distribution of sample size of SY with orientation N60E
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   32.00   38.00   40.00   39.97   41.00   46.00</code></pre>
 <div id="exercise-sy.r" class="section level4 unnumbered">
-<h4>Exercise (SY.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/SY.R">SY.R</a>)</h4>
 <ol style="list-style-type: decimal">
 <li>Write an R script to select a systematic random sample (square grid) with an expected size of 40 from Voorst (data are in <code>Voorst.RData</code>).</li>
 <li>Overlay the selected points with <code>grdVoorst</code> using function <code>%over%</code> and extract the <em>z</em>-values at the selected SY sample. Estimate the population mean, and approximate its standard error by treating the SY sample as a simple random sample.<br />
@@ -304,7 +305,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR-master/05-SY.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/05-SY.Rmd",
 "text": "Edit"
 },
 "download": null,

@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-15">
+<meta name="date" content="2018-06-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -129,6 +129,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
 <li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
 <li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
@@ -235,7 +236,7 @@ Balanced samples can be selected with the cube algorithm <span class="citation">
 \hat{\bar{z}}_{\mathrm{bal}} = \frac{1}{N}\sum_{i=1}^n \frac{z_i}{\pi_i}.
 \tag{10.2}
 \end{equation}\]</span>
-So with equal inclusion probabilities, equal to <span class="math inline">\(n/N\)</span>, the mean is estimated by the sample mean of the study variable. The variance of the estimated mean can be approximated by <span class="citation">(Anton Grafström and Tillé 2013)</span>
+So with equal inclusion probabilities, equal to <span class="math inline">\(n/N\)</span>, the mean is estimated by the sample mean of the study variable. The variance of the estimated mean can be approximated by <span class="citation">(Grafström and Tillé 2013)</span>
 <span class="math display" id="eq:VarMeanBalanced">\[\begin{equation}
 \widehat{V}\!\left(\hat{\bar{z}}_{\text{bal}}\right)=\frac{1}{N}\frac{n}{n-p}\sum_{i=1}^n (1-\pi_i)\left(\frac{e_i}{\pi_i}\right)^2\;,
 \tag{10.3}
@@ -294,12 +295,12 @@ Figure 10.5: Sampling distribution of sample mean of balancing variable EM
 <div id="balanced-sampling-with-geographical-spreading" class="section level3">
 <h3><span class="header-section-number">10.2.1</span> Balanced sampling with geographical spreading</h3>
 <p>When a sample is balanced on a covariate, this does not necessarily imply a good spread along the axis spanned by the covariate. Balancing and spreading of sampling locations are different things. For that reason I do not like the term spatially balanced sampling for sampling with spreading in geographical space. I prefer the term spatial coverage sampling for this.</p>
-<p><span class="citation">Anton Grafström and Tillé (2013)</span> presented a method for selecting balanced samples that are also well-spread along the axes of one or more covariates. If we take for the spreading covariates Easting and Northing, this leads to balanced samples with good spatial coverage (balanced spatial coverage samples). when the residuals of the regression mdeol show spatial structure (are spatially correlated), the estimated population mean of the study variable becomes more precise thanks to the improved geographical spreading. Balanced samples with spreading can be selected with function <code>lcube</code> of R package <code>BalancedSampling</code>.</p>
+<p><span class="citation">Grafström and Tillé (2013)</span> presented a method for selecting balanced samples that are also well-spread along the axes of one or more covariates. If we take for the spreading covariates Easting and Northing, this leads to balanced samples with good spatial coverage (balanced spatial coverage samples). when the residuals of the regression mdeol show spatial structure (are spatially correlated), the estimated population mean of the study variable becomes more precise thanks to the improved geographical spreading. Balanced samples with spreading can be selected with function <code>lcube</code> of R package <code>BalancedSampling</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(BalancedSampling)
 sampleid=<span class="kw">lcube</span>(<span class="dt">Xbal=</span>X,<span class="dt">Xspread=</span>X,<span class="dt">prob=</span>pik)
 mysample&lt;-grdUzbekistan[sampleid,]</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-21"></span>
-<img src="SpatialSampling_files/figure-html/unnamed-chunk-21-1.png" alt="Balanced spatial coverage sample from the cotton farm (Uzbekistan), balanced on EM" width="100%" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-22"></span>
+<img src="SpatialSampling_files/figure-html/unnamed-chunk-22-1.png" alt="Balanced spatial coverage sample from the cotton farm (Uzbekistan), balanced on EM" width="100%" />
 <p class="caption">
 Figure 10.6: Balanced spatial coverage sample from the cotton farm (Uzbekistan), balanced on EM
 </p>
@@ -343,7 +344,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR-master/10-Balanced.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/10-Balanced.Rmd",
 "text": "Edit"
 },
 "download": null,

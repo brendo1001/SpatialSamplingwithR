@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-15">
+<meta name="date" content="2018-06-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -129,6 +129,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
 <li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
 <li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
@@ -227,7 +228,7 @@ Figure 6.2: ppswr sample of 40 draws from Kandahar, using agricultural area as s
 </p>
 </div>
 <div id="exercise-pps.r" class="section level4 unnumbered">
-<h4>Exercise (pps.R)</h4>
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/pps.R">pps.R</a>)</h4>
 <ol style="list-style-type: decimal">
 <li>Write an R script to select a pps sample with replacement from the cotton farm in Uzbekistan, using EM as a size variable (data are in <code>CottonFarmUzbekistan.RData</code>). Draw 40 times a unit.<br />
 </li>
@@ -239,7 +240,7 @@ Figure 6.2: ppswr sample of 40 draws from Kandahar, using agricultural area as s
 </div>
 <div id="probability-proportional-to-size-sampling-without-replacement-ppswor" class="section level2">
 <h2><span class="header-section-number">6.2</span> Probability-proportional-to-size sampling without replacement (ppswor)</h2>
-<p>In pps sampling with replacement a sampling unit can be selected more than once, especially with large sampling fractions <span class="math inline">\(n/N\)</span>. This may decrease the sampling efficiency. Therefore, pps-sampling without replacement (ppswor) can be an attractive alternative. The selection of sampling units with inclusion probabilities proportional to size without replacement is not straightforward. Various ingenious sampling algorithms have been developed for this, such as Brewer’s method, Sampford’s method and the pivotal method <span class="citation">(Deville and Tille {1998})</span>, see <span class="citation">Y. Tillé (2006)</span> for an overview.</p>
+<p>In pps sampling with replacement a sampling unit can be selected more than once, especially with large sampling fractions <span class="math inline">\(n/N\)</span>. This may decrease the sampling efficiency. Therefore, pps-sampling without replacement (ppswor) can be an attractive alternative. The selection of sampling units with inclusion probabilities proportional to size without replacement is not straightforward. Various ingenious sampling algorithms have been developed for this, such as Brewer’s method, Sampford’s method and the pivotal method <span class="citation">(Deville and Tille {1998})</span>, see <span class="citation">Tillé (2006)</span> for an overview.</p>
 <p>In ppswor the inclusion probabilities are equal to the draw-by-draw selection probabilities <span class="math inline">\(p_i\)</span> of ppswr, multiplied by the sample size <span class="math inline">\(n\)</span>: <span class="math inline">\(\pi_i= n\;p_i = n\;x_i/t(x)\)</span>. In the pivotal method the <span class="math inline">\(N\)</span>-vector with inclusion probabilities are successively updated to a vector with indicators. If the indicator for sampling unit <span class="math inline">\(i\)</span> becomes value 1 then this sampling unit is selected, if it becomes 0 then it is not selected. One step in the updating algorithm can be described as follows:</p>
 <ol style="list-style-type: decimal">
 <li>select fully randomly two sampling units <span class="math inline">\(k\)</span> and <span class="math inline">\(l\)</span> with <span class="math inline">\(0&lt;\pi_k&lt;1\)</span> and <span class="math inline">\(0&lt;\pi_l&lt;1\)</span><br />
@@ -316,7 +317,7 @@ Figure 6.3: Sampling distribution of estimated total poppy area with ppswor and 
 </div>
 <div id="spatial-version-of-ppswor" class="section level2">
 <h2><span class="header-section-number">6.3</span> Spatial version of ppswor</h2>
-<p>The units selected with ppswr and ppswor may show strong spatial clustering, which inflates the standard error of the estimated population total and mean. To avoid spatial clustering <span class="citation">A. Grafström, Lundström, and Schelin (2012)</span> developed the so-called local pivotal method for selecting a ppswor sample. The only diffrence with the pivotal method described above is the selection of the pairs of points. In the pivotal method the two points of a pair are selected independently, whereas in the local pivotal method the first point is selected fully randomly and the nearest neighbour of this point is used as its counterpart. Recall that when one point of a pair is included in the sample, the inclusion probability of its counterpart is decreased. This leads to a better spreading of the sampling units in geographic space.</p>
+<p>The units selected with ppswr and ppswor may show strong spatial clustering, which inflates the standard error of the estimated population total and mean. To avoid spatial clustering <span class="citation">Grafström, Lundström, and Schelin (2012)</span> developed the so-called local pivotal method for selecting a ppswor sample. The only diffrence with the pivotal method described above is the selection of the pairs of points. In the pivotal method the two points of a pair are selected independently, whereas in the local pivotal method the first point is selected fully randomly and the nearest neighbour of this point is used as its counterpart. Recall that when one point of a pair is included in the sample, the inclusion probability of its counterpart is decreased. This leads to a better spreading of the sampling units in geographic space.</p>
 <p>Selecting samples with the local pivotal method can be done with function <code>lpm</code> of R package <code>BalancedSampling</code>. Figure <a href="pps.html#fig:LPMKandahar">6.4</a> shows the sample of 40 units selected from the sampling frame of Kandahar.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pik &lt;-<span class="st"> </span><span class="kw">inclusionprobabilities</span>(grdKandahar<span class="op">$</span>agri,n)
 X&lt;-<span class="st"> </span><span class="kw">cbind</span>(grdKandahar<span class="op">$</span>x,grdKandahar<span class="op">$</span>y)
@@ -372,7 +373,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR-master/06-pps.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/06-pps.Rmd",
 "text": "Edit"
 },
 "download": null,

@@ -197,7 +197,7 @@ ggplot() +
 summary(sampleSizes)
 ```
 
-#### Exercise (SY.R) {-}  
+#### Exercise ([SY.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/SY.R)) {-}  
 1. Write an R script to select a systematic random sample (square grid) with an expected size of 40 from Voorst (data are in `Voorst.RData`). 
 2. Overlay the selected points with `grdVoorst` using function `%over%` and extract the *z*-values at the selected SY sample.  Estimate the population mean, and approximate its standard error by treating the SY sample as a simple random sample.  
 3. Cluster the gridpoints using function `stratify` of package `spcosa`, and approximate the standard error by treating the sample as a stratified random sample. 
