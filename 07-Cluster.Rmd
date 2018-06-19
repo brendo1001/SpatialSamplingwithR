@@ -60,7 +60,7 @@ ggplot(grdVoorst) +
 The output `mysample` of function `cl` in the chunk above has a column named `start'. This is an indicator with value 1 if this point of the cluster is selected first, and 0 else. When in the field it appears that the first selected point of a cluster does not belong to the target population, all other points of that cluster are also dropped. This is to keep the selection probabilities of the clusters exactly proportional to their size.
 
 ## Estimation of mean and its sampling variance
-With pps-sampling with replacement of clusters an unbiased estimator of the mean is:
+With pps-sampling with replacement of clusters the population mean is estimated unbiasedly by (see chunk hereafter):
 \begin{equation}
 \hat{\bar{z}}_{\mathrm{Cl}}=
 \frac{1}{d}\sum\limits_{i=1}^{d}\hat{\bar{z}}_{i} \;,
@@ -172,7 +172,7 @@ for (i in 1:length(cls)) {
 ggplot(grdVoorst) +        
   geom_raster(mapping = aes(x = s1/1000, y = s2/1000,fill=zonef)) +
   geom_point(data=mysample, mapping = aes(x = s1/1000, y = s2/1000), size = 1.5) +
-  geom_vline(xintercept=c(202.5,204.5,206.5))+
+  geom_vline(xintercept=c(202.517,204.517,206.517))+
   scale_x_continuous(name = "Easting (km)") +
   scale_y_continuous(name = "Northing (km)") +
   coord_fixed()+
