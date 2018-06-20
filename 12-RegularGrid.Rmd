@@ -1,0 +1,26 @@
+# Sampling on a regular grid {#Regulargrid}
+
+For mapping sampling on a regular grid is attractive because of its simplicity. The data collected on the grid-points are not used for design-based estimation of the population mean or total, and for that reason the grid need not be placed randomly on the study area as in systematic random sampling (Chapter \@ref(SY)). The grid can be located such that the grid nodes optimally cover the study area. Commonly used grid configuration are square, triangular and hexagonal. Which configuration is optimal depends on the variogram, amongst others. If the variable of interest shows moderate to strong spatial autocorrelation, triangular grids give the best result.
+
+Besides the shape of the grid cells, we must decide on the size of the grid cells (grid spacing). The grid spacing determines the number of sampling locations in the study area, the sample size. There are two options to decide on this spacing, either by starting from the available budget or from a requirement on the quality of the map. The latter is explained in Chapter \@ref(MBgridspacing), as this requires a model of the spatial variation, and as a consequence this is an example of model-based sampling. Starting from the available budget and an estimate of the costs per point, we first compute the affordable sample size. Then we may derive from this number the grid spacing. For square grids, the grid spacing in meters can be calculated with $\sqrt{A/n}$, where $A$ is the area in m$^2$, and $n$ is the number of sampling locations (sample size).
+
+Grids can be selected with function `spsample` of `R`package `sp` [Pebesma2005]. The argument `offset` is used to select non-randomly a grid. Either a sample size can be specified, using argument `n`, or a gridspacing using argument `cellsize`.
+
+```{r grid}
+mysample<-spsample(x=Voorst,type="regular",cellsize=c(200,200),offset=c(0.5,0.5))
+mysample<-as(mysample,"data.frame")
+```
+
+Figure \@ref(fig:grdVoorst) shows the selected square grid.
+
+```{r gridVoorst, out.width='100%',fig.asp=0.333,, fig.cap="Non-random square grid sample from Voorst",echo=F}
+ggplot()+
+  geom_raster(data=grdVoorst,mapping = aes(x = s1/1000, y = s2/1000), fill="grey")+
+  geom_point(data=mysample,mapping = aes(x = x1/1000,y = x2/1000), size = 2) +
+  scale_x_continuous(name = "Easting (km)") +
+  scale_y_continuous(name = "Northing (km)") +
+  coord_fixed()
+n <- nrow(mysample)
+```
+
+The number of gridpoints equals ```r n```. Nodes of the square grid in parts of the area not belonging to the population of interest, such as build-up areas and roads, are discarded. As a consequence,there are some empty spaces, for instance in the middle of the study area.

@@ -150,3 +150,7 @@ y_i &=& \beta_0 + \beta_1 x_i + \epsilon_i \\
 The errors are not independent, but spatially correlated. This model is used when mapping by kriging with an external drift (KED). Figure \@ref(fig:threesamples)(c) shows an optmized sample for KED mapping^[Which sample is optimal for KED also depends on how strong the spatial correlation is, see Chapter \@ref(MBKED)]. Spatial clustering is avoided, the selected units are spread throughout the area.  At the same time units near the minimum (unit with coordinates (13.5, 12.5)) and maximum (unit with coordinates (13.5, 6.5)) of the covariate are selected.
 
 A model-based approach for sampling and statistical inference does not necessarily imply model-based sampling. The adjective model-based refers to the model-based inference, not to the selection of the locations. In a model-based approach sampling locations can be, but need not be selected by model-based sampling. If they are, then both in selecting the locations and in mapping a statistical model is used. In most cases the two models differ: once the  sample data are collected, these are used to update the postulated model used for sampling design. This updated model is then used for mapping.
+
+## An overview {#Overview}
+
+At the highest level we may distinguish geometric sampling designs from model-based sampling designs.
