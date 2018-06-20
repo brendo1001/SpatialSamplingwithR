@@ -1,0 +1,152 @@
+# Sampling for mapping {#IntroSamplingforMapping}
+
+This second part of the book deals with sampling for mapping. In practice a map is constructed by overlaying the study area by a very fine square grid, and estimating the variable of interest for all grid cells. Note that the estimated value may either represent the mean of the grid cell or the value at its centre. We should be clear about this.
+
+For mapping a model-based sampling approach is the only option. We cannot afford to select a random sample from each grid cell for design-based estimation of their means. A statistical model, containing an error term modeled by a probability distribution, is used to map the study variable from the sample data. As the model already contains a random error, selection of the sampling units by probability sampling is not strictly needed in a model-based approach. As a consequence there is room for optimizing the sampling units, i.e. searching for those units that lead to the most precise map. 
+
+As an illustration, consider the following model:
+\begin{equation}
+z_i = \beta_0 + \beta_1 x_i + \epsilon_i
+(\#eq:simplelinearregressionmodel)
+\end{equation}
+with $z_i$ the study variable of unit $i$, $\beta_0$ and $\beta_1$ regression coefficients and $\epsilon_i$ the error (residual) at unit $i$, normally distributed with mean zero and a constant variance $\sigma^2$. The errors are assumed independent, so that $Cov(\epsilon_i,\epsilon_j)=0$ for all $i \neq j$. Figure \@ref(fig:threesamples) shows a simple random sample without replacement (subfigure a) and the sample optimized for mapping with a simple linear regression model (subfigure b). Both samples are plotted in a map of the covariate (predictor). 
+
+```{r, echo=F}
+#define discretisation grid
+s1<-seq(1:20)-0.5
+s2<-s1
+grid<-expand.grid(s1,s2)
+names(grid)<-c("s1","s2")
+N <- nrow(grid)
+
+#define residual variogram for simulation
+vgmodel = vgm(model = "Exp", psill = 25, range = 2, nugget = 0)
+
+#compute matrix with covariances between discretisation points
+dists1<-outer(grid$s1,grid$s1,FUN="-")
+dists2<-outer(grid$s2,grid$s2,FUN="-")
+dist<-sqrt(dists1^2+dists2^2)
+
+#compute matrix with covariances
+C = variogramLine(vgmodel, dist_vector = dist, covariance = TRUE)
+
+#now simulate values for grid by Cholesky decomposition
+Upper<-chol(C)
+
+set.seed(31415)
+G<-rnorm(n=nrow(grid),0,1) #simulate random numbers from standard normal distribution
+e<-crossprod(Upper,G)
+
+mu<-15
+grid$x <-e + mu
+
+ord <- order(grid$x)
+grid <- grid[ord,]
+grid$x[1] <- 4
+grid$x[400] <- 32
+
+#compute values of variable of interest as linear combination of covariate + white noise
+sigma_resid <- 2
+set.seed(31415)
+grid$z <- 2 + 0.5*grid$x + rnorm(n=nrow(grid),mean=0,sd=sigma_resid)
+
+#select simple random sample without replacement
+n<-16
+idsrandom <- sample.int(400,n)
+randomsample <- grid[idsrandom,]
+
+model.random <- lm(z~x,data=randomsample)
+det.random <- det(vcov(model.random))
+
+#select optimal sample for simple linear regression model
+optsample <- grid[c(1,2,3,4,5,6,7,8,393,394,395,396,397,398,399,400),]
+model.opt <- lm(z~x,data=optsample)
+det.opt <- det(vcov(model.opt))
+```
+
+```{r,echo=F, message=F,eval=F}
+#optimize sample for KED
+candi <- grid[,c(1,2)]
+names(candi) <- c("x","y") #these names are required by spsann 
+covars <- data.frame(x=grid$x)
+names(covars)<-"x1"
+
+
+vgmegstat <- vgm(psill=1, model="Exp",range=1)
+schedule <- scheduleSPSANN(initial.acceptance = 0.8,initial.temperature = 0.03,
+                           temperature.decrease=0.95,
+                           x.max=5,y.max=5,
+                           chains=500,
+                           chain.length=20,
+                           stopping=20)
+set.seed(314)
+# Execute the simulated annealing algorithm
+res <- optimMKV(points = n, candi = candi, covars=covars, vgm = vgmegstat, eqn = z ~ x1, schedule = schedule)
+
+save(res, file="MBSample_spsann_KED_Square.RData")
+```
+
+
+```{r threesamples, echo=F, out.width='33.3%',fig.asp=1, fig.show='hold', fig.cap="Simple random sample (a) and optimized samples for mapping with simple linear regression (b) and kriging with an external drift (c)"}
+
+ggplot(data = grid) +
+  geom_raster(mapping = aes(x = s1, y = s2, fill = x)) +
+  geom_tile(data=randomsample,mapping = aes(x = s1, y = s2), width=1,height=1,colour="red",fill = NA) +
+  ggtitle("a")+
+  theme(plot.title = element_text(size=14, hjust=0.5))+
+  scale_fill_gradient(name="x",low = "skyblue", high = "darkblue") +
+  scale_y_continuous(name = "Northing") +
+  scale_x_continuous(name = "Easting") +
+  coord_equal()
+
+ggplot(data = grid) +
+  geom_raster(mapping = aes(x = s1, y = s2, fill = x)) +
+  geom_tile(data=optsample,mapping = aes(x = s1, y = s2), width=1,height=1,colour="red",fill = NA) +
+  ggtitle("b")+
+  theme(plot.title = element_text(size=14, hjust=0.5))+
+  scale_fill_gradient(name="x",low = "skyblue", high = "darkblue") +
+  scale_y_continuous(name = "Northing") +
+  scale_x_continuous(name = "Easting") +
+  coord_equal()
+
+load(file="MBSample_spsann_KED_Square.RData")
+candi <- grid[,c(1,2)]
+names(candi) <- c("x","y") #these names are required by spsann 
+covars <- data.frame(x=grid$x)
+names(covars)<-"x1"
+MBsample<-candi[res$points$id,]
+df <-data.frame(candi,covars$x)
+
+ggplot(data = df) +
+  geom_raster(mapping = aes(x = x, y = y, fill = covars.x)) +
+  geom_tile(data=MBsample,mapping = aes(x = x, y = y), width=1,height=1,colour="red",fill = NA) +
+  ggtitle("c")+
+  theme(plot.title = element_text(size=14, hjust=0.5))+
+  scale_fill_gradient(name="x",low = "skyblue", high = "darkblue") +
+  scale_y_continuous(name = "Northing") +
+  scale_x_continuous(name = "Easting") +
+  coord_equal()
+```
+
+The optimized sample for mapping with a simple linear regression model contains the units with the smallest or the largest values of the covariate $x$. The optimized sample shows strong spatial clustering. Spatial clustering is not avoided because in a simple linear regression model we assume that the data are independent. The standard errors of both regression coefficients are considerably smaller for the optimized sample (Table \@ref(tab:sebetas)). The joint uncertainty about the two regression coefficients, quantified by the determinant of the variance-covariance matrix of the estimated regression coefficients, equals 0.0020 for the simple random sample and 0.00010 for the optimized sample. When we are less uncertain about the regression coefficients, we are also less uncertain about the estimates of the study variable obtained with the simple linear regression model at (unobserved) locations of a fine grid discretizing the study area used for mapping the study variable. So, we conclude that for mapping with a simple linear gression model, simple random sampling is not a good option. 
+
+```{r sebetas, tidy=FALSE, echo=F}
+tbl <- data.frame(x=c("SI","Optimized"),y=c("1.51","1.08"),z=c("0.086","0.051"))
+
+knitr::kable(
+  head(tbl, 20), caption = 'Standard errors of estimated regression coefficients with simple random sample and optimized sample',
+  col.names=c("Sampling design", "Intercept","Slope"),
+  booktabs = TRUE
+)
+```
+
+The following model differs slightly from Equation \@ref(eq:simplelinearregressionmodel): 
+\begin{eqnarray}
+y_i &=& \beta_0 + \beta_1 x_i + \epsilon_i \\
+\epsilon_i &\sim& \mathcal{N}(0,\sigma^2)\\
+\mathrm{cov}(\epsilon_i,\epsilon_j) &=& C(d_{i,j})
+(\#eq:KEDmodel)
+\end{eqnarray}
+The errors are not independent, but spatially correlated. This model is used when mapping by kriging with an external drift (KED). Figure \@ref(fig:threesamples)(c) shows an optmized sample for KED mapping^[Which sample is optimal for KED also depends on how strong the spatial correlation is, see Chapter \@ref(MBKED)]. Spatial clustering is avoided, the selected units are spread throughout the area.  At the same time units near the minimum (unit with coordinates (13.5, 12.5)) and maximum (unit with coordinates (13.5, 6.5)) of the covariate are selected.
+
+A model-based approach for sampling and statistical inference does not necessarily imply model-based sampling. The adjective model-based refers to the model-based inference, not to the selection of the locations. In a model-based approach sampling locations can be, but need not be selected by model-based sampling. If they are, then both in selecting the locations and in mapping a statistical model is used. In most cases the two models differ: once the  sample data are collected, these are used to update the postulated model used for sampling design. This updated model is then used for mapping.
