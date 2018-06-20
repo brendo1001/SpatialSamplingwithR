@@ -91,9 +91,9 @@ save(res, file="MBSample_spsann_KED_Square.RData")
 
 ggplot(data = grid) +
   geom_raster(mapping = aes(x = s1, y = s2, fill = x)) +
-  geom_tile(data=randomsample,mapping = aes(x = s1, y = s2), width=1,height=1,colour="red",fill = NA) +
+  geom_tile(data=randomsample,mapping = aes(x = s1, y = s2), width=1,height=1,size=2,colour="red",fill = NA) +
   ggtitle("a")+
-  theme(plot.title = element_text(size=14, hjust=0.5))+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_fill_gradient(name="x",low = "skyblue", high = "darkblue") +
   scale_y_continuous(name = "Northing") +
   scale_x_continuous(name = "Easting") +
@@ -101,9 +101,9 @@ ggplot(data = grid) +
 
 ggplot(data = grid) +
   geom_raster(mapping = aes(x = s1, y = s2, fill = x)) +
-  geom_tile(data=optsample,mapping = aes(x = s1, y = s2), width=1,height=1,colour="red",fill = NA) +
+  geom_tile(data=optsample,mapping = aes(x = s1, y = s2), width=1,height=1,size=2,colour="red",fill = NA) +
   ggtitle("b")+
-  theme(plot.title = element_text(size=14, hjust=0.5))+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_fill_gradient(name="x",low = "skyblue", high = "darkblue") +
   scale_y_continuous(name = "Northing") +
   scale_x_continuous(name = "Easting") +
@@ -119,9 +119,9 @@ df <-data.frame(candi,covars$x)
 
 ggplot(data = df) +
   geom_raster(mapping = aes(x = x, y = y, fill = covars.x)) +
-  geom_tile(data=MBsample,mapping = aes(x = x, y = y), width=1,height=1,colour="red",fill = NA) +
+  geom_tile(data=MBsample,mapping = aes(x = x, y = y), width=1,height=1,size=2,colour="red",fill = NA) +
   ggtitle("c")+
-  theme(plot.title = element_text(size=14, hjust=0.5))+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_fill_gradient(name="x",low = "skyblue", high = "darkblue") +
   scale_y_continuous(name = "Northing") +
   scale_x_continuous(name = "Easting") +
