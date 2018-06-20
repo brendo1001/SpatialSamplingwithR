@@ -4,11 +4,11 @@ To estimate population parameters like the mean or the total, *probability sampl
 1. All population units have a probability larger than zero of being selected.  
 2. The selection probability of each possible sample is known.
 
-If the selection probability of each possible is known, for any unit in the population the probability that this unit is selected can be calculated as the sum of the selection probabilities over all samples that contains this unit. The selection probability of an individual unit is referred to as the inclusuion probability of that unit.
+If the selection probability of each possible is known, for any unit in the population the probability that this unit is selected can be calculated as the sum of the selection probabilities over all samples that contains this unit. The selection probability of an individual unit is referred to as the inclusion probability of that unit.
 
 A common misunderstanding is that with probability sampling the inclusion probabilities must be equal. With many sampling designs they are unequal. This is no problem as long as these probabilities are known.
 
-There are many ways of selecting population units by probability sampling. The following sampling designs are described and illustrated in this book:
+There are many ways of selecting population units by probability sampling. The following sampling designs are described and illustrated in this book:  
 * simple random sampling  
 * stratified random sampling  
 * systematic random sampling  
