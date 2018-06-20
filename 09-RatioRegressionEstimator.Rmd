@@ -116,8 +116,7 @@ gain<-var(HTEstimator)/var(RegressionEstimator)
 The average of the 10,000 regression estimates equals `r round(mean(RegressionEstimator),3)`. The population mean of the study variable ECe equals `r round(mean(grdUzbekistan$ECe),3)`. so the estimated bias of the regression estimator equals `r round(bias,3)`. The variance of the 10,000 regression estimates equals `r round(varR,3)`, and the average of the 10,000 estimated approximate variances equals `r round(meanvarR,3)`. The gain in precision due to the regression estimator, quantified by the ratio of the variance of the Horvitz-Thompson estimator to the variance of the regression estimator equals `r round(gain,3)`.
 
 #### Exercise ([RegressionEstimator.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator.R)) {-}
-In this exercise the mean soil salinity (electrical conductivity, ECe) of the field in Uzbekistan is estimated by the simple regression estimator using the electromagnetic measurements (EM) as a covariate. The data are in ```CottonFarmUzbekistan.RData```  
-1. Select a simple random sample without replacement of size 40 and estimate the mean ECe by the regression estimator      
+1. Write an `R`script to select a simple random sample without replacement of size 40 from the cotton farm in Uzbekistan (data are ```CottonFarmUzbekistan.RData```). Estimate the mean electrical conductivity (ECe) by the regression estimator using the  electromagnetic measurements (EM) as a covariate    
 2. Approximate the sampling variance of the regression estimator  
 3. Repeat the sampling 10,000 times in a for-loop, compute the regression estimator for every sample, and compute the variance of the 10,000 regression estimates  
 4. Compute the true sampling variance of the Horvitz-Thompson estimator of the same size, and compute the gain in precision achieved by the regression estimator     
@@ -168,8 +167,7 @@ The variance of the combined regression estimator can be estimated as follows:
 4. combine the estimated variances per stratum: $\widehat{V}\!\left(\hat{\bar{z}}_{\text{combreg}}\right)=\sum_{h=1}^Hw^2_h\widehat{V}\!\left(\hat{\bar{e}}_h\right)$
 
 #### Exercise ([RegressionEstimator_STSI.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator_STSI.R)) {-}
-In this exercise the mean soil salinity (electrical conductivity, ECe) of the field in Uzbekistan is estimated by stratified simple random sampling in combination with the regression estimator.  
-1. Construct two strata on the basis of covariate EM, using as a threshold 50. Then select a stratified simple random sample without replacement of size 40 with proportional allocation  
+1. Write an R script to estimate the mean ECe of the cotton farm in Uzbekistan by stratified simple random sampling. Construct two strata on the basis of covariate EM, using as a threshold 50. Select a stratified simple random sample without replacement of size 40, and allocate the sample to the strata proportional to their size     
 2. Estimate the mean ECe by the seperate regression estimator and approximate the sampling variance of this regression estimator  
 3. Estimate the mean ECe by the combined regression estimator and approximate the sampling variance of this regression estimator   
 
@@ -349,8 +347,7 @@ ggplot(data = estimateslf) +
 I repeated the two-phase sampling 10,000 times, see Figure \@ref(fig:SamplingDistributionRegression2phase). The variance of the regression estimator equals `r round(var(RegressionEstimator2phase),4)`. This is larger than for the regression estimator with known mean of the covariate EM (`r round(var(RegressionEstimator),4)`), but still smaller than the variance of the Horvitz-Thompson estimator (`r round(var(grdUzbekistan$ECe)/n2,4)`).
 
 #### Exercise ([RegressionEstimator\_Twophase.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator_Twophase.R)) {-}
-Similar to the previous Exercise (RegressionEstimator.R) the aim is to estimate the mean electrical conductivity (ECe) of the field in Uzbekistan, using electromagnetic (EM) measurements as a covariate in the regression estimator. Now we do not have a full-coverage map of EM, so that the population mean of EM is unknown. EM is measured at a relatively large first-phase sample. At a subsample soil samples are collected for measurement of ECe.  
-1. Select a random sample of 80 points and a subsample of 40 points by simple random sampling without replacement. Estimate the population mean of ECe by the regression estimator for two-phase sampling    
+1. Write an `R`script to select a simple random sample without replacement of 80 points and a subsample of 40 points by the same sampling design from the cotton farm in Uzbekistan. Estimate the population mean of ECe by the regression estimator for two-phase sampling using EM as a covariate (EM is observed at all 80 points, ECe at the subsample only)    
 2. Approximate the sampling variance of the regression estimator  
-3. Repeat this 10000 times in a for-loop, and compute the variance of the 10000 regression estimates of the mean of ECe  
+3. Repeat this 10,000 times in a for-loop, and compute the variance of the 10,000 regression estimates of the mean of ECe  
 4. Compare the variance of the regression estimator for this two-phase sampling design with the variance of the regression estimator with known population mean of EM.
