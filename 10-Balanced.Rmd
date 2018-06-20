@@ -54,7 +54,7 @@ for (i in 1:nsam) {
 }
 ggplot(data = grid) +
   geom_tile(mapping = aes(x = x1, y = x2, fill = z)) +
-  geom_tile(data=sam,mapping = aes(x = x1, y = x2),colour="red",size=0.5,width=1,height=1,fill=NA)+
+  geom_tile(data=sam,mapping = aes(x = x1, y = x2),colour="red",size=0.8,width=1,height=1,fill=NA)+
   ggtitle("a")+
   theme(plot.title = element_text(size=14, hjust=0.5))+
   scale_fill_gradient(name="z",low = "skyblue", high = "darkblue") +
@@ -78,7 +78,7 @@ for (i in 1:nsam) {
 }
 ggplot(data = grid) +
   geom_tile(mapping = aes(x = x1, y = x2, fill = z)) +
-  geom_tile(data=sam1,mapping = aes(x = x1, y = x2),colour="red",size=0.5,width=1,height=1,fill=NA)+
+  geom_tile(data=sam1,mapping = aes(x = x1, y = x2),colour="red",size=0.8,width=1,height=1,fill=NA)+
   ggtitle("b")+
   theme(plot.title = element_text(size=14, hjust=0.5))+
   scale_fill_gradient(name="z",low = "skyblue", high = "darkblue") +

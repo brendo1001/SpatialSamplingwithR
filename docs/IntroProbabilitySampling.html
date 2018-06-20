@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-19">
+<meta name="date" content="2018-06-20">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -132,7 +132,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
-<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a><ul>
+<li class="chapter" data-level="" data-path="Twostage.html"><a href="Twostage.html#questions-9"><i class="fa fa-check"></i>Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>8.2</b> Stratified two-stage random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
 <li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
@@ -149,6 +152,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -172,9 +176,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>To estimate population parameters like the mean or the total, <em>probability sampling</em> is most appropriate. Probability sampling is random sampling using a random number generator such that<br />
 1. All population units have a probability larger than zero of being selected.<br />
 2. The selection probability of each possible sample is known.</p>
-<p>If the selection probability of each possible is known, for any unit in the population the probability that this unit is selected can be calculated as the sum of the selection probabilities over all samples that contains this unit. The selection probability of an individual unit is referred to as the inclusuion probability of that unit.</p>
+<p>If the selection probability of each possible is known, for any unit in the population the probability that this unit is selected can be calculated as the sum of the selection probabilities over all samples that contains this unit. The selection probability of an individual unit is referred to as the inclusion probability of that unit.</p>
 <p>A common misunderstanding is that with probability sampling the inclusion probabilities must be equal. With many sampling designs they are unequal. This is no problem as long as these probabilities are known.</p>
-<p>There are many ways of selecting population units by probability sampling. The following sampling designs are described and illustrated in this book: * simple random sampling<br />
+<p>There are many ways of selecting population units by probability sampling. The following sampling designs are described and illustrated in this book:<br />
+* simple random sampling<br />
 * stratified random sampling<br />
 * systematic random sampling<br />
 * sampling with probabilities proportional to size (pps-sampling)<br />
@@ -183,7 +188,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 * balanced sampling</p>
 <div id="Voorst" class="section level2">
 <h2><span class="header-section-number">2.1</span> Simulated population</h2>
-<p>The sampling designs are illustated with a <em>simulated</em> population (pseudo-population). The population is an area near Voorst (Netherlands) with simulated soil organic matter (SOM) concentrations (in mass-percentages) in the topsoil (Figure <a href="IntroProbabilitySampling.html#fig:Voorst">2.1</a>).</p>
+<p>The sampling designs are illustated with <em>simulated</em> populations (pseudo-populations). Figure <a href="IntroProbabilitySampling.html#fig:Voorst">2.1</a>) shows one of these simulated populations. The population consists of simulated soil organic matter (SOM) concentrations (in mass-percentages) in the topsoil in an area near Voorst (Netherlands). The field is simulated with data collected at 132 points in the past years by graduate students of Wageningen University. Besides the point data I used an existing soil map and a land use map in the simulation. I think the map is a realistic picture of SOM in the study area.</p>
 <div class="figure" style="text-align: center"><span id="fig:Voorst"></span>
 <img src="SpatialSampling_files/figure-html/Voorst-1.png" alt="Simulated soil organic matter concentration in Voorst" width="100%" />
 <p class="caption">
@@ -201,7 +206,7 @@ Figure 2.2: Histogram of SOM in Voorst
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   1.061   4.859   6.807   8.119   9.918  46.700</code></pre>
 <p>The standard deviation of SOM in the population equals 4.9.</p>
-<p>The simulated population is taken as reality. This means that the true values are known everywhere, as if SOM is observed without error everywhere in the area. So we know SOM at any randomly selected location, as well as the population mean and total. So, for any sample selected from the population, the study variable values for the selected sampling units are known, so that we can <em>estimate</em> the population mean or total from this sample. The estimated mean (total) can be compared with the population mean (total). The difference between these two is the <em>sampling error</em> in the estimated mean (total).</p>
+<p>The simulated populations are taken as reality. This means that the true values are known everywhere, as if the study varable is observed without error everywhere in the area. So for Voorst we know SOM at any randomly selected location, as well as the population mean and total. So, for any sample selected from this simulated population, the SOM values for the selected sampling units are known, so that we can <em>estimate</em> the population mean or total from this sample. The estimated mean (total) can be compared with the population mean (total). The difference between these two is the <em>sampling error</em> in the estimated mean (total).</p>
 
 </div>
 </div>

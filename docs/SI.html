@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-19">
+<meta name="date" content="2018-06-20">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -132,7 +132,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
-<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a><ul>
+<li class="chapter" data-level="" data-path="Twostage.html"><a href="Twostage.html#questions-9"><i class="fa fa-check"></i>Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>8.2</b> Stratified two-stage random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
 <li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
@@ -149,6 +152,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -195,7 +199,7 @@ N&lt;-<span class="kw">nrow</span>(grdVoorst)
 <span class="kw">set.seed</span>(<span class="dv">314</span>)
 units &lt;-<span class="st"> </span><span class="kw">sample.int</span>(N, <span class="dt">size =</span> n, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
 mysample &lt;-<span class="st"> </span>grdVoorst[units,]</code></pre></div>
-<p>Restricting the sampling locations to the nodes of a discretisation grid can be avoided as follows. The columns s1 and s2 in the <code>data.frame</code> <code>grdVoorst</code> are the spatial coordinates of the centres of gridcells of 25 m by 25 m. Now a simple random sample is selected in two stages. First <em>n</em> times a gridcell is selected by simple random sampling with replacement. Second, every time a gridcell is selected, one point is selected fully randomly within this gridcell. In the chunk below this selection procedure is implemented using function <code>jitter</code>. It adds random noise to the spatial coordinates of the centres of the selected gridcells, by drawing from a continuous uniform distribution unif(<span class="math inline">\(-c,c\)</span>), with <span class="math inline">\(c\)</span> half the sidelength of the square gridcells. With this selection procedure we respect that the population is infinite.</p>
+<p>Restricting the sampling locations to the nodes of a discretisation grid can be avoided as follows. The columns s1 and s2 in the <code>data.frame</code> <code>grdVoorst</code> are the spatial coordinates of the centres of gridcells of 25 m by 25 m. Now a simple random sample is selected in two stages. First <em>n</em> times a gridcell is selected by simple random sampling with replacement. Second, every time a gridcell is selected, one point is selected fully randomly within this gridcell. In the chunk below the second step of this selection procedure is implemented with function <code>jitter</code>. It adds random noise to the spatial coordinates of the centres of the selected gridcells, by drawing from a continuous uniform distribution unif(<span class="math inline">\(-c,c\)</span>), with <span class="math inline">\(c\)</span> half the sidelength of the square gridcells. With this selection procedure we respect that the population actually is infinite.</p>
 <pre class="jitter"><code>set.seed(314)
 units &lt;- sample.int(N, size = n, replace = TRUE)
 mysample &lt;- grdVoorst[units,]

@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-19">
+<meta name="date" content="2018-06-20">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -132,7 +132,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
-<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a><ul>
+<li class="chapter" data-level="" data-path="Twostage.html"><a href="Twostage.html#questions-9"><i class="fa fa-check"></i>Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>8.2</b> Stratified two-stage random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
 <li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
@@ -149,6 +152,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -174,7 +178,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In two-stage random sampling in principle any type of sampling design can be used at the two stages, leading to numerous combinations. A simple version is (SI,SI), in which both psu’s and ssu’s are selected by simple random sampling.</p>
 <p>Commonly the psu’s have unequal size, i.e., the number of ssu’s (finite population) or the area (infinite population) are not equal for all psu’s. Think for instance of the agricultural fields, forest stands, lakes, river sections <em>et cetera</em> in an area. If the psu’s are of unequal size, then psu’s can best be selected with probabilities proportional to their size (pps). If the total of a psu is related to its size, then pps-sampling leads to more precise estimates compared to simple ranmdom sampling of psu’s. Also, with pps-sampling of psu’s the estimation of means or totals and of their sampling variances is much simpler compared to selection with equal probabilities. Implementation of selection with probabilities proportional to size is easiest `when units are replaced (pps with replacement, ppswr). This implies that a psu might be selected more than once, especially if the total number of psu’s in the population is small compared to the number of psu draws (large sampling fraction in first stage).</p>
 <p>The following algorithm can be used to select <span class="math inline">\(d\)</span> times a psu by ppswr from a total of <span class="math inline">\(N\)</span> psu’s in the population:<br />
-1. Select randomly one ssu from the list with <span class="math inline">\(M=\sum_{i=1}^N M_i\)</span> ssu’s, and determine the psu of the selected ssu 2. Repeat step 1 until <span class="math inline">\(d\)</span> selections have been made.</p>
+1. Select randomly one ssu from the list with <span class="math inline">\(M=\sum_{i=1}^N M_i\)</span> ssu’s (<span class="math inline">\(M_i\)</span> is number of ssu’s of primary unit <span class="math inline">\(i\)</span>), and determine the psu of the selected ssu<br />
+2. Repeat step 1 until <span class="math inline">\(d\)</span> selections have been made.</p>
 <p>This sampling algorithm makes use of a list of all sampling units as a sampling frame. An alternative algorithm works with a geographical representation of the study area (shape file) and its psu’s:</p>
 <ol style="list-style-type: decimal">
 <li>Select a random point in the area, as in SI.<br />
@@ -184,7 +189,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Repeat steps 1 and 2 until <span class="math inline">\(d\)</span> selections have been made.</li>
 </ol>
 <p>In the second stage, a <em>pre-determined</em> number of secondary sampling units, <span class="math inline">\(m_{i}\)</span>, is selected every time psu <span class="math inline">\(i\)</span> is selected. Secondary sample sizes Predetermined means that it is not allowed to decide on the secondary sample sizes (number of ssu’s) per selected psu <em>after the selection of the psu’s</em>.</p>
-<p>The <code>R</code> code below shows the selection of a two-stage random sample from Voorst. Primary units are 24 blocks of 0.5 km <span class="math inline">\(\times\)</span> 0.5 km. Note that these blocks have unequal size, i.e. the number of pixels within the blocks differs due to build-up area, roads <em>et cetera</em>. Four times a psu is selected, with probabilities proportional to size and with replacement. The second stage sample size <span class="math inline">\(m_i\)</span> equals 10 for all psu’s. These units ssu’s are selected by SIR.</p>
+<p>The <code>R</code> code below shows the selection of a two-stage random sample from Voorst. Primary units are 24 blocks of 0.5 km <span class="math inline">\(\times\)</span> 0.5 km. Note that these blocks have unequal size, i.e. the number of pixels within the blocks differs due to build-up area, roads <em>et cetera</em>. Four times a psu is selected, with probabilities proportional to size and with replacement. The second stage sample size <span class="math inline">\(m_i\)</span> equals 10 for all psu’s. These units ssu’s are selected by simple random sampling.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="dv">4</span> <span class="co">#number of psu selections</span>
 m &lt;-<span class="st"> </span><span class="dv">10</span> <span class="co">#fixed number of ssu selections per psu-draw</span>
 <span class="co">#define function for two-stage random sampling</span>
@@ -205,19 +210,17 @@ twostage &lt;-<span class="st"> </span><span class="cf">function</span>(sframe,p
 mysample &lt;-<span class="st"> </span><span class="kw">twostage</span>(<span class="dt">sframe=</span>grdVoorst,<span class="dt">psu=</span><span class="st">&quot;psu&quot;</span>,<span class="dt">d=</span>d,<span class="dt">m=</span>m)
 cellsize &lt;-<span class="st"> </span><span class="dv">25</span>
 mysample<span class="op">$</span>s1 &lt;-<span class="st"> </span><span class="kw">jitter</span>(mysample<span class="op">$</span>s1,cellsize<span class="op">/</span><span class="dv">2</span>)
-mysample<span class="op">$</span>s2 &lt;-<span class="st"> </span><span class="kw">jitter</span>(mysample<span class="op">$</span>s2,cellsize<span class="op">/</span><span class="dv">2</span>)
-psumeans &lt;-<span class="st"> </span><span class="kw">tapply</span>(mysample<span class="op">$</span>z,<span class="dt">INDEX=</span>mysample<span class="op">$</span>psu,<span class="dt">FUN=</span>mean)
-meanz &lt;-<span class="st"> </span><span class="kw">mean</span>(psumeans)
-Vmeanz &lt;-<span class="st"> </span><span class="kw">var</span>(psumeans) <span class="op">/</span><span class="st"> </span>d</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-16"></span>
-<img src="SpatialSampling_files/figure-html/unnamed-chunk-16-1.png" alt="Two-stage random sample from Voorst" width="100%" />
+mysample<span class="op">$</span>s2 &lt;-<span class="st"> </span><span class="kw">jitter</span>(mysample<span class="op">$</span>s2,cellsize<span class="op">/</span><span class="dv">2</span>)</code></pre></div>
+<p>Figure <a href="Twostage.html#fig:TwostageVoorst">8.1</a> shows the selected sample.</p>
+<div class="figure" style="text-align: center"><span id="fig:TwostageVoorst"></span>
+<img src="SpatialSampling_files/figure-html/TwostageVoorst-1.png" alt="Two-stage random sample from Voorst" width="100%" />
 <p class="caption">
 Figure 8.1: Two-stage random sample from Voorst
 </p>
 </div>
 <div id="estimation-of-mean-and-its-sampling-variance-1" class="section level2">
 <h2><span class="header-section-number">8.1</span> Estimation of mean and its sampling variance</h2>
-If the psu’s are selected with replacement and with probabilities proportional to size (ppswr), then the population mean can be estimated by the simple estimator:
+If the psu’s are selected with replacement and with probabilities proportional to size (ppswr), then the population mean can be estimated by the simple estimator (see chunk hereafter):
 <span class="math display" id="eq:EstMeanTwostage">\[\begin{equation}
 \hat{\bar{z}}_{\mathrm{(pps,SI)}}=
 \frac{1}{d}\sum\limits_{i=1}^{d}\hat{\bar{z}}_{i} \;,
@@ -235,6 +238,9 @@ with <span class="math inline">\(\widehat{S^2}_{\mathrm{psu}}\)</span> the estim
 \tag{8.3}
 \end{equation}\]</span>
 <p>Note that neither the sizes of the psu’s, i.e. the number of ssu’s per primary unit, nor the secondary sample sizes <span class="math inline">\(m_{i}\)</span> occur in these formulas. This simplicity is due to the fact that the psu’s are selected with replacement and with probabilities proportional to size. The effect of the secondary sample sizes on the variance is implicitly accounted for. To understand this, note that the larger <span class="math inline">\(n_{i}\)</span>, the less variable <span class="math inline">\(\hat{\bar{z}}_{i}\)</span>, and the smaller its contribution to the variance.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psumeans &lt;-<span class="st"> </span><span class="kw">tapply</span>(mysample<span class="op">$</span>z,<span class="dt">INDEX=</span>mysample<span class="op">$</span>psu,<span class="dt">FUN=</span>mean)
+meanz &lt;-<span class="st"> </span><span class="kw">mean</span>(psumeans)
+Vmeanz &lt;-<span class="st"> </span><span class="kw">var</span>(psumeans) <span class="op">/</span><span class="st"> </span>d</code></pre></div>
 <p>Figure <a href="Twostage.html#fig:SamplingDistributionTwostage">8.2</a> shows the sampling distributions of the estimated mean with two-stage random sampling and simple random sampling, obtained by repeating the random sampling with each design and estimation 10,000 times.</p>
 <div class="figure" style="text-align: center"><span id="fig:SamplingDistributionTwostage"></span>
 <img src="SpatialSampling_files/figure-html/SamplingDistributionTwostage-1.png" alt="Sampling distribution of estimated mean with Twostage random sampling and SI" width="70%" />
@@ -243,16 +249,29 @@ Figure 8.2: Sampling distribution of estimated mean with Twostage random samplin
 </p>
 </div>
 <p>The variance of the 10^{4} means with two-stage random sampling equals 1.383. This is considerably larger than with SI: 0.592. The average of the estimated variances equals 1.431.</p>
-<div id="exercise-twostage.r" class="section level4 unnumbered">
-<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/TwoStage.R">TwoStage.R</a>)</h4>
+<div id="questions-9" class="section level3 unnumbered">
+<h3>Questions</h3>
 <ol style="list-style-type: decimal">
-<li>Write an R script to select a two-stage random sample from Voorst. Select four times a psu by ppswr, and ten points (ssu’s) per psu-draw by SI.<br />
+<li>Is the standard error of the estimated mean with 10 psu draws and 4 ssu’s per psu draw (<span class="math inline">\(10 \times 4\)</span>) larger or smaller than with <span class="math inline">\(4 \times 10\)</span>?</li>
+</ol>
+</div>
+</div>
+<div id="StratifiedCl" class="section level2">
+<h2><span class="header-section-number">8.2</span> Stratified two-stage random sampling</h2>
+<p>The basic sampling designs stratified random sampling (Chapter <a href="STSI.html#STSI">4</a>) and two-stage random sampling can be combined into stratified two-stage random sampling. Figure <a href="Twostage.html#fig:STtwostage">8.3</a> shows a stratified two-stage random sample from Voorst. The strata are as before in stratified cluster random sampling (Figure <a href="Cl.html#fig:ClVoorst">7.1</a>). The primary sampling units are as before in (unstratified) two-stage random sampling (Figure <a href="Twostage.html#fig:TwostageVoorst">8.1</a>). Within each stratum two times a psu is selected by ppswr, and every time a psu is selected, six ssu’s (points) are selected by simple random sampling. The stratification avoids the clustering of the selected psu’s in one part of the study area. Compared to (unstratified) two-stage random sampling, the geographical spreading of the psu’s is somewhat improved, which may lead to an increase of the precision of the estimated population mean.</p>
+<div class="figure" style="text-align: center"><span id="fig:STtwostage"></span>
+<img src="SpatialSampling_files/figure-html/STtwostage-1.png" alt="Stratified twostage random sample from Voorst" width="100%" />
+<p class="caption">
+Figure 8.3: Stratified twostage random sample from Voorst
+</p>
+</div>
+<p>The population mean is estimated by first estimating the stratum means using Equation <a href="Twostage.html#eq:EstMeanTwostage">(8.1)</a>, followed by computing the weighted average of the estimated stratum means using Equation <a href="STSI.html#eq:HTMeanSTSI2">(4.2)</a>. The variance of the estimated population mean is estimated in the same way, by first estimating the variance of the estimated stratum means using Equation <a href="Twostage.html#eq:VarEstMeanTwostage">(8.2)</a>, followed by computing the weighted average of the estimated variances of the estimated stratum means (Equation <a href="STSI.html#eq:EstVarMeanSTSI">(4.3)</a>).</p>
+<div id="exercise-stratifiedtwostage.r" class="section level4 unnumbered">
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/StratifiedTwoStage.R">StratifiedTwoStage.R</a>)</h4>
+<ol style="list-style-type: decimal">
+<li>Write an R script to select a stratified two-stage random sample from Voorst, using the 2 km <span class="math inline">\(\times\)</span> 1 km blocks of Figure <a href="Twostage.html#fig:STtwostage">8.3</a> as strata and the 1 km <span class="math inline">\(\times\)</span> 1 km blocks as primary sampling units (psu’s). Select in each stratum two times a psu by ppswr, and select six ssu’s per psu draw.<br />
 </li>
-<li>Estimate the population mean, and its standard error<br />
-</li>
-<li>Compare the standard error with that of the Horvitz-Thompson estimator for simple random sampling of the same size; explain the difference<br />
-</li>
-<li>Is the standard error of the estimated mean for <span class="math inline">\(10 \times 4\)</span> units larger or smaller than with <span class="math inline">\(4 \times 10\)</span>?</li>
+<li>Estimate the population mean and its standard error</li>
 </ol>
 
 </div>

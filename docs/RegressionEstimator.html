@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-19">
+<meta name="date" content="2018-06-20">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -132,7 +132,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
-<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a><ul>
+<li class="chapter" data-level="" data-path="Twostage.html"><a href="Twostage.html#questions-9"><i class="fa fa-check"></i>Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>8.2</b> Stratified two-stage random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
 <li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
@@ -149,6 +152,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -236,11 +240,15 @@ Figure 9.3: Sampling distribution of regression and Horvitz-Thompson estimator f
 <p>The average of the 10,000 regression estimates equals 2.591. The population mean of the study variable ECe equals 2.586. so the estimated bias of the regression estimator equals 0.005. The variance of the 10,000 regression estimates equals 0.037, and the average of the 10,000 estimated approximate variances equals 0.035. The gain in precision due to the regression estimator, quantified by the ratio of the variance of the Horvitz-Thompson estimator to the variance of the regression estimator equals 1.508.</p>
 <div id="exercise-regressionestimator.r" class="section level4 unnumbered">
 <h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator.R">RegressionEstimator.R</a>)</h4>
-<p>In this exercise the mean soil salinity (electrical conductivity, ECe) of the field in Uzbekistan is estimated by the simple regression estimator using the electromagnetic measurements (EM) as a covariate. The data are in <code>CottonFarmUzbekistan.RData</code><br />
-1. Select a simple random sample without replacement of size 40 and estimate the mean ECe by the regression estimator<br />
-2. Approximate the sampling variance of the regression estimator<br />
-3. Repeat the sampling 10,000 times in a for-loop, compute the regression estimator for every sample, and compute the variance of the 10,000 regression estimates<br />
-4. Compute the true sampling variance of the Horvitz-Thompson estimator of the same size, and compute the gain in precision achieved by the regression estimator</p>
+<ol style="list-style-type: decimal">
+<li>Write an <code>R</code>script to select a simple random sample without replacement of size 40 from the cotton farm in Uzbekistan (data are <code>CottonFarmUzbekistan.RData</code>). Estimate the mean electrical conductivity (ECe) by the regression estimator using the electromagnetic measurements (EM) as a covariate<br />
+</li>
+<li>Approximate the sampling variance of the regression estimator<br />
+</li>
+<li>Repeat the sampling 10,000 times in a for-loop, compute the regression estimator for every sample, and compute the variance of the 10,000 regression estimates<br />
+</li>
+<li>Compute the true sampling variance of the Horvitz-Thompson estimator of the same size, and compute the gain in precision achieved by the regression estimator</li>
+</ol>
 </div>
 <div id="regression-estimator-for-stratified-simple-random-sampling" class="section level3">
 <h3><span class="header-section-number">9.1.1</span> Regression estimator for stratified simple random sampling</h3>
@@ -284,10 +292,13 @@ and <span class="math inline">\(\widehat{S^2}_h(x)\)</span> the estimated varian
 4. combine the estimated variances per stratum: <span class="math inline">\(\widehat{V}\!\left(\hat{\bar{z}}_{\text{combreg}}\right)=\sum_{h=1}^Hw^2_h\widehat{V}\!\left(\hat{\bar{e}}_h\right)\)</span></p>
 <div id="exercise-regressionestimator_stsi.r" class="section level4 unnumbered">
 <h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator_STSI.R">RegressionEstimator_STSI.R</a>)</h4>
-<p>In this exercise the mean soil salinity (electrical conductivity, ECe) of the field in Uzbekistan is estimated by stratified simple random sampling in combination with the regression estimator.<br />
-1. Construct two strata on the basis of covariate EM, using as a threshold 50. Then select a stratified simple random sample without replacement of size 40 with proportional allocation<br />
-2. Estimate the mean ECe by the seperate regression estimator and approximate the sampling variance of this regression estimator<br />
-3. Estimate the mean ECe by the combined regression estimator and approximate the sampling variance of this regression estimator</p>
+<ol style="list-style-type: decimal">
+<li>Write an R script to estimate the mean ECe of the cotton farm in Uzbekistan by stratified simple random sampling. Construct two strata on the basis of covariate EM, using as a threshold 50. Select a stratified simple random sample without replacement of size 40, and allocate the sample to the strata proportional to their size<br />
+</li>
+<li>Estimate the mean ECe by the seperate regression estimator and approximate the sampling variance of this regression estimator<br />
+</li>
+<li>Estimate the mean ECe by the combined regression estimator and approximate the sampling variance of this regression estimator</li>
+</ol>
 </div>
 </div>
 </div>
@@ -395,11 +406,15 @@ Figure 9.6: Sampling distribution of regression estimator for two-phase sampling
 <p>I repeated the two-phase sampling 10,000 times, see Figure <a href="RegressionEstimator.html#fig:SamplingDistributionRegression2phase">9.6</a>. The variance of the regression estimator equals 0.0461. This is larger than for the regression estimator with known mean of the covariate EM (0.0367), but still smaller than the variance of the Horvitz-Thompson estimator (0.0554).</p>
 <div id="exercise-regressionestimator_twophase.r" class="section level4 unnumbered">
 <h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/RegressionEstimator_Twophase.R">RegressionEstimator_Twophase.R</a>)</h4>
-<p>Similar to the previous Exercise (RegressionEstimator.R) the aim is to estimate the mean electrical conductivity (ECe) of the field in Uzbekistan, using electromagnetic (EM) measurements as a covariate in the regression estimator. Now we do not have a full-coverage map of EM, so that the population mean of EM is unknown. EM is measured at a relatively large first-phase sample. At a subsample soil samples are collected for measurement of ECe.<br />
-1. Select a random sample of 80 points and a subsample of 40 points by simple random sampling without replacement. Estimate the population mean of ECe by the regression estimator for two-phase sampling<br />
-2. Approximate the sampling variance of the regression estimator<br />
-3. Repeat this 10000 times in a for-loop, and compute the variance of the 10000 regression estimates of the mean of ECe<br />
-4. Compare the variance of the regression estimator for this two-phase sampling design with the variance of the regression estimator with known population mean of EM.</p>
+<ol style="list-style-type: decimal">
+<li>Write an <code>R</code>script to select a simple random sample without replacement of 80 points and a subsample of 40 points by the same sampling design from the cotton farm in Uzbekistan. Estimate the population mean of ECe by the regression estimator for two-phase sampling using EM as a covariate (EM is observed at all 80 points, ECe at the subsample only)<br />
+</li>
+<li>Approximate the sampling variance of the regression estimator<br />
+</li>
+<li>Repeat this 10,000 times in a for-loop, and compute the variance of the 10,000 regression estimates of the mean of ECe<br />
+</li>
+<li>Compare the variance of the regression estimator for this two-phase sampling design with the variance of the regression estimator with known population mean of EM.</li>
+</ol>
 
 </div>
 </div>

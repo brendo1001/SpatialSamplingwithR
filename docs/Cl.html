@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-19">
+<meta name="date" content="2018-06-20">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -132,7 +132,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
-<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a><ul>
+<li class="chapter" data-level="" data-path="Twostage.html"><a href="Twostage.html#questions-9"><i class="fa fa-check"></i>Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>8.2</b> Stratified two-stage random sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
 <li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
@@ -149,6 +152,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -215,7 +219,7 @@ Figure 7.1: Cluster random sample from Voorst
 <p>The output <code>mysample</code> of function <code>cl</code> in the chunk above has a column named `start’. This is an indicator with value 1 if this point of the cluster is selected first, and 0 else. When in the field it appears that the first selected point of a cluster does not belong to the target population, all other points of that cluster are also dropped. This is to keep the selection probabilities of the clusters exactly proportional to their size.</p>
 <div id="estimation-of-mean-and-its-sampling-variance" class="section level2">
 <h2><span class="header-section-number">7.1</span> Estimation of mean and its sampling variance</h2>
-With pps-sampling with replacement of clusters an unbiased estimator of the mean is:
+With pps-sampling with replacement of clusters the population mean is estimated unbiasedly by (see chunk hereafter):
 <span class="math display" id="eq:EstMeanCl">\[\begin{equation}
 \hat{\bar{z}}_{\mathrm{Cl}}=
 \frac{1}{d}\sum\limits_{i=1}^{d}\hat{\bar{z}}_{i} \;,
@@ -264,7 +268,9 @@ Figure 7.4: Stratified cluster random sample from Voorst
 <div id="exercise-stratifiedcluster.r" class="section level4 unnumbered">
 <h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/StratifiedCluster.R">StratifiedCluster.R</a>)</h4>
 <ol style="list-style-type: decimal">
-<li>Write an R script to select a stratified cluster random sample from Voorst, using the 2 km <span class="math inline">\(\times\)</span> 1 km blocks of Figure <a href="Cl.html#fig:STCl">7.4</a> as strata. Select in each stratum two times a cluster with probabilities proportional to size. 2. Estimate the population mean and its standard error</li>
+<li>Write an R script to select a stratified cluster random sample from Voorst, using the 2 km <span class="math inline">\(\times\)</span> 1 km blocks of Figure <a href="Cl.html#fig:STCl">7.4</a> as strata. Select in each stratum two times a cluster with probabilities proportional to size<br />
+</li>
+<li>Estimate the population mean and its standard error</li>
 </ol>
 </div>
 <div id="questions-8" class="section level4 unnumbered">
