@@ -25,4 +25,4 @@ ggplot()+
 n <- nrow(mysample)
 ```
 
-The number of gridpoints equals ```r n```. Nodes of the square grid in parts of the area not belonging to the population of interest, such as build-up areas and roads, are discarded. As a consequence, there are some empty spaces, for instance in the middle of the study area. If we use the square grid in spatial interpolation, e.g. ordinary kriging, we are more uncertain about the predictions in these undersampled areas than in areas where the grid is complete. In the next Chapter I show how this undersampling can be avoided.
+The number of gridpoints equals ```r n```. Nodes of the square grid in parts of the area not belonging to the population of interest, such as build-up areas and roads, are discarded. As a consequence, there are some empty spaces, for instance in the middle of the study area. If we use the square grid in spatial interpolation, e.g. ordinary kriging, we are more uncertain about the predictions in these undersampled areas than in areas where the grid is complete. In the next Chapter I show how this local undersampling can be avoided.

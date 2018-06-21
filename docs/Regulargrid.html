@@ -183,14 +183,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gridded</span>(grdVoorst) &lt;-<span class="st"> </span><span class="er">~</span>s1<span class="op">+</span>s2
 mysample&lt;-<span class="kw">spsample</span>(<span class="dt">x=</span>grdVoorst,<span class="dt">type=</span><span class="st">&quot;regular&quot;</span>,<span class="dt">cellsize=</span><span class="kw">c</span>(<span class="dv">200</span>,<span class="dv">200</span>),<span class="dt">offset=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>))
 mysample&lt;-<span class="kw">as</span>(mysample,<span class="st">&quot;data.frame&quot;</span>)</code></pre></div>
-<p>Figure <a href="#fig:grdVoorst"><strong>??</strong></a> shows the selected square grid.</p>
+<p>Figure <a href="Regulargrid.html#fig:gridVoorst">12.1</a> shows the selected square grid.</p>
 <div class="figure" style="text-align: center"><span id="fig:gridVoorst"></span>
 <img src="SpatialSampling_files/figure-html/gridVoorst-1.png" alt="Non-random square grid sample from Voorst" width="100%" />
 <p class="caption">
 Figure 12.1: Non-random square grid sample from Voorst
 </p>
 </div>
-<p>The number of gridpoints equals <code>115</code>. Nodes of the square grid in parts of the area not belonging to the population of interest, such as build-up areas and roads, are discarded. As a consequence,there are some empty spaces, for instance in the middle of the study area.</p>
+<p>The number of gridpoints equals <code>115</code>. Nodes of the square grid in parts of the area not belonging to the population of interest, such as build-up areas and roads, are discarded. As a consequence, there are some empty spaces, for instance in the middle of the study area. If we use the square grid in spatial interpolation, e.g. ordinary kriging, we are more uncertain about the predictions in these undersampled areas than in areas where the grid is complete. In the next Chapter I show how this undersampling can be avoided.</p>
 
 </div>
             </section>
