@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="Balanced.html">
-<link rel="next" href="Regulargrid.html">
+<link rel="prev" href="IntroSamplingforMapping.html">
+<link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -175,77 +175,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="IntroSamplingforMapping" class="section level1">
-<h1><span class="header-section-number">Chapter 11</span> Sampling for mapping</h1>
-<p>This second part of the book deals with sampling for mapping. In practice a map is constructed by overlaying the study area by a very fine square grid, and estimating the variable of interest for all grid cells. Note that the estimated value may either represent the mean of the grid cell or the value at its centre. We should be clear about this.</p>
-<p>For mapping a model-based sampling approach is the only option. We cannot afford to select a random sample from each grid cell for design-based estimation of their means. A statistical model, containing an error term modeled by a probability distribution, is used to map the study variable from the sample data. As the model already contains a random error, selection of the sampling units by probability sampling is not strictly needed in a model-based approach. As a consequence there is room for optimizing the sampling units, i.e. searching for those units that lead to the most precise map.</p>
-As an illustration, consider the following model:
-<span class="math display" id="eq:simplelinearregressionmodel">\[\begin{equation}
-z_i = \beta_0 + \beta_1 x_i + \epsilon_i \;,
-\tag{11.1}
-\end{equation}\]</span>
-<p>with <span class="math inline">\(z_i\)</span> the study variable of unit <span class="math inline">\(i\)</span>, <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> regression coefficients and <span class="math inline">\(\epsilon_i\)</span> the error (residual) at unit <span class="math inline">\(i\)</span>, normally distributed with mean zero and a constant variance <span class="math inline">\(\sigma^2\)</span>. The errors are assumed independent, so that <span class="math inline">\(Cov(\epsilon_i,\epsilon_j)=0\)</span> for all <span class="math inline">\(i \neq j\)</span>. Figure <a href="IntroSamplingforMapping.html#fig:foursamples">11.1</a> shows a simple random sample without replacement (subfigure a) and the sample optimized for mapping with a simple linear regression model (subfigure b). Both samples are plotted in a map of the covariate (predictor).</p>
-<div class="figure" style="text-align: center"><span id="fig:foursamples"></span>
-<img src="SpatialSampling_files/figure-html/foursamples-1.png" alt="Simple random sample (a), optimized samples for mapping with simple linear regression (b) and kriging with an external drift (c), and stratified sample using sixteen equal-sized covariate strata (d)" width="25%" /><img src="SpatialSampling_files/figure-html/foursamples-2.png" alt="Simple random sample (a), optimized samples for mapping with simple linear regression (b) and kriging with an external drift (c), and stratified sample using sixteen equal-sized covariate strata (d)" width="25%" /><img src="SpatialSampling_files/figure-html/foursamples-3.png" alt="Simple random sample (a), optimized samples for mapping with simple linear regression (b) and kriging with an external drift (c), and stratified sample using sixteen equal-sized covariate strata (d)" width="25%" /><img src="SpatialSampling_files/figure-html/foursamples-4.png" alt="Simple random sample (a), optimized samples for mapping with simple linear regression (b) and kriging with an external drift (c), and stratified sample using sixteen equal-sized covariate strata (d)" width="25%" />
+<div id="Regulargrid" class="section level1">
+<h1><span class="header-section-number">Chapter 12</span> Sampling on a regular grid</h1>
+<p>For mapping sampling on a regular grid is attractive because of its simplicity. The data collected on the grid-points are not used for design-based estimation of the population mean or total, and for that reason the grid need not be placed randomly on the study area as in systematic random sampling (Chapter <a href="SY.html#SY">5</a>). The grid can be located such that the grid nodes optimally cover the study area. Commonly used grid configuration are square, triangular and hexagonal. Which configuration is optimal depends on the variogram, amongst others. If the variable of interest shows moderate to strong spatial autocorrelation, triangular grids give the best result.</p>
+<p>Besides the shape of the grid cells, we must decide on the size of the grid cells (grid spacing). The grid spacing determines the number of sampling locations in the study area, the sample size. There are two options to decide on this spacing, either by starting from the available budget or from a requirement on the quality of the map. The latter is explained in Chapter <a href="#MBgridspacing"><strong>??</strong></a>, as this requires a model of the spatial variation, and as a consequence this is an example of model-based sampling. Starting from the available budget and an estimate of the costs per point, we first compute the affordable sample size. Then we may derive from this number the grid spacing. For square grids, the grid spacing in meters can be calculated with <span class="math inline">\(\sqrt{A/n}\)</span>, where <span class="math inline">\(A\)</span> is the area in m<span class="math inline">\(^2\)</span>, and <span class="math inline">\(n\)</span> is the number of sampling locations (sample size).</p>
+<p>Grids can be selected with function <code>spsample</code> of <code>R</code>package <code>sp</code> [Pebesma2005]. The argument <code>offset</code> is used to select non-randomly a grid. Either a sample size can be specified, using argument <code>n</code>, or a gridspacing using argument <code>cellsize</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gridded</span>(grdVoorst) &lt;-<span class="st"> </span><span class="er">~</span>s1<span class="op">+</span>s2
+mysample&lt;-<span class="kw">spsample</span>(<span class="dt">x=</span>grdVoorst,<span class="dt">type=</span><span class="st">&quot;regular&quot;</span>,<span class="dt">cellsize=</span><span class="kw">c</span>(<span class="dv">200</span>,<span class="dv">200</span>),<span class="dt">offset=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>))
+mysample&lt;-<span class="kw">as</span>(mysample,<span class="st">&quot;data.frame&quot;</span>)</code></pre></div>
+<p>Figure <a href="#fig:grdVoorst"><strong>??</strong></a> shows the selected square grid.</p>
+<div class="figure" style="text-align: center"><span id="fig:gridVoorst"></span>
+<img src="SpatialSampling_files/figure-html/gridVoorst-1.png" alt="Non-random square grid sample from Voorst" width="100%" />
 <p class="caption">
-Figure 11.1: Simple random sample (a), optimized samples for mapping with simple linear regression (b) and kriging with an external drift (c), and stratified sample using sixteen equal-sized covariate strata (d)
+Figure 12.1: Non-random square grid sample from Voorst
 </p>
 </div>
-<p>The optimized sample for mapping with a simple linear regression model contains the units with the smallest or the largest values of the covariate <span class="math inline">\(x\)</span>. The optimized sample shows strong spatial clustering. Spatial clustering is not avoided because in a simple linear regression model we assume that the data are independent. The standard errors of both regression coefficients are considerably smaller for the optimized sample (Table <a href="IntroSamplingforMapping.html#tab:sebetas">11.1</a>). The joint uncertainty about the two regression coefficients, quantified by the determinant of the variance-covariance matrix of the estimated regression coefficients, equals 0.0020 for the simple random sample and 0.00010 for the optimized sample. When we are less uncertain about the regression coefficients, we are also less uncertain about the estimates of the study variable obtained with the simple linear regression model at (unobserved) locations of a fine grid discretizing the study area used for mapping the study variable. So, we conclude that for mapping with a simple linear gression model, simple random sampling is not a good option.</p>
-<table>
-<caption><span id="tab:sebetas">Table 11.1: </span>Standard errors and determinant of variance-covariance matrix of estimated regression coefficients with simple random sample and optimized sample</caption>
-<thead>
-<tr class="header">
-<th align="left">Sampling design</th>
-<th align="right">se intercept</th>
-<th align="right">se slope</th>
-<th align="right">Determinant</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">SI</td>
-<td align="right">1.51</td>
-<td align="right">0.086</td>
-<td align="right">2e-03</td>
-</tr>
-<tr class="even">
-<td align="left">Optimized</td>
-<td align="right">1.08</td>
-<td align="right">0.051</td>
-<td align="right">1e-04</td>
-</tr>
-</tbody>
-</table>
-The following model differs slightly from Equation <a href="IntroSamplingforMapping.html#eq:simplelinearregressionmodel">(11.1)</a>:
-<span class="math display" id="eq:KEDmodel">\[\begin{eqnarray}
-y_i &amp;=&amp; \beta_0 + \beta_1 x_i + \epsilon_i \\
-\epsilon_i &amp;\sim&amp; \mathcal{N}(0,\sigma^2)\\
-\mathrm{cov}(\epsilon_i,\epsilon_j) &amp;=&amp; C(d_{i,j}) \;.
-\tag{11.2}
-\end{eqnarray}\]</span>
-<p>In this model the errors are not independent, but spatially correlated. This model is used when mapping by kriging with an external drift (KED). Figure <a href="IntroSamplingforMapping.html#fig:foursamples">11.1</a>(c) shows an optmized sample for KED mapping<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>. Spatial clustering is avoided, the selected units are spread throughout the area. At the same time units near the minimum (unit with coordinates (13.5, 12.5)) and maximum (unit with coordinates (13.5, 6.5)) of the covariate are selected. This example shows that there is no single best sampling design for mapping. The best design depends on the method used for mapping. If we believe that the study variable can better be mapped by KED instead of simple linear regression, because we expect the data to be spatially autocorrelated, the optimal sample largely differs from the optimal sample for mapping using a simple linear regression model. If we foresee a quadratic relation, <span class="math inline">\(z_i = \beta_0 + \beta_1x_i + \beta_2x^2_i+\epsilon_i\)</span>, the optimal sample will also include locations with covariate values near the mean of <span class="math inline">\(x\)</span>. And if we expect an even more complicated, non-linear relation, stratified sampling using quantiles of covariate <span class="math inline">\(x\)</span> as stratum breaks, so that the distribution of <span class="math inline">\(x\)</span> in the sample and in the population are similar, as is done in cLHS sampling for multiple covariates (Chapter <a href="#cLHS"><strong>??</strong></a>), can be advantageous (Figure <a href="IntroSamplingforMapping.html#fig:foursamples">11.1</a>).</p>
-<div id="geometric-versus-model-based-sampling-designs" class="section level2">
-<h2><span class="header-section-number">11.1</span> Geometric versus model-based sampling designs</h2>
-<p>At the highest level we may distinguish geometric from model-based sampling designs for mapping. A square grid and a triangular grid are examples of geometric sampling designs; the sampling locations show a regular, geometric spatial pattern. In other geometric sampling designs the spatial pattern is not that nicely regular. Yet these are classified as geometric sampling designs when the samples are obtained by minimizing a geometric criterion, i.e. a criterion defined in terms of distances between the sampling locations and the nodes of a fine prediction grid discretizing the study area (Chapters <a href="#SpatialCoverage"><strong>??</strong></a> and <a href="#kmeans"><strong>??</strong></a>).</p>
-<p>In model-based sampling designs the samples are obtained by minimizing a criterion that is defined in terms of variances of prediction errors. An example is the mean kriging variance criterion, i.e. the average of the kriging variances over all nodes of the prediction grid. Model-based sampling therefore requires some knowledge of the model of spatial variation. Such a model must be postulated, and given this model the sample can be optimized.</p>
-<p>In Chapter <a href="GeneralIntro.html#GeneralIntro">1</a> we introduced the design-based and model-based approach for sampling and statistical inference. Note that a model-based approach does not necessarily imply model-based sampling. The adjective model-based refers to the model-based inference, not to the selection of the locations. In a model-based approach sampling locations can be, but need not be selected by model-based sampling. If they are, then both in selecting the locations and in mapping a statistical model is used. In most cases the two models differ: once the sample data are collected, these are used to update the postulated model used for sampling design. This updated model is then used for mapping.</p>
+<p>The number of gridpoints equals <code>115</code>. Nodes of the square grid in parts of the area not belonging to the population of interest, such as build-up areas and roads, are discarded. As a consequence,there are some empty spaces, for instance in the middle of the study area.</p>
 
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="4">
-<li id="fn4"><p>Which sample is optimal for KED also depends on how strong the spatial correlation is, see Chapter <a href="#MBKED"><strong>??</strong></a><a href="IntroSamplingforMapping.html#fnref4">↩</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="Balanced.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="Regulargrid.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="IntroSamplingforMapping.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -274,7 +228,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR/11-IntroSampling4Mapping.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/12-RegularGrid.Rmd",
 "text": "Edit"
 },
 "download": null,

@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-20">
+<meta name="date" content="2018-06-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -104,10 +104,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
-<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.1</b> Simulated population</a></li>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>2.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="2.2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.2</b> Simulated population</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
-<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator-1"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
 <li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
 <li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
 <li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
@@ -152,7 +153,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a><ul>
+<li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -217,35 +221,24 @@ Figure 3.1: Simple random sample without replacement of size 40 from Voorst
 <h4>Drop outs</h4>
 <p>What to do with selected units that do not belong to target population, or cannot be observed for whatever reason (e.g. no permission)? In practice it may happen that inspection in the field shows that a selected sampling unit does not belong to the target population. For instance, in a soil survey the sampling location may happen to fall on a road or in a build-up area. Shifting this location to a nearby unit may lead to biased estimates of the population mean, i.e., a systematic error in the estimated mean. This can be avoided by discarding these units and to replace them by sampling units on a reserve list, selected in the same way, i.e., by the same type of sampling design. The order of sampling units in this list must be the order in which they are selected. Do not replace a deleted sampling unit by the nearest sampling unit from the reserve list, but by the first unit, not yet selected, from the reserve list.</p>
 </div>
-<div id="horvitz-thompson-estimator" class="section level2">
+<div id="horvitz-thompson-estimator-1" class="section level2">
 <h2><span class="header-section-number">3.1</span> Horvitz-Thompson estimator</h2>
-<p>For any probability sampling design the population total can be estimated as a weightd sum of the observations</p>
-<span class="math display" id="eq:HTTotal">\[\begin{equation}
-\hat{t}(z)=\sum_{i=1}^n w_i z_i = \sum_{i=1}^n \frac{1}{\pi_i}z_i \;,
-\tag{3.1}
-\end{equation}\]</span>
-<p>with <span class="math inline">\(n\)</span> the sample size (number of selected units), <span class="math inline">\(w_i\)</span> the weight attached to unit <span class="math inline">\(i\)</span>, <span class="math inline">\(z_i\)</span> the observed study variable for unit <span class="math inline">\(i\)</span>, and <span class="math inline">\(\pi_i\)</span> the probability that unit <span class="math inline">\(i\)</span> is included in the sample (in short, inclusion probability). This estimator is referred to as the Horvitz-Thompson estimator or <span class="math inline">\(\pi\)</span>-estimator. The <span class="math inline">\(\pi\)</span>-estimator for the <em>mean</em> is simply the <span class="math inline">\(\pi\)</span>-estimator for the total, divided by the total number of units in the population, <span class="math inline">\(N\)</span>:</p>
-<span class="math display" id="eq:HTMean">\[\begin{equation}
-\hat{\bar{z}}=\frac{1}{N} \sum_{i=1}^n w_i z_i \;.
-\tag{3.2}
-\end{equation}\]</span>
-<p>So the observations are multiplied by a weight <span class="math inline">\(w_i\)</span> which equals the inverse of the inclusion probabilities. One may think of the weights as the number of units in the population a selected unit represents. So, in sampling with <em>unequal</em> probabilities, the larger this inclusion probability is, the smaller the weight attached to the observation on this unit, whereas if a unit is selected with a small selection probability, then the observation on this unit gets a large weight</p>
-<p>For simple random sampling with replacement from a finite population the probability that a unit is selected in one draw equals <span class="math inline">\(1/N\)</span>. With <span class="math inline">\(n\)</span> draws the probability that a unit is included in the sample (inclusion probability) equals <span class="math inline">\(n/N\)</span>. It can be shown that for simple random sampling without replacement the inclusion probabilities are equal to those with simple random sampling with replacement <span class="citation">(Lohr 1999)</span>. Substituting this in the <span class="math inline">\(\pi\)</span>-estimator for the total gives for simple random sampling (with or without replacement)</p>
+<p>For simple random sampling with replacement from a finite population the probability that a unit is selected in one draw equals <span class="math inline">\(1/N\)</span>. With <span class="math inline">\(n\)</span> draws the probability that a unit is included in the sample (inclusion probability) equals <span class="math inline">\(n/N\)</span>. It can be shown that for simple random sampling without replacement the inclusion probabilities are equal to those with simple random sampling with replacement <span class="citation">(Lohr 1999)</span>. Substituting this in the <span class="math inline">\(\pi\)</span>-estimator for the total (Equation <a href="IntroProbabilitySampling.html#eq:HTTotal">(2.1)</a>) gives for simple random sampling (with or without replacement)</p>
 <span class="math display" id="eq:HTTotalSI">\[\begin{equation}
 \hat{t}_{\text{SI}}(z)=\frac{N}{n}\sum_{i=1}^n z_i=N \bar{z}_s \;,
-\tag{3.3}
+\tag{3.1}
 \end{equation}\]</span>
 <p>with <span class="math inline">\(\bar{z}_s\)</span> the (unweighted) <em>sample mean</em>. So for simple random sampling the <span class="math inline">\(\pi\)</span> estimator of the mean is the <em>unweighted</em> sample mean:</p>
 <span class="math display" id="eq:HTMeanSI">\[\begin{equation}
 \hat{\bar{z}}_{\text{SI}} = \bar{z}_s = \frac{1}{n}\sum_{i=1}^n z_i \;.
-\tag{3.4}
+\tag{3.2}
 \end{equation}\]</span>
 <p>For <em>infinite</em> populations the total can be estimated by the (unweighted) sample mean multiplied by the area of the region of interest <span class="math inline">\(A\)</span>:</p>
 <span class="math display" id="eq:HTTotalSIInfinite">\[\begin{equation}
 \hat{t}_{\text{SI}}(z)= \frac{A}{n}\sum_{i=1}^{n}z_{i} \;.
-\tag{3.5}
+\tag{3.3}
 \end{equation}\]</span>
-<p>Comparing this estimator with the estimator for the finite population total (Eq. <a href="SI.html#eq:HTTotal">(3.1)</a>) shows that the inclusion probability <span class="math inline">\(n/N\)</span> in the latter estimator has been replaced by <span class="math inline">\(n/A\)</span>, which can be interpreted as the inclusion probability , i.e., the number of sampling units per unit of area, or shortly, the .</p>
+<p>Comparing this estimator with the estimator for the finite population total (Eq. <a href="IntroProbabilitySampling.html#eq:HTTotal">(2.1)</a>) shows that the inclusion probability <span class="math inline">\(n/N\)</span> in the latter estimator has been replaced by <span class="math inline">\(n/A\)</span>, which can be interpreted as the inclusion probability , i.e., the number of sampling units per unit of area, or shortly, the .</p>
 <p>The simulated population is now sampled 10000 times. For each sample the mean is estimated, as well as the variance of the estimated mean. How the variance is estimated, is explained hereafter in Section <a href="SI.html#VarMeanSI">3.2</a>. Figure <a href="SI.html#fig:SamplingDistributionSI">3.2</a> shows a histogram of the 10000 estimated means.</p>
 <div class="figure" style="text-align: center"><span id="fig:SamplingDistributionSI"></span>
 <img src="SpatialSampling_files/figure-html/SamplingDistributionSI-1.png" alt="Sampling distribution of estimated mean with SI of size 40" width="60%" />
@@ -266,10 +259,10 @@ Figure 3.2: Sampling distribution of estimated mean with SI of size 40
 </li>
 <li>Suppose we would repeat the sampling a billion number of times, what would happen with the difference between the average of the estimated means and the population mean?</li>
 </ol>
-<p>In some cases one is interested in the proportion of the population (study area) satisfying a given condition. Think for instance of the proportion of trees in a forest infected by some disease, the proportion of an area in which a soil pollutant exceeds some critical threshold, or the proportion of an area where habitat conditions are suitable for some endangered species. A proportion is defined as the spatial mean of an 0/1 indicator <span class="math inline">\(y\)</span> with value 1 if the condition is satisfied, and 0 else. So for simple random sampling this proportion can be estimated by the same formula as for the mean (Eq. <a href="SI.html#eq:HTMeanSI">(3.4)</a>):</p>
+<p>In some cases one is interested in the proportion of the population (study area) satisfying a given condition. Think for instance of the proportion of trees in a forest infected by some disease, the proportion of an area in which a soil pollutant exceeds some critical threshold, or the proportion of an area where habitat conditions are suitable for some endangered species. A proportion is defined as the spatial mean of an 0/1 indicator <span class="math inline">\(y\)</span> with value 1 if the condition is satisfied, and 0 else. So for simple random sampling this proportion can be estimated by the same formula as for the mean (Eq. <a href="SI.html#eq:HTMeanSI">(3.2)</a>):</p>
 <span class="math display" id="eq:HTProportionSI">\[\begin{equation}
 \hat{p}_{\text{SI}} =  \frac{1}{n}\sum_{i=1}^n y_i \;.
-\tag{3.6}
+\tag{3.4}
 \end{equation}\]</span>
 </div>
 </div>
@@ -278,27 +271,27 @@ Figure 3.2: Sampling distribution of estimated mean with SI of size 40
 <p>For simple random sampling of an infinite population and simple random sampling with replacement (SIR) of a finite population the sampling variance of the estimated mean equals</p>
 <span class="math display" id="eq:VarMean">\[\begin{equation}
 V\!\left(\hat{\bar{z}}_{\text{SIR}}\right)=\frac{S^{2}(z)}{n} \;,
-\tag{3.7}
+\tag{3.5}
 \end{equation}\]</span>
 <p>with <span class="math inline">\(S^{2}(z)\)</span> the <em>population</em> variance, also referred to as the spatial variance. For finite populations this population variance is defined as</p>
 <span class="math display" id="eq:PopulationVariance">\[\begin{equation}
 S^{2}(z)=\frac{1}{N}\sum\limits_{i=1}^{N}\left(z_{i}-\bar{z}\right)^{2} \;,
-\tag{3.8}
+\tag{3.6}
 \end{equation}\]</span>
 <p>and for infinite populations as</p>
 <span class="math display" id="eq:PopulationVarianceInfinite">\[\begin{equation}
 S^{2}(z) = \frac{1}{A} \int \limits_{\mathbf{s} \in \mathcal{A}} \left(z(\mathbf{s})-\bar{z}\right)^2\text{d}\mathbf{s} \;.
-\tag{3.9}
+\tag{3.7}
 \end{equation}\]</span>
 <p>In practice we select only one sample, i.e. we do not repeat the sampling many times. Still it is possible to <em>estimate</em> the variance of the estimated means if we would repeat the sampling. In other words, we can estimate the sampling variance of the estimated mean from a single sample. We do so by estimating the population variance from the sample, and this estimate can be used on his turn to estimate the <em>sampling</em> variance of the estimated mean. For simple random sampling <em>with replacement</em> (SIR) from finite populations the sampling variance of the estimated mean can be estimated by</p>
 <span class="math display" id="eq:EstVarMeanSIR">\[\begin{equation}
 \widehat{V}\!\left(\hat{\bar{z}}_{\text{SIR}}\right)=\frac{\widehat{S^2}(z)}{n}= \frac{1}{n\,(n-1)}\sum\limits_{i=1}^{n}\left(z_{i}-\hat{\bar{z}}\right)^{2} \;,
-\tag{3.10}
+\tag{3.8}
 \end{equation}\]</span>
 <p>with <span class="math inline">\(\widehat{S^2}(z)\)</span> the <em>estimated</em> population variance. This estimator can also be used for <em>infinite</em> populations. For simple random sampling <em>without replacement</em> (SI) from finite populations the sampling variance of the estimated mean can be estimated by</p>
 <span class="math display" id="eq:EstVarMeanSI">\[\begin{equation}
 \widehat{V}\!\left(\hat{\bar{z}}_{\text{SI}}\right)=\left(1-\frac{n}{N}\right)\frac{\widehat{S^2}(z)}{n} \;.
-\tag{3.11}
+\tag{3.9}
 \end{equation}\]</span>
 <div id="questions-2" class="section level4 unnumbered">
 <h4>Questions</h4>
@@ -308,7 +301,7 @@ S^{2}(z) = \frac{1}{A} \int \limits_{\mathbf{s} \in \mathcal{A}} \left(z(\mathbf
 <li>What is the effect of the population size <span class="math inline">\(N\)</span> on this difference?</li>
 </ol>
 <p>The term <span class="math inline">\(1-\frac{n}{N}\)</span> is referred to as the finite population correction (fpc).</p>
-<p>In the sampling experiment described above, the average of the 10^{4} <em>estimated</em> sampling variances equals 0.597. The true sampling variance equals 0.599. So the difference is very small, indicating that the estimator of the sampling variance (Eq. <a href="SI.html#eq:EstVarMeanSI">(3.11)</a> is unbiased.</p>
+<p>In the sampling experiment described above, the average of the 10^{4} <em>estimated</em> sampling variances equals 0.597. The true sampling variance equals 0.599. So the difference is very small, indicating that the estimator of the sampling variance (Eq. <a href="SI.html#eq:EstVarMeanSI">(3.9)</a> is unbiased.</p>
 </div>
 <div id="questions-3" class="section level4 unnumbered">
 <h4>Questions</h4>
@@ -320,17 +313,17 @@ S^{2}(z) = \frac{1}{A} \int \limits_{\mathbf{s} \in \mathcal{A}} \left(z(\mathbf
 <p>The sampling variance of an estimated total of a finite population can be estimated by multiplying the estimated variance of the estimated mean by <span class="math inline">\(N^2\)</span>. For simple random sampling without replacement this estimator thus equals</p>
 <span class="math display" id="eq:EstVarTotalSI">\[\begin{equation}
 \widehat{V}\!\left(\hat{t}_{\text{SI}}(z)\right)=N^2 (1-\frac{n}{N})\frac{\widehat{S^{2}}(z)}{n} \;.
-\tag{3.12}
+\tag{3.10}
 \end{equation}\]</span>
 <p>For simple random sampling with replacement (SIR) and simple random sampling of infinite populations the sampling variance of the estimated total can be estimated by</p>
 <span class="math display" id="eq:EstVarTotalSIR">\[\begin{equation}
 \widehat{V}\!\left(\hat{t}_{\text{SIR}}(z)\right)=A^2\frac{\widehat{S^{2}}(z)}{n} \;.
-\tag{3.13}
+\tag{3.11}
 \end{equation}\]</span>
 <p>The sampling variance of an estimated proportion <span class="math inline">\(\hat{p}\)</span> can be estimated by</p>
 <span class="math display" id="eq:EstVarProportionSI">\[\begin{equation}
 \widehat{V}\!\left(\hat{p}_{\text{SI}}\right)=\left( 1-\frac{n}{N}\right) \frac{\hat{p}_{\text{SI}}(1-\hat{p}_{\text{SI}})}{n-1} \;.
-\tag{3.14}
+\tag{3.12}
 \end{equation}\]</span>
 <p>The numerator in this estimator is an estimate of the population variance of the indicator. Note that this estimated population variance is divided by <span class="math inline">\(n-1\)</span>, and not by <span class="math inline">\(n\)</span> as in the estimator of the mean.</p>
 </div>
@@ -340,13 +333,13 @@ S^{2}(z) = \frac{1}{A} \int \limits_{\mathbf{s} \in \mathcal{A}} \left(z(\mathbf
 <p>A second way of expressing our uncertainty about the estimated total or mean (proportion) is to present not merely a single number, but an interval. The wider the interval, the more uncertain we are, and vice versa, the narrower the interval, the more confident we are about the estimate. To learn how to compute a confidence interval, I return to the sampling distribution of the estimated mean soil organic carbon concentration. Suppose we would like to compute the bounds of an interval <span class="math inline">\([a,b]\)</span> such that 5% of the estimated means is smaller than <span class="math inline">\(a\)</span>, and 5% is larger than <span class="math inline">\(b\)</span>. To compute the lower bound <span class="math inline">\(a\)</span> and upper bound <span class="math inline">\(b\)</span> of this 90%-interval, we must specify the distribution function. When the distribution of the target variable <span class="math inline">\(z\)</span> is approximately normal, then the sampling distribution of the estimated mean is also approximately normal, regardless of the sample size. The larger the sample size, the smaller the effect of the distribution of <span class="math inline">\(z\)</span> on the sampling distribution of the estimated mean. For instance, even when the distribution of <span class="math inline">\(z\)</span> is far from symmetric, then still the sampling distribution of the estimated mean is approximately normal if the sample size is large, say <span class="math inline">\(n &gt; 100\)</span>. This is the essence of the Central Limit Theorem. Above we already noticed that the sampling distribution is much less asymmetric than the histogram of the simulated values, and looks much more like a normal distribution. Assuming a normal distribution, the bounds of the 90%-interval are given by:</p>
 <span class="math display" id="eq:CIBounds">\[\begin{equation}
 \bar{z} \pm u_{1-(0.10/2)}\cdot \sqrt{V\!\left(\hat{\bar{z}}\right)} \;,
-\tag{3.15}
+\tag{3.13}
 \end{equation}\]</span>
 <p>where <span class="math inline">\(u_{1-(0.10/2)}\)</span> is the <span class="math inline">\(0.95\)</span> quantile of the standard normal distribution. Note that in this equation the population mean <span class="math inline">\(\bar{z}\)</span> and the sampling variance of the estimated mean <span class="math inline">\(V\!\left(\hat{\bar{z}}\right)\)</span> are used. These quantities are unknown in practice, and must be estimated from the sample. Usually the standard normal distribution is replaced by the Student <span class="math inline">\(t\)</span> distribution, which is a bit wider than the standard normal distribution. In this way we account for the unknown population variance. This leads to the following bounds of the <span class="math inline">\(100(\alpha/2)\%\)</span> confidence interval estimate of the mean:</p>
 <span class="math display" id="eq:CIBoundsStudent">\[\begin{equation}
 \hat{\bar{z}}_{\text{SI}} \pm t^{(n-1)}_{1-\alpha /2}\cdot
 \sqrt{\widehat{V}\!\left(\hat{\bar{z}}_{\text{SI}}\right)} \;,
-\tag{3.16}
+\tag{3.14}
 \end{equation}\]</span>
 <p>where <span class="math inline">\(t^{(n-1)}_{1-\alpha /2}\)</span> is the <span class="math inline">\((1-\alpha /2)\)</span> quantile of the Student <span class="math inline">\(t\)</span> distribution with <span class="math inline">\((n-1)\)</span> degrees of freedom. The quantity <span class="math inline">\((1-\alpha)\)</span> is referred to as the confidence level. The larger the number of degrees of freedom <span class="math inline">\((n-1)\)</span>, the closer the Student <span class="math inline">\(t\)</span> distribution is to the standard normal distribution.</p>
 <p>The interpretation and definition of a confidence interval is not straightforward. A common misinterpretation is that if the 90% confidence interval estimate of the mean equals <span class="math inline">\([a,b]\)</span>, then the probability that the population mean is in this interval equals 90%. This cannot be a correct interpretation, because the population mean is not a random variable, and consequently the probability that the population mean is in an interval does not exist. However, the estimated bounds of the confidence interval are random variables, because the estimated mean and also the estimated sampling variance varies between samples drawn with the sampling design, so it does make sense to attach a probability to this interval. Figure <a href="SI.html#fig:coverageconfinterval">3.3</a> shows the 90% confidence interval estimates of the mean for the first 100 simple random samples drawn above. Note that both the location and the width of the intervals differ between samples. For each sample I determined whether this interval covers the population mean.</p>
