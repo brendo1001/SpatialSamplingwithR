@@ -17,6 +17,25 @@ There are many ways of selecting population units by probability sampling. The f
 * two-stage random sampling  
 * balanced sampling
 
+## Horvitz-Thompson estimator
+For any probability sampling design the population total can be estimated as a weighted sum of the observations
+
+\begin{equation}
+\hat{t}(z)_{\text{HT}}=\sum_{i=1}^n w_i z_i = \sum_{i=1}^n \frac{1}{\pi_i}z_i \;,
+(\#eq:HTTotal)
+\end{equation}
+
+with $n$ the sample size (number of selected units), $w_i$ the weight attached to unit $i$, $z_i$ the observed study variable for unit $i$, and $\pi_i$ the probability that unit $i$ is included in the sample (in short, inclusion probability). This estimator is referred to as the Horvitz-Thompson estimator or $\pi$-estimator. 
+
+So the observations are multiplied by a weight $w_i$ which equals the inverse of the inclusion probabilities. One may think of the weights as the number of units in the population represented by the selected units. So, in sampling with *unequal* probabilities, the larger this inclusion probability of a unit is, the fewer poplation units this unit represents, and the smaller the weight attached to the observation on this unit.
+
+The $\pi$-estimator for the *mean* is simply the $\pi$-estimator for the total, divided by the total number of units in the population, $N$:
+
+\begin{equation}
+\hat{\bar{z}}=\frac{1}{N} \sum_{i=1}^n \frac{1}{\pi_i}z_i \;.
+(\#eq:HTMean)
+\end{equation}
+
 ## Simulated population {#Voorst}
 
 The sampling designs are illustated with *simulated* populations (pseudo-populations). Figure \@ref(fig:Voorst)) shows one of these simulated populations. The population consists of simulated soil organic matter (SOM) concentrations (in mass-percentages) in the topsoil in an area near Voorst (Netherlands). The field is simulated with data collected at 132 points in the past years by graduate students of Wageningen University. Besides the point data I used an existing soil map and a land use map in the simulation. I think the map is a realistic picture of SOM in the study area.

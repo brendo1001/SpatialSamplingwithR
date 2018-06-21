@@ -61,23 +61,8 @@ ggplot() +
 What to do with selected units that do not belong to target population, or cannot be observed for whatever reason (e.g. no permission)? In practice it may happen that inspection in the field shows that a selected sampling unit does not belong to the target population. For instance, in a soil survey the sampling location may happen to fall on a road or in a build-up area. Shifting this location to a nearby unit may lead to biased estimates of the population mean, i.e., a systematic error in the estimated mean. This can be avoided by discarding these units and to replace them by sampling units on a reserve list, selected in the same way, i.e., by the same type of sampling design. The order of sampling units in this list must be the order in which they are selected. Do not replace a deleted sampling unit by the nearest sampling unit from the reserve list, but by the first unit, not yet selected, from the reserve list.
 
 ## Horvitz-Thompson estimator
-For any probability sampling design the population total can be estimated as a weightd sum of the observations
 
-\begin{equation}
-\hat{t}(z)=\sum_{i=1}^n w_i z_i = \sum_{i=1}^n \frac{1}{\pi_i}z_i \;,
-(\#eq:HTTotal)
-\end{equation}
-
-with $n$ the sample size (number of selected units), $w_i$ the weight attached to unit $i$, $z_i$ the observed study variable for unit $i$, and $\pi_i$ the probability that unit $i$ is included in the sample (in short, inclusion probability). This estimator is referred to as the Horvitz-Thompson estimator or $\pi$-estimator. The $\pi$-estimator for the *mean* is simply the $\pi$-estimator for the total, divided by the total number of units in the population, $N$:
-
-\begin{equation}
-\hat{\bar{z}}=\frac{1}{N} \sum_{i=1}^n w_i z_i \;.
-(\#eq:HTMean)
-\end{equation}
-
-So the observations are multiplied by a weight $w_i$ which equals the inverse of the inclusion probabilities. One may think of the weights as the number of units in the population a selected unit represents. So, in sampling with *unequal* probabilities, the larger this inclusion probability is, the smaller the weight attached to the observation on this unit, whereas if a unit is selected with a small selection probability, then the observation on this unit gets a large weight
-
-For simple random sampling with replacement from a finite population the probability that a unit is selected in one draw equals $1/N$. With $n$ draws the probability that a unit is included in the sample (inclusion probability) equals $n/N$. It can be shown that for simple random sampling without replacement the inclusion probabilities are equal to those with simple random sampling with replacement [@loh99]. Substituting this in the $\pi$-estimator for the total gives for simple random sampling (with or without replacement)
+For simple random sampling with replacement from a finite population the probability that a unit is selected in one draw equals $1/N$. With $n$ draws the probability that a unit is included in the sample (inclusion probability) equals $n/N$. It can be shown that for simple random sampling without replacement the inclusion probabilities are equal to those with simple random sampling with replacement [@loh99]. Substituting this in the $\pi$-estimator for the total (Equation \@ref(eq:HTTotal)) gives for simple random sampling (with or without replacement)
 
 \begin{equation}
 \hat{t}_{\text{SI}}(z)=\frac{N}{n}\sum_{i=1}^n z_i=N \bar{z}_s \;,

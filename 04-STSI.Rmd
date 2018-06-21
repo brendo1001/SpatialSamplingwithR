@@ -39,7 +39,7 @@ ggplot() +
 
 
 ## Estimation of the mean and its sampling variance
-With simple random sampling within strata, the estimator of the mean for simple random sampling (Eq. \@ref(eq:HTMeanSI)) is applied at the level of the strata. The estimated stratum means are then pooled (averaged), using the relative sizes (relative areas) of the strata as weights:
+With simple random sampling within strata, the estimator of the mean for simple random sampling (Eq. \@ref(eq:HTMeanSI)) is applied at the level of the strata. The estimated stratum means are then averaged, using the relative sizes (relative areas) of the strata as weights:
 
 \begin{equation}
 \hat{\bar{z}}_{\text{STSI}}= \sum\limits_{h=1}^{H} w_{h}\,\hat{\bar{z}}_{h} \;,
@@ -48,7 +48,7 @@ With simple random sampling within strata, the estimator of the mean for simple 
 
 where $H$ is the number of strata, $w_{h}$ are the relative sizes (areas) of the strata (stratum weights): $w_h = N_h/N$, and $\hat{\bar{z}}_{h}$ is the estimated mean of stratum $h$ estimated by the sample mean for stratum $h$.
 
-The same estimator is found when the Horvitz-Thompson estimator is worked out for stratified simple random sampling. With stratified simple random sampling and different sampling fractions for the strata the inclusion probabilities differ between the strata and equal $\pi_{hi} = n_h/N_h$ for all $i$ in stratum $h$.  Inserting this in the Horvitz-Thompson-estimator gives for the estimator of the mean
+The same estimator is found when the Horvitz-Thompson estimator is worked out for stratified simple random sampling. With stratified simple random sampling and different sampling fractions for the strata the inclusion probabilities differ between the strata and equal $\pi_{hi} = n_h/N_h$ for all $i$ in stratum $h$. Inserting this in the Horvitz-Thompson-estimator of the mean (Equation \@ref(eq:HTMean)) gives
 \begin{equation}
 \hat{\bar{z}}_{\text{STSI}}= \frac{1}{N}\sum\limits_{h=1}^{H}\sum\limits_{i=1}^{n_h} \frac{z_{hi}}{\pi_{hi}} = \frac{1}{N}\sum\limits_{h=1}^{H} \frac{N_h}{n_h}\sum\limits_{i=1}^{n_h} z_{hi} = \sum\limits_{h=1}^{H} w_{h}\,\hat{\bar{z}}_{h} \;.
 (\#eq:HTMeanSTSI2)
