@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-21">
+<meta name="date" content="2018-06-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -179,7 +179,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">Chapter 12</span> Sampling on a regular grid</h1>
 <p>For mapping sampling on a regular grid is attractive because of its simplicity. The data collected on the grid-points are not used for design-based estimation of the population mean or total, and for that reason the grid need not be placed randomly on the study area as in systematic random sampling (Chapter <a href="SY.html#SY">5</a>). The grid can be located such that the grid nodes optimally cover the study area. Commonly used grid configuration are square, triangular and hexagonal. Which configuration is optimal depends on the variogram, amongst others. If the variable of interest shows moderate to strong spatial autocorrelation, triangular grids give the best result.</p>
 <p>Besides the shape of the grid cells, we must decide on the size of the grid cells (grid spacing). The grid spacing determines the number of sampling locations in the study area, the sample size. There are two options to decide on this spacing, either by starting from the available budget or from a requirement on the quality of the map. The latter is explained in Chapter <a href="#MBgridspacing"><strong>??</strong></a>, as this requires a model of the spatial variation, and as a consequence this is an example of model-based sampling. Starting from the available budget and an estimate of the costs per point, we first compute the affordable sample size. Then we may derive from this number the grid spacing. For square grids, the grid spacing in meters can be calculated with <span class="math inline">\(\sqrt{A/n}\)</span>, where <span class="math inline">\(A\)</span> is the area in m<span class="math inline">\(^2\)</span>, and <span class="math inline">\(n\)</span> is the number of sampling locations (sample size).</p>
-<p>Grids can be selected with function <code>spsample</code> of <code>R</code>package <code>sp</code> [Pebesma2005]. The argument <code>offset</code> is used to select non-randomly a grid. Either a sample size can be specified, using argument <code>n</code>, or a gridspacing using argument <code>cellsize</code>.</p>
+<p>Grids can be selected with function <code>spsample</code> of <code>R</code>package <code>sp</code> <span class="citation">(Pebesma and Bivand 2005)</span>. The argument <code>offset</code> is used to select non-randomly a grid. Either a sample size can be specified, using argument <code>n</code>, or a gridspacing using argument <code>cellsize</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gridded</span>(grdVoorst) &lt;-<span class="st"> </span><span class="er">~</span>s1<span class="op">+</span>s2
 mysample&lt;-<span class="kw">spsample</span>(<span class="dt">x=</span>grdVoorst,<span class="dt">type=</span><span class="st">&quot;regular&quot;</span>,<span class="dt">cellsize=</span><span class="kw">c</span>(<span class="dv">200</span>,<span class="dv">200</span>),<span class="dt">offset=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>))
 mysample&lt;-<span class="kw">as</span>(mysample,<span class="st">&quot;data.frame&quot;</span>)</code></pre></div>
@@ -190,7 +190,7 @@ mysample&lt;-<span class="kw">as</span>(mysample,<span class="st">&quot;data.fra
 Figure 12.1: Non-random square grid sample from Voorst
 </p>
 </div>
-<p>The number of gridpoints equals <code>115</code>. Nodes of the square grid in parts of the area not belonging to the population of interest, such as build-up areas and roads, are discarded. As a consequence, there are some empty spaces, for instance in the middle of the study area. If we use the square grid in spatial interpolation, e.g. ordinary kriging, we are more uncertain about the predictions in these undersampled areas than in areas where the grid is complete. In the next Chapter I show how this undersampling can be avoided.</p>
+<p>The number of gridpoints equals <code>115</code>. Nodes of the square grid in parts of the area not belonging to the population of interest, such as build-up areas and roads, are discarded. As a consequence, there are some empty spaces, for instance in the middle of the study area. If we use the square grid in spatial interpolation, e.g. ordinary kriging, we are more uncertain about the predictions in these undersampled areas than in areas where the grid is complete. In the next Chapter I show how this local undersampling can be avoided.</p>
 
 </div>
             </section>

@@ -85,7 +85,7 @@ stratumVarofMean <- (1-nh/Nh)*stratumVars/nh
 estimatedVarofMean <- sum(wh^2*stratumVarofMean)
 ```
 
-For the stratified sample of Fig \@ref(fig:SampleSTSI) the estimated mean equals `r round(estimatedMean,2)` and the estimated sampling variance of this estimate equals `r round(estimatedVarofMean,2)`.
+For the stratified sample of Figure \@ref(fig:SampleSTSI) the estimated mean equals `r round(estimatedMean,2)` and the estimated sampling variance of this estimate equals `r round(estimatedVarofMean,2)`.
 
 Why should we stratify? There can be two reasons:
 

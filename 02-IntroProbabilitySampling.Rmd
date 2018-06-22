@@ -38,7 +38,7 @@ The $\pi$-estimator for the *mean* is simply the $\pi$-estimator for the total, 
 
 ## Simulated population {#Voorst}
 
-The sampling designs are illustated with *simulated* populations (pseudo-populations). Figure \@ref(fig:Voorst)) shows one of these simulated populations. The population consists of simulated soil organic matter (SOM) concentrations (in mass-percentages) in the topsoil in an area near Voorst (Netherlands). The field is simulated with data collected at 132 points in the past years by graduate students of Wageningen University. Besides the point data I used an existing soil map and a land use map in the simulation. I think the map is a realistic picture of SOM in the study area.
+The sampling designs are illustated with *simulated* populations (pseudo-populations). Figure \@ref(fig:Voorst) shows one of these simulated populations. The population consists of simulated soil organic matter (SOM) concentrations (in mass-percentages) in the topsoil in an area near Voorst (Netherlands). The field is simulated with data collected at 132 points in the past years by graduate students of Wageningen University. Besides the point data I used an existing soil map and a land use map in the simulation. I think the map is a realistic picture of SOM in the study area.
 
 ```{r Voorst,  out.width='100%', fig.asp=.333, echo=F, fig.cap="Simulated soil organic matter concentration in Voorst"}
 ggplot(data = grdVoorst) +
