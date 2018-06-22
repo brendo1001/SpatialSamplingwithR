@@ -39,7 +39,7 @@ ggplot() +
 
 
 ## Estimation of the mean and its sampling variance
-With simple random sampling within strata, the estimator of the mean for simple random sampling (Eq. \@ref(eq:HTMeanSI)) is applied at the level of the strata. The estimated stratum means are then averaged, using the relative sizes (relative areas) of the strata as weights:
+With simple random sampling within strata, the estimator of the mean for simple random sampling (Equation \@ref(eq:HTMeanSI)) is applied at the level of the strata. The estimated stratum means are then averaged, using the relative sizes (relative areas) of the strata as weights:
 
 \begin{equation}
 \hat{\bar{z}}_{\text{STSI}}= \sum\limits_{h=1}^{H} w_{h}\,\hat{\bar{z}}_{h} \;,
@@ -172,9 +172,9 @@ When we have a quantitative covariate related to the study variable and known fo
 3. Cumulate the square root of the frequencies, i.e. compute $\sqrt{f_1}$, $\sqrt{f_1} + \sqrt{f_2}$, $\sqrt{f_1} + \sqrt{f_2} + \sqrt{f_3}$, et cetera.   
 4. Divide the total of the square root of the frequencies by the number of strata, multiply this value by 1, 2, $\cdots$, *H*-1, and select the boundaries of the histogram bins closest to these values.
 
-This method is illustrated with a survey of soil salinity at a cotton farm of about 80 ha in Khorezm, Uzbekistan [@Akramkhanov2013].  For this farm a covariate map is available, depicting the apparent electrical conductivity as measured by an electromagnetic induction device (EM38), see Figure \@ref(fig:EMCottonFarm).
+This method is illustrated with a survey of soil salinity at a cotton research farm of about 80 ha in Khorezm, Uzbekistan [@Akramkhanov2013].  For this farm a covariate map is available, depicting the apparent electrical conductivity as measured by an electromagnetic induction device (EM38), see Figure \@ref(fig:EMCottonFarm).
 
-```{r EMCottonFarm,  out.width='100%', fig.asp=0.5, fig.cap="EM38 measurements at cotton farm in Khorezm, Uzbekistan",echo=F}
+```{r EMCottonFarm,  out.width='100%', fig.asp=0.5, fig.cap="EM38 measurements at cotton research farm in Khorezm, Uzbekistan",echo=F}
 grdUzbekistan$EM <- exp(grdUzbekistan$lnEM)
 ggplot(data = grdUzbekistan) +
   geom_raster(mapping = aes(x = x1/1000, y = x2/1000, fill = EM)) +
@@ -214,7 +214,7 @@ ggplot(data = grdUzbekistan) +
 ```
 
 #### Exercise ([STSIcumrootf.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSIcumrootf.R)) {-}
-1. Write an R script to compute ten cumrootf strata for the cotton farm in Uzbekistan using EM as stratification variable (data are in `CottonFarmUzbekistan.RData`).  
+1. Write an R script to compute ten cumrootf strata for the cotton research farm in Uzbekistan using EM as stratification variable (data are in `CottonFarmUzbekistan.RData`).  
 2. Select a stratified simple random sample of size 40 (use function `strata` of package `sampling`). Use the stratum sample sizes as computed by the function `strata.cumrootf`.  What allocation is used for computing the stratum sample sizes?  
 3. Estimate the population mean of ECe and its variance.  
 4. Compute the true sampling variance of the mean for this sampling design (Hint: compute the population variances of ECe per stratum, and divide these by the stratum sample sizes).  

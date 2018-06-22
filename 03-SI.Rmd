@@ -83,7 +83,7 @@ For *infinite* populations the total can be estimated by the (unweighted) sample
 (\#eq:HTTotalSIInfinite)
 \end{equation}
 
-Comparing this estimator with the estimator for the finite population total (Eq. \@ref(eq:HTTotal)) shows that the inclusion probability $n/N$ in the latter estimator has been replaced by $n/A$, which can be interpreted as the inclusion probability \emph{density}, i.e., the number of sampling units per unit of area, or shortly, the \emph{sampling density}.
+Comparing this estimator with the estimator for the finite population total (Equation \@ref(eq:HTTotal)) shows that the inclusion probability $n/N$ in the latter estimator has been replaced by $n/A$, which can be interpreted as the inclusion probability \emph{density}, i.e., the number of sampling units per unit of area, or shortly, the \emph{sampling density}.
 
 The simulated population is now sampled 10000 times. For each sample the mean is estimated, as well as the variance of the estimated mean. How the variance is estimated, is explained hereafter in Section \@ref(VarMeanSI). Figure \@ref(fig:SamplingDistributionSI) shows a histogram of the 10000 estimated means.
 
@@ -119,7 +119,7 @@ When the expectation equals the population mean, then the estimator is *p-unbias
 2. What happens with the spread in the histogram (variance of estimated means) when the sample size $n$ is increased?  
 3. Suppose we would repeat the sampling a billion number of times, what would happen with the difference between the average  of the estimated means and the population mean?
 
-In some cases one is interested in the proportion of the population (study area) satisfying a given condition. Think for instance of the proportion of trees in a forest infected by some disease, the proportion of an area in which a soil pollutant exceeds some critical threshold, or the proportion of an area where habitat conditions are suitable for some endangered species. A proportion is defined as the spatial mean of an 0/1 indicator $y$ with value 1 if the condition is satisfied, and 0 else. So for simple random sampling this proportion can be estimated by the same formula as for the mean (Eq. \@ref(eq:HTMeanSI)):
+In some cases one is interested in the proportion of the population (study area) satisfying a given condition. Think for instance of the proportion of trees in a forest infected by some disease, the proportion of an area in which a soil pollutant exceeds some critical threshold, or the proportion of an area where habitat conditions are suitable for some endangered species. A proportion is defined as the spatial mean of an 0/1 indicator $y$ with value 1 if the condition is satisfied, and 0 else. So for simple random sampling this proportion can be estimated by the same formula as for the mean (Equation \@ref(eq:HTMeanSI)):
 
 \begin{equation}
 \hat{p}_{\text{SI}} =  \frac{1}{n}\sum_{i=1}^n y_i \;.
@@ -169,7 +169,7 @@ with $\widehat{S^2}(z)$ the *estimated* population variance. This estimator can 
 
 The term $1-\frac{n}{N}$ is referred to as the finite population correction (fpc).
 
-In the sampling experiment described above, the average of the `r NUMBER_OF_SAMPLES` *estimated* sampling variances equals `r round(mean(estimatedVarofMeans),3)`. The true sampling variance equals `r round( (1-n/N) * var(grdVoorst$z)/n,3)`. So the difference is very small, indicating that the estimator of the sampling variance (Eq. \@ref(eq:EstVarMeanSI) is unbiased.
+In the sampling experiment described above, the average of the `r NUMBER_OF_SAMPLES` *estimated* sampling variances equals `r round(mean(estimatedVarofMeans),3)`. The true sampling variance equals `r round( (1-n/N) * var(grdVoorst$z)/n,3)`. So the difference is very small, indicating that the estimator of the sampling variance (Equation \@ref(eq:EstVarMeanSI)) is unbiased.
 
 #### Questions {-}  
 1. Above I computed the true sampling variance, i.e. the variance of the estimated means if we would repeat the sampling an infinite number of times. How can this true sampling variance be computed?  

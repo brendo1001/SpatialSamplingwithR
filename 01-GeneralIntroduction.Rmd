@@ -67,8 +67,8 @@ When the aim is to map the study variable, a model-based approach is the only op
 load(file="Voorst.RData")
 load(file="CottonFarmUzbekistan.RData")
 load(file="Kandahar.RData")
-#load("CovariatesThreeWoredasEthiopia.RData")
-#load(file="DataThreeWoredasEthiopia.RData")
-#load(file="HunterValley4Practicals.RData")
+load("CovariatesThreeWoredasEthiopia.RData")
+load(file="DataThreeWoredasEthiopia.RData")
+load(file="HunterValley4Practicals.RData")
 ```
 

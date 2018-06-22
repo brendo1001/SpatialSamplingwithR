@@ -157,6 +157,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
+<li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -178,7 +181,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="Balanced" class="section level1">
 <h1><span class="header-section-number">Chapter 10</span> Balanced sampling</h1>
 <p>Similar to the regression estimator, balanced sampling is a sampling method that exploits one or more quantitative covariates that are related to the variable of interest. The idea behind balanced sampling is that, if we know the mean of the covariates, then the sampling efficiency can be increased by selecting a sample whose averages of the covariates is equal to the population means of the covariates.</p>
-<p>The simulated population Figure<a href="Balanced.html#fig:simpleexample">10.1</a> shows a linear trend from West to East. In other words, the simulated study variable is correlated with the covariate Easting. To estimate the population mean of the simulated study variable, intuitively it is attractive to select a sample with an average of the Easting coordinate that is equal to the population mean of Easting (which is 10). Figure<a href="Balanced.html#fig:simpleexample">10.1</a>(a) shows such a sample; we say that the sample is `balanced’ on the covariate Easting.</p>
+<p>The simulated population Figure <a href="Balanced.html#fig:simpleexample">10.1</a> shows a linear trend from West to East. In other words, the simulated study variable is correlated with the covariate Easting. To estimate the population mean of the simulated study variable, intuitively it is attractive to select a sample with an average of the Easting coordinate that is equal to the population mean of Easting (which is 10). Figure <a href="Balanced.html#fig:simpleexample">10.1</a>(a) shows such a sample; we say that the sample is `balanced’ on the covariate Easting.</p>
 <div class="figure" style="text-align: center"><span id="fig:simpleexample"></span>
 <img src="SpatialSampling_files/figure-html/simpleexample-1.png" alt="Sample balanced on Easting (a) and on Easting and Northing (b)" width="50%" /><img src="SpatialSampling_files/figure-html/simpleexample-2.png" alt="Sample balanced on Easting (a) and on Easting and Northing (b)" width="50%" />
 <p class="caption">
@@ -196,7 +199,7 @@ Figure 10.2: Squared error in estimated mean of <span class="math inline">\(z\)<
 </p>
 </div>
 <p>Clearly, the larger the absolute value of the difference, the larger on average the squared error. So to obtain a precise estimate of the population mean of <span class="math inline">\(z\)</span>, we better select samples with a difference close to 0.</p>
-<p>Sampling designs can also be balanced on multiple covariates. Figure<a href="Balanced.html#fig:simpleexample">10.1</a>(b) shows a sample balanced on both Easting and Northing. Using Easting as a balancing variable reduced the sampling variance of the estimated mean substantially, see Table <a href="Balanced.html#tab:tablebalanced">10.1</a>. Using Northing as a second balancing variable further reduced the sampling variance.</p>
+<p>Sampling designs can also be balanced on multiple covariates. Figure <a href="Balanced.html#fig:simpleexample">10.1</a>(b) shows a sample balanced on both Easting and Northing. Using Easting as a balancing variable reduced the sampling variance of the estimated mean substantially, see Table <a href="Balanced.html#tab:tablebalanced">10.1</a>. Using Northing as a second balancing variable further reduced the sampling variance.</p>
 <table>
 <caption><span id="tab:tablebalanced">Table 10.1: </span>Sampling variances of estimated mean for SI and balanced sampling of four units</caption>
 <thead>
@@ -261,7 +264,7 @@ Working this out for simple random sampling without replacement (<span class="ma
 \tag{10.6}
 \end{equation}\]</span>
 <p>With his design the residuals <span class="math inline">\(e_i\)</span> can be computed by fitting a linear regression model by ordinary least squares. For small sampling fractions <span class="math inline">\(n/N\)</span> and for balanced sampling from infinite poplations the finite population correction can be dropped from this variance estimator.</p>
-<p>Balanced sampling is now illustrated with the field of simulated ECe values on the cotton farm in Uzbekistan. EM is used as balancing variable.</p>
+<p>Balanced sampling is now illustrated with the field of simulated ECe values on the cotton research farm in Uzbekistan. EM is used as balancing variable.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sampling)
 <span class="co">#compute population size</span>
 N&lt;-<span class="kw">nrow</span>(grdUzbekistan)
@@ -282,9 +285,9 @@ S2e&lt;-<span class="kw">sum</span>(e<span class="op">^</span><span class="dv">2
 estimatedVarofMean&lt;-S2e<span class="op">/</span>n</code></pre></div>
 <p>Figure <a href="Balanced.html#fig:BalancedSampleCottonFarm">10.3</a> shows the result. The sample mean of EM equals 48.9. The population mean of EM equals 49.9.</p>
 <div class="figure" style="text-align: center"><span id="fig:BalancedSampleCottonFarm"></span>
-<img src="SpatialSampling_files/figure-html/BalancedSampleCottonFarm-1.png" alt="Balanced sample from the cotton farm (Uzbekistan), balanced on covariate EM" width="100%" />
+<img src="SpatialSampling_files/figure-html/BalancedSampleCottonFarm-1.png" alt="Balanced sample from the cotton research farm (Uzbekistan), balanced on covariate EM" width="100%" />
 <p class="caption">
-Figure 10.3: Balanced sample from the cotton farm (Uzbekistan), balanced on covariate EM
+Figure 10.3: Balanced sample from the cotton research farm (Uzbekistan), balanced on covariate EM
 </p>
 </div>
 <p>Figure <a href="Balanced.html#fig:SamplingDistributionBalanced">10.4</a> shows the sampling distributions of the estimated mean of ECe for balanced sampling and simple random sampling, obtained by repeating the random sampling with both designs and estimation 1000 times.</p>
@@ -309,9 +312,9 @@ Figure 10.5: Sampling distribution of sample mean of balancing variable EM
 sampleid=<span class="kw">lcube</span>(<span class="dt">Xbal=</span>X,<span class="dt">Xspread=</span>X,<span class="dt">prob=</span>pik)
 mysample&lt;-grdUzbekistan[sampleid,]</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-22"></span>
-<img src="SpatialSampling_files/figure-html/unnamed-chunk-22-1.png" alt="Balanced spatial coverage sample from the cotton farm (Uzbekistan), balanced on EM" width="100%" />
+<img src="SpatialSampling_files/figure-html/unnamed-chunk-22-1.png" alt="Balanced spatial coverage sample from the cotton research farm (Uzbekistan), balanced on EM" width="100%" />
 <p class="caption">
-Figure 10.6: Balanced spatial coverage sample from the cotton farm (Uzbekistan), balanced on EM
+Figure 10.6: Balanced spatial coverage sample from the cotton research farm (Uzbekistan), balanced on EM
 </p>
 </div>
 

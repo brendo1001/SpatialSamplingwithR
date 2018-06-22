@@ -157,6 +157,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
+<li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -267,7 +270,7 @@ with
 \tag{9.6}
 \end{equation}\]</span>
 <p>with <span class="math inline">\(\bar{z}_{s,h}\)</span> and <span class="math inline">\(\bar{x}_{s,h}\)</span> the stratum sample means of the study variable and covariate, respectively, <span class="math inline">\(\bar{x}_h\)</span> the mean of the covariate in stratum <span class="math inline">\(h\)</span>, and <span class="math inline">\(b_h\)</span> the estimated slope coefficient for stratum <span class="math inline">\(h\)</span>.</p>
-<p>The variance of the seperate regression estimator of the population mean can be estimated by first estimating the variances of the regression estimators of the stratum means using Eq. <a href="RegressionEstimator.html#eq:VarianceRegressionEstimatorSI">(9.3)</a>, and then combining these variances using Eq. <a href="STSI.html#eq:EstVarMeanSTSI">(4.3)</a>.</p>
+<p>The variance of the seperate regression estimator of the population mean can be estimated by first estimating the variances of the regression estimators of the stratum means using Equation <a href="RegressionEstimator.html#eq:VarianceRegressionEstimatorSI">(9.3)</a>, and then combining these variances using Equation <a href="STSI.html#eq:EstVarMeanSTSI">(4.3)</a>.</p>
 The alternative is the combined regression estimator
 <span class="math display" id="eq:CombinedRegressionEstimator">\[\begin{equation}
 \hat{\bar{z}}_{\text{combreg}}= \hat{\bar{z}}_{\text{STSI}}+b_{\text{STSI}}\left( \bar{x}-\hat{\bar{x}}_{\text{STSI}}\right)

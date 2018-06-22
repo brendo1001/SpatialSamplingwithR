@@ -157,6 +157,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
+<li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -241,8 +244,8 @@ With systematic random sampling all units have an equal inclusion probability. C
 \hat{\bar{z}}_{\text{SY}}=\frac{1}{n}\sum_{i=1}^{n}z_{i} \;.
 \tag{5.1}
 \end{equation}\]</span>
-<p>An unbiased estimator of the sampling variance of the estimated mean is not available. A simple, often applied procedure is to calculate the sampling variance as if the sample were a simple random sample (Eq. #eq:HTMeanSI). In general this procedure over-estimates the sampling variance, so that we are on the safe side.</p>
-<p>Alternatively, the sampling variance can be estimated by treating the SY sample as if it were a stratified simple random sample (Eq. #eq:HTMeanSTSI). The sampling units are clustered on the basis of their spatial coordinates into <span class="math inline">\(H=n/2\)</span> clusters (<span class="math inline">\(n\)</span> even) or <span class="math inline">\(H=(n-1)/2\)</span> clusters (<span class="math inline">\(n\)</span> odd). The two (or three) sampling units of a cluster are then treated as a simple random sample from an undefined stratum, and the variance estimator for stratified random sampling is used. With <span class="math inline">\(n\)</span> even the stratum weights are <span class="math inline">\(1/H\)</span> for all strata, with <span class="math inline">\(n\)</span> odd the weights are computed as <span class="math inline">\(w_h=n_h/n\)</span>. See <span class="citation">Brus and Saby (2016)</span> for a comparison of various variance approximations for SY.</p>
+<p>An unbiased estimator of the sampling variance of the estimated mean is not available. A simple, often applied procedure is to calculate the sampling variance as if the sample were a simple random sample (Equation #eq:HTMeanSI). In general this procedure over-estimates the sampling variance, so that we are on the safe side.</p>
+<p>Alternatively, the sampling variance can be estimated by treating the SY sample as if it were a stratified simple random sample (Equation #eq:HTMeanSTSI). The sampling units are clustered on the basis of their spatial coordinates into <span class="math inline">\(H=n/2\)</span> clusters (<span class="math inline">\(n\)</span> even) or <span class="math inline">\(H=(n-1)/2\)</span> clusters (<span class="math inline">\(n\)</span> odd). The two (or three) sampling units of a cluster are then treated as a simple random sample from an undefined stratum, and the variance estimator for stratified random sampling is used. With <span class="math inline">\(n\)</span> even the stratum weights are <span class="math inline">\(1/H\)</span> for all strata, with <span class="math inline">\(n\)</span> odd the weights are computed as <span class="math inline">\(w_h=n_h/n\)</span>. See <span class="citation">Brus and Saby (2016)</span> for a comparison of various variance approximations for SY.</p>
 <div class="figure" style="text-align: center"><span id="fig:varapproxSY"></span>
 <img src="SpatialSampling_files/figure-html/varapproxSY-1.png" alt="Clustering of grid points for variance approximation" width="100%" />
 <p class="caption">

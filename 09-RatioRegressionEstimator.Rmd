@@ -136,7 +136,7 @@ with
 \end{equation}
 with $\bar{z}_{s,h}$ and $\bar{x}_{s,h}$ the stratum sample means of the study variable and covariate, respectively, $\bar{x}_h$ the  mean of the covariate in stratum $h$, and $b_h$ the estimated slope coefficient for stratum $h$.
 
-The variance of the seperate regression estimator of the population mean can be estimated by first estimating the variances of the regression estimators of the stratum means using Eq. \@ref(eq:VarianceRegressionEstimatorSI), and then combining these variances using Eq. \@ref(eq:EstVarMeanSTSI).
+The variance of the seperate regression estimator of the population mean can be estimated by first estimating the variances of the regression estimators of the stratum means using Equation \@ref(eq:VarianceRegressionEstimatorSI), and then combining these variances using Equation \@ref(eq:EstVarMeanSTSI).
 
 The alternative is the combined regression estimator
 \begin{equation}

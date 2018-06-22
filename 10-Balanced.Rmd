@@ -2,7 +2,7 @@
 
 Similar to the regression estimator, balanced sampling is a sampling method that exploits one or more quantitative covariates that are related to the variable of interest. The idea behind balanced sampling is that, if we know the mean of the covariates, then the sampling efficiency can be increased by selecting a sample whose averages of the covariates is equal to the population means of the covariates.
 
-The simulated population Figure\@ref(fig:simpleexample) shows a linear trend from West to East. In other words, the simulated study variable is correlated with the covariate Easting. To estimate the population mean of the simulated study variable, intuitively it is attractive to select a sample with an average of the Easting coordinate that is equal to the population mean of Easting (which is 10). Figure\@ref(fig:simpleexample)(a) shows such a sample; we say that the sample is `balanced' on the covariate Easting.
+The simulated population Figure \@ref(fig:simpleexample) shows a linear trend from West to East. In other words, the simulated study variable is correlated with the covariate Easting. To estimate the population mean of the simulated study variable, intuitively it is attractive to select a sample with an average of the Easting coordinate that is equal to the population mean of Easting (which is 10). Figure \@ref(fig:simpleexample)(a) shows such a sample; we say that the sample is `balanced' on the covariate Easting.
 
 ```{r simpleexample, out.width='50%',fig.asp=1, fig.show='hold', fig.cap = "Sample balanced on Easting (a) and on Easting and Northing (b)", echo=FALSE, cache=T}
 #define residual variogram for simulation
@@ -115,7 +115,7 @@ ggplot(data = df) +
 
 Clearly, the larger the absolute value of the difference, the larger on average the squared error. So to obtain a precise estimate of the population mean of $z$, we better select samples with a difference close to 0.
 
-Sampling designs can also be balanced on multiple covariates. Figure\@ref(fig:simpleexample)(b) shows a sample balanced on both Easting and Northing. Using Easting as a balancing variable reduced the sampling variance of the estimated mean substantially, see Table \@ref(tab:tablebalanced). Using Northing as a second balancing variable further reduced the sampling variance.  
+Sampling designs can also be balanced on multiple covariates. Figure \@ref(fig:simpleexample)(b) shows a sample balanced on both Easting and Northing. Using Easting as a balancing variable reduced the sampling variance of the estimated mean substantially, see Table \@ref(tab:tablebalanced). Using Northing as a second balancing variable further reduced the sampling variance.  
 
 ```{r tablebalanced, tidy=FALSE, echo=F}
 tbl <- data.frame(x=c("SI","Balanced","Balanced"),y=c("-","Easting","Easting+Northing"),z=c(39.7,14.4,9.77))
@@ -164,7 +164,7 @@ Working this out for simple random sampling without replacement ($\pi_i = n/N$ f
 \end{equation}
 With his design the residuals $e_i$ can be computed by fitting a linear regression model by ordinary least squares. For small sampling fractions $n/N$ and for balanced sampling from infinite poplations the finite population correction can be dropped from this variance estimator.
 
-Balanced sampling is now illustrated with the field of simulated ECe values on the cotton farm in Uzbekistan. EM is used as balancing variable.
+Balanced sampling is now illustrated with the field of simulated ECe values on the cotton research farm in Uzbekistan. EM is used as balancing variable.
 
 ```{r, echo=F}
 #randomize rows
@@ -197,7 +197,7 @@ estimatedVarofMean<-S2e/n
 Figure \@ref(fig:BalancedSampleCottonFarm) shows the result. The sample mean of EM equals `r round(mean(mysample$EM),1)`. The population mean of EM equals `r round(mean(grdUzbekistan$EM),1)`. 
 
 
-```{r BalancedSampleCottonFarm, echo=F, out.width='100%', fig.asp=0.5, fig.cap="Balanced sample from the cotton farm (Uzbekistan), balanced on covariate EM"}
+```{r BalancedSampleCottonFarm, echo=F, out.width='100%', fig.asp=0.5, fig.cap="Balanced sample from the cotton research farm (Uzbekistan), balanced on covariate EM"}
 ggplot(data = grdUzbekistan) +
   geom_raster(mapping = aes(x = x1/1000, y = x2/1000, fill = EM)) +
   geom_tile(data=mysample,mapping = aes(x = x1/1000, y = x2/1000), colour="red",size=0.5, width=0.02, height=0.02, fill=NA)+
@@ -262,7 +262,7 @@ sampleid=lcube(Xbal=X,Xspread=X,prob=pik)
 mysample<-grdUzbekistan[sampleid,]
 ```
 
-```{r, echo=F, out.width='100%', fig.asp=0.5, fig.cap="Balanced spatial coverage sample from the cotton farm (Uzbekistan), balanced on EM"}
+```{r, echo=F, out.width='100%', fig.asp=0.5, fig.cap="Balanced spatial coverage sample from the cotton research farm (Uzbekistan), balanced on EM"}
 ggplot(data = grdUzbekistan) +
   geom_raster(mapping = aes(x = x1/1000, y = x2/1000, fill = EM)) +
   geom_tile(data=mysample,mapping = aes(x = x1/1000, y = x2/1000), colour="red",size=0.5, width=0.02, height=0.02, fill=NA)+

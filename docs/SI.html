@@ -157,6 +157,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
+<li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -238,7 +241,7 @@ Figure 3.1: Simple random sample without replacement of size 40 from Voorst
 \hat{t}_{\text{SI}}(z)= \frac{A}{n}\sum_{i=1}^{n}z_{i} \;.
 \tag{3.3}
 \end{equation}\]</span>
-<p>Comparing this estimator with the estimator for the finite population total (Eq. <a href="IntroProbabilitySampling.html#eq:HTTotal">(2.1)</a>) shows that the inclusion probability <span class="math inline">\(n/N\)</span> in the latter estimator has been replaced by <span class="math inline">\(n/A\)</span>, which can be interpreted as the inclusion probability , i.e., the number of sampling units per unit of area, or shortly, the .</p>
+<p>Comparing this estimator with the estimator for the finite population total (Equation <a href="IntroProbabilitySampling.html#eq:HTTotal">(2.1)</a>) shows that the inclusion probability <span class="math inline">\(n/N\)</span> in the latter estimator has been replaced by <span class="math inline">\(n/A\)</span>, which can be interpreted as the inclusion probability , i.e., the number of sampling units per unit of area, or shortly, the .</p>
 <p>The simulated population is now sampled 10000 times. For each sample the mean is estimated, as well as the variance of the estimated mean. How the variance is estimated, is explained hereafter in Section <a href="SI.html#VarMeanSI">3.2</a>. Figure <a href="SI.html#fig:SamplingDistributionSI">3.2</a> shows a histogram of the 10000 estimated means.</p>
 <div class="figure" style="text-align: center"><span id="fig:SamplingDistributionSI"></span>
 <img src="SpatialSampling_files/figure-html/SamplingDistributionSI-1.png" alt="Sampling distribution of estimated mean with SI of size 40" width="60%" />
@@ -259,7 +262,7 @@ Figure 3.2: Sampling distribution of estimated mean with SI of size 40
 </li>
 <li>Suppose we would repeat the sampling a billion number of times, what would happen with the difference between the average of the estimated means and the population mean?</li>
 </ol>
-<p>In some cases one is interested in the proportion of the population (study area) satisfying a given condition. Think for instance of the proportion of trees in a forest infected by some disease, the proportion of an area in which a soil pollutant exceeds some critical threshold, or the proportion of an area where habitat conditions are suitable for some endangered species. A proportion is defined as the spatial mean of an 0/1 indicator <span class="math inline">\(y\)</span> with value 1 if the condition is satisfied, and 0 else. So for simple random sampling this proportion can be estimated by the same formula as for the mean (Eq. <a href="SI.html#eq:HTMeanSI">(3.2)</a>):</p>
+<p>In some cases one is interested in the proportion of the population (study area) satisfying a given condition. Think for instance of the proportion of trees in a forest infected by some disease, the proportion of an area in which a soil pollutant exceeds some critical threshold, or the proportion of an area where habitat conditions are suitable for some endangered species. A proportion is defined as the spatial mean of an 0/1 indicator <span class="math inline">\(y\)</span> with value 1 if the condition is satisfied, and 0 else. So for simple random sampling this proportion can be estimated by the same formula as for the mean (Equation <a href="SI.html#eq:HTMeanSI">(3.2)</a>):</p>
 <span class="math display" id="eq:HTProportionSI">\[\begin{equation}
 \hat{p}_{\text{SI}} =  \frac{1}{n}\sum_{i=1}^n y_i \;.
 \tag{3.4}
@@ -301,7 +304,7 @@ S^{2}(z) = \frac{1}{A} \int \limits_{\mathbf{s} \in \mathcal{A}} \left(z(\mathbf
 <li>What is the effect of the population size <span class="math inline">\(N\)</span> on this difference?</li>
 </ol>
 <p>The term <span class="math inline">\(1-\frac{n}{N}\)</span> is referred to as the finite population correction (fpc).</p>
-<p>In the sampling experiment described above, the average of the 10^{4} <em>estimated</em> sampling variances equals 0.597. The true sampling variance equals 0.599. So the difference is very small, indicating that the estimator of the sampling variance (Eq. <a href="SI.html#eq:EstVarMeanSI">(3.9)</a> is unbiased.</p>
+<p>In the sampling experiment described above, the average of the 10^{4} <em>estimated</em> sampling variances equals 0.597. The true sampling variance equals 0.599. So the difference is very small, indicating that the estimator of the sampling variance (Equation <a href="SI.html#eq:EstVarMeanSI">(3.9)</a>) is unbiased.</p>
 </div>
 <div id="questions-3" class="section level4 unnumbered">
 <h4>Questions</h4>

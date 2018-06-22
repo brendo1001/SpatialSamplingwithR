@@ -94,9 +94,9 @@ With systematic random sampling all units have an equal inclusion probability. C
 (\#eq:HTMeanSY)
 \end{equation}
 
-An unbiased estimator of the sampling variance of the estimated mean is not available. A simple, often applied procedure is to calculate the sampling variance as if the sample were a simple random sample (Eq. \#eq:HTMeanSI). In general this procedure over-estimates the sampling variance, so that we are on the safe side.
+An unbiased estimator of the sampling variance of the estimated mean is not available. A simple, often applied procedure is to calculate the sampling variance as if the sample were a simple random sample (Equation \#eq:HTMeanSI). In general this procedure over-estimates the sampling variance, so that we are on the safe side.
 
-Alternatively, the sampling variance can be estimated by treating the SY sample as if it were a stratified simple random sample (Eq. \#eq:HTMeanSTSI). The sampling units are clustered on the basis of their spatial coordinates into $H=n/2$ clusters ($n$ even) or $H=(n-1)/2$ clusters ($n$ odd). The two (or three) sampling units of a cluster are then treated as a simple random sample from an undefined stratum, and the variance estimator for stratified random sampling is used. With $n$ even the stratum weights are $1/H$ for all strata, with $n$ odd the weights are computed as $w_h=n_h/n$. See @Brus2016c for a comparison of various variance approximations for SY.
+Alternatively, the sampling variance can be estimated by treating the SY sample as if it were a stratified simple random sample (Equation \#eq:HTMeanSTSI). The sampling units are clustered on the basis of their spatial coordinates into $H=n/2$ clusters ($n$ even) or $H=(n-1)/2$ clusters ($n$ odd). The two (or three) sampling units of a cluster are then treated as a simple random sample from an undefined stratum, and the variance estimator for stratified random sampling is used. With $n$ even the stratum weights are $1/H$ for all strata, with $n$ odd the weights are computed as $w_h=n_h/n$. See @Brus2016c for a comparison of various variance approximations for SY.
 
 ```{r varapproxSY, out.width='100%', fig.asp=.333, echo=F, fig.cap="Clustering of grid points for variance approximation"}
 estimatedMean <- mean(mysample$z)

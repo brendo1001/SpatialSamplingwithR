@@ -73,7 +73,7 @@ ggplot(data = grdKandahar) +
 ```
 
 #### Exercise ([pps.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/pps.R)) {-}
-1. Write an R script to select a pps sample with replacement from the cotton farm in Uzbekistan, using EM as a size variable (data are in `CottonFarmUzbekistan.RData`). Draw 40 times a unit.    
+1. Write an R script to select a pps sample with replacement from the cotton research farm in Uzbekistan, using EM as a size variable (data are in `CottonFarmUzbekistan.RData`). Draw 40 times a unit.    
 2. Estimate the mean ECe with the Hansen-Hurwitz estimator and its sampling variance  
 3. Challenge: compute the true sampling variances of the the Hansen-Hurwitz estimator and of the Horvitz-Thompson estimator for simple random sampling with replacement and the same sample size. Is there a gain in precision?  
 

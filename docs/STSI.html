@@ -157,6 +157,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
+<li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -203,7 +206,7 @@ Figure 4.1: Stratified simple random sample of size 40 from Voorst
 </div>
 <div id="estimation-of-the-mean-and-its-sampling-variance" class="section level2">
 <h2><span class="header-section-number">4.1</span> Estimation of the mean and its sampling variance</h2>
-<p>With simple random sampling within strata, the estimator of the mean for simple random sampling (Eq. <a href="SI.html#eq:HTMeanSI">(3.2)</a>) is applied at the level of the strata. The estimated stratum means are then averaged, using the relative sizes (relative areas) of the strata as weights:</p>
+<p>With simple random sampling within strata, the estimator of the mean for simple random sampling (Equation <a href="SI.html#eq:HTMeanSI">(3.2)</a>) is applied at the level of the strata. The estimated stratum means are then averaged, using the relative sizes (relative areas) of the strata as weights:</p>
 <span class="math display" id="eq:HTMeanSTSI">\[\begin{equation}
 \hat{\bar{z}}_{\text{STSI}}= \sum\limits_{h=1}^{H} w_{h}\,\hat{\bar{z}}_{h} \;,
 \tag{4.1}
@@ -230,7 +233,7 @@ The same estimator is found when the Horvitz-Thompson estimator is worked out fo
 \tag{4.5}
 \end{equation}\]</span>
 <p>and <span class="math inline">\(n_{h}\)</span> is the number of sampling locations in stratum <span class="math inline">\(h\)</span>. Note that the sampling variance is for infinite populations and simple random sampling <em>with replacement</em> from finite population. For without replacement the variances of the estimated stratum means must be multiplied by the fpc’s <span class="math inline">\(1- (n_h/N_h)\)</span>.</p>
-<p>For the stratified sample of Fig <a href="STSI.html#fig:SampleSTSI">4.1</a> the estimated mean equals 7.6 and the estimated sampling variance of this estimate equals 0.35.</p>
+<p>For the stratified sample of Figure <a href="STSI.html#fig:SampleSTSI">4.1</a> the estimated mean equals 7.6 and the estimated sampling variance of this estimate equals 0.35.</p>
 <p>Why should we stratify? There can be two reasons:</p>
 <ol style="list-style-type: decimal">
 <li>We are interested in the means (totals) per stratum .</li>
@@ -293,11 +296,11 @@ df \approx \frac {\left(\sum_{h=1}^H a_h^2
 1. Compute a histogram of the stratification variable using a large number of bins. 2. Compute the square root of the histogram frequencies.<br />
 3. Cumulate the square root of the frequencies, i.e. compute <span class="math inline">\(\sqrt{f_1}\)</span>, <span class="math inline">\(\sqrt{f_1} + \sqrt{f_2}\)</span>, <span class="math inline">\(\sqrt{f_1} + \sqrt{f_2} + \sqrt{f_3}\)</span>, et cetera.<br />
 4. Divide the total of the square root of the frequencies by the number of strata, multiply this value by 1, 2, <span class="math inline">\(\cdots\)</span>, <em>H</em>-1, and select the boundaries of the histogram bins closest to these values.</p>
-<p>This method is illustrated with a survey of soil salinity at a cotton farm of about 80 ha in Khorezm, Uzbekistan <span class="citation">(Akramkhanov, Brus, and Walvoort 2013)</span>. For this farm a covariate map is available, depicting the apparent electrical conductivity as measured by an electromagnetic induction device (EM38), see Figure <a href="STSI.html#fig:EMCottonFarm">4.4</a>.</p>
+<p>This method is illustrated with a survey of soil salinity at a cotton research farm of about 80 ha in Khorezm, Uzbekistan <span class="citation">(Akramkhanov, Brus, and Walvoort 2013)</span>. For this farm a covariate map is available, depicting the apparent electrical conductivity as measured by an electromagnetic induction device (EM38), see Figure <a href="STSI.html#fig:EMCottonFarm">4.4</a>.</p>
 <div class="figure" style="text-align: center"><span id="fig:EMCottonFarm"></span>
-<img src="SpatialSampling_files/figure-html/EMCottonFarm-1.png" alt="EM38 measurements at cotton farm in Khorezm, Uzbekistan" width="100%" />
+<img src="SpatialSampling_files/figure-html/EMCottonFarm-1.png" alt="EM38 measurements at cotton research farm in Khorezm, Uzbekistan" width="100%" />
 <p class="caption">
-Figure 4.4: EM38 measurements at cotton farm in Khorezm, Uzbekistan
+Figure 4.4: EM38 measurements at cotton research farm in Khorezm, Uzbekistan
 </p>
 </div>
 <p>The optimal strata can be constructed with the <code>R</code> package <code>stratification</code> <span class="citation">(Baillargeon and Rivest 2011)</span>. Take care that the data are sorted in ascending order by the columns used for optimal stratification, see help of function <code>strata.cumrootf</code>.</p>
@@ -324,7 +327,7 @@ Figure 4.5: Optimal strata obtained with cumrootf
 <div id="exercise-stsicumrootf.r" class="section level4 unnumbered">
 <h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/STSIcumrootf.R">STSIcumrootf.R</a>)</h4>
 <ol style="list-style-type: decimal">
-<li>Write an R script to compute ten cumrootf strata for the cotton farm in Uzbekistan using EM as stratification variable (data are in <code>CottonFarmUzbekistan.RData</code>).<br />
+<li>Write an R script to compute ten cumrootf strata for the cotton research farm in Uzbekistan using EM as stratification variable (data are in <code>CottonFarmUzbekistan.RData</code>).<br />
 </li>
 <li>Select a stratified simple random sample of size 40 (use function <code>strata</code> of package <code>sampling</code>). Use the stratum sample sizes as computed by the function <code>strata.cumrootf</code>. What allocation is used for computing the stratum sample sizes?<br />
 </li>
