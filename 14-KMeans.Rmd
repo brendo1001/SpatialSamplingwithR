@@ -101,7 +101,7 @@ ggplot(grdHunterValley) +
   ggtitle("Hard k-means")+
   theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_x_continuous(name = "ndvi") +
-  scale_y_continuous(name = "elevation") +
+  scale_y_continuous(name = "cti") +
   theme(legend.position="none")
 
 ggplot(grdHunterValley) +
@@ -110,7 +110,12 @@ ggplot(grdHunterValley) +
   ggtitle("Fuzzy k-means")+
   theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_x_continuous(name = "ndvi") +
-  scale_y_continuous(name = "elevation") +
+  scale_y_continuous(name = "cti") +
   theme(legend.position="none")
 ```
 
+#### Exercise {-}
+1. Use [FuzME](https://sydney.edu.au/agriculture/pal/software/fuzme.shtml) to compute a fuzzy clustering for 20 classes, using the five covariates of Hunter Valley and Mahalanobis distances. Use 1.3 as fuzzy exponent.  
+2. Write an R script to select the fuzzy k-means sample for this fuzzy clustering    
+3. Defuzzify the clustering, and plot the sample in a map of the defuzzified clusters, and in a scatter plot of cti against ndvi with the defuzified clsusters of the grid cells as colours   
+4. Repeat this for scaled Euclidian distances (Diagonal in box Metric Distance in FuzME), and compare both the samples  
