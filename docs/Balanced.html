@@ -247,7 +247,7 @@ Similar to the regression estimator, balanced sampling exploits the linear relat
 \tag{10.2}
 \end{equation}\]</span>
 <p>with <span class="math inline">\(\hat{\bar{z}}_{\mathrm{HT}}\)</span> and <span class="math inline">\(\hat{\bar{x}}_{\mathrm{HT}}\)</span> the Horvitz-Thompson estimators of the mean of the study variable <span class="math inline">\(z\)</span> and the covariate <span class="math inline">\(x\)</span>, respectively, <span class="math inline">\(\bar{x}\)</span> the population mean of the covariate, and <span class="math inline">\(b\)</span> the estimated slope of the regression line. With a perfectly balanced sample the adjustment term in the regression estimator (the second term) equals zero.</p>
-Balanced samples can be selected with the cube algorithm <span class="citation">Deville and Tillé (2004)</span>, see also <span class="citation">D. Brus (2015)</span> for a detailed description of this algorithm. The population mean can be estimated by the Horvitz-Thompson estimator:
+Balanced samples can be selected with the cube algorithm <span class="citation">Deville and Tillé (2004)</span>, see also <span class="citation">Brus (2015)</span> for a detailed description of this algorithm. The population mean can be estimated by the Horvitz-Thompson estimator:
 <span class="math display" id="eq:HTMeanBalanced">\[\begin{equation}
 \hat{\bar{z}}_{\mathrm{bal}} = \frac{1}{N}\sum_{i=1}^n \frac{z_i}{\pi_i}.
 \tag{10.3}

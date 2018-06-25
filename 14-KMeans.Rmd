@@ -1,7 +1,6 @@
 # K-means sampling {#kmeans}
 
-Regular grid sampling and spatial coverage sampling are pure spatial sampling designs. Covariates possibly related
-to the study variable are not accounted for in selecting sampling units. This can be suboptimal when the study variable is related to covariates of which maps are available, think for instance of remote sensing imagery. These maps can then be used in mapping the study variablet using, for instance using a multiple linear regression model. This chapter describes a simple straightforward method for selecting sampling units on the basis of the covariate values of the grid cells.
+Regular grid sampling and spatial coverage sampling are pure spatial sampling designs. Covariates possibly related to the study variable are not accounted for in selecting sampling units. This can be suboptimal when the study variable is related to covariates of which maps are available, think for instance of remote sensing imagery. These maps can then be used in mapping the study variable by, for instance, a multiple linear regression model. This chapter describes a simple, straightforward method for selecting sampling units on the basis of the covariate values of the grid cells.
 
 The sampling methods are illustated with a study area in the Hunter Valley, New South-Wales in Australia. Five quantitative covariates are available: elevation, slope, cosine of aspect, compound topographic index (cti) and normalized difference vegetation index (ndvi). The plot below shows cti and ndvi. The sharp boundaries on the ndvi map coincide with boundaries of agricultural fields.
 
