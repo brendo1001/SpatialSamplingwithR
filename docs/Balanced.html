@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-22">
+<meta name="date" content="2018-06-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -158,7 +158,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
 <li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
-<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#SpatialInfill"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="kmeans.html"><a href="kmeans.html"><i class="fa fa-check"></i><b>14</b> K-means sampling</a><ul>
+<li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
+<li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -243,7 +247,7 @@ Similar to the regression estimator, balanced sampling exploits the linear relat
 \tag{10.2}
 \end{equation}\]</span>
 <p>with <span class="math inline">\(\hat{\bar{z}}_{\mathrm{HT}}\)</span> and <span class="math inline">\(\hat{\bar{x}}_{\mathrm{HT}}\)</span> the Horvitz-Thompson estimators of the mean of the study variable <span class="math inline">\(z\)</span> and the covariate <span class="math inline">\(x\)</span>, respectively, <span class="math inline">\(\bar{x}\)</span> the population mean of the covariate, and <span class="math inline">\(b\)</span> the estimated slope of the regression line. With a perfectly balanced sample the adjustment term in the regression estimator (the second term) equals zero.</p>
-Balanced samples can be selected with the cube algorithm <span class="citation">Deville and Tille (2004)</span>, see also <span class="citation">Brus (2015)</span> for a detailed description of this algorithm. The population mean can be estimated by the Horvitz-Thompson estimator:
+Balanced samples can be selected with the cube algorithm <span class="citation">Deville and Tillé (2004)</span>, see also <span class="citation">D. Brus (2015)</span> for a detailed description of this algorithm. The population mean can be estimated by the Horvitz-Thompson estimator:
 <span class="math display" id="eq:HTMeanBalanced">\[\begin{equation}
 \hat{\bar{z}}_{\mathrm{bal}} = \frac{1}{N}\sum_{i=1}^n \frac{z_i}{\pi_i}.
 \tag{10.3}

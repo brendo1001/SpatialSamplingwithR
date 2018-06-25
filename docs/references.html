@@ -25,14 +25,14 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-22">
+<meta name="date" content="2018-06-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="SpatialCoverage.html">
+<link rel="prev" href="kmeans.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -158,7 +158,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
 <li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
-<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#SpatialInfill"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="kmeans.html"><a href="kmeans.html"><i class="fa fa-check"></i><b>14</b> K-means sampling</a><ul>
+<li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
+<li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -183,31 +187,34 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="refs" class="references">
 <div>
-<p>Akramkhanov, A., D. J. Brus, and D. J. J. Walvoort. 2013. “Geostatistical Monitoring of Soil Salinity in Uzbekistan by Repeated Emi Surveys.” <em>Geoderma</em>.</p>
+<p>Akramkhanov, A., D.J. Brus, and D.J.J. Walvoort. 2013. “Geostatistical Monitoring of Soil Salinity in Uzbekistan by Repeated Emi Surveys.” <em>Geoderma</em>.</p>
 </div>
 <div>
 <p>Baillargeon, S., and L. -P. Rivest. 2011. “The construction of stratified designs in R with the package stratification.” <em>Survey Methodology</em> 37: 53–65. <a href="http://www.statcan.gc.ca/pub/12-001-x/2011001/article/11447-eng.pdf" class="uri">http://www.statcan.gc.ca/pub/12-001-x/2011001/article/11447-eng.pdf</a>.</p>
 </div>
 <div>
-<p>Brus, D. J. 2015. “Balanced sampling: A versatile sampling approach for statistical soil surveys.” <em>Geoderma</em> 253-254: 111–21.</p>
-</div>
-<div>
-<p>Brus, D. J., and J. J. de Gruijter. 1997. “Random Sampling or Geostatistical Modelling? Choosing Between Design-Based and Model-Based Sampling Strategies for Soil (with Discussion).” <em>Geoderma</em> 80: 1–59.</p>
-</div>
-<div>
-<p>Brus, D. J., and N. P. A. Saby. 2016. “Approximating the variance of estimated means for systematic random sampling, illustrated with data of the French Soil Monitoring Network.” <em>Geoderma</em> 279: 77–86. doi:<a href="https://doi.org/http://dx.doi.org/10.1016/j.geoderma.2016.05.016">http://dx.doi.org/10.1016/j.geoderma.2016.05.016</a>.</p>
-</div>
-<div>
-<p>Brus, D. J., J. J. de Gruijter, and J. W. van Groenigen. 2007. “Designing Spatial Coverage Samples Using the K-Means Clustering Algorithm.” In <em>Digital Soil Mapping. an Introductory Perspective</em>, edited by P. Lagacherie, A.B. McBratney, and M. Voltz, 183–92. Elsevier.</p>
-</div>
-<div>
 <p>Brus, D. J., L. E. E. M. Spatjens, and J. J. de Gruijter. 1999. “A Sampling Scheme for Estimating the Mean Extractable Phosphorus Concentration of Fields for Environmental Regulation.” <em>Geoderma</em> 89: 129–48.</p>
 </div>
 <div>
-<p>Cochran, W. G. 1977. <em>Sampling Techniques</em>. New York: Wiley.</p>
+<p>Brus, D.J. 2015. “Balanced sampling: A versatile sampling approach for statistical soil surveys.” <em>Geoderma</em> 253-254: 111–21.</p>
 </div>
 <div>
-<p>Deville, J.-C, and Y Tille. 2004. “Efficient Balanced Sampling: The Cube Method.” <em>Biometrika</em> 91: 893–912.</p>
+<p>Brus, D.J., and J.J. de Gruijter. 1997. “Random Sampling or Geostatistical Modelling? Choosing Between Design-Based and Model-Based Sampling Strategies for Soil (with Discussion).” <em>Geoderma</em> 80: 1–59.</p>
+</div>
+<div>
+<p>Brus, D.J., and N.P.A. Saby. 2016. “Approximating the variance of estimated means for systematic random sampling, illustrated with data of the French Soil Monitoring Network.” <em>Geoderma</em> 279: 77–86. doi:<a href="https://doi.org/http://dx.doi.org/10.1016/j.geoderma.2016.05.016">http://dx.doi.org/10.1016/j.geoderma.2016.05.016</a>.</p>
+</div>
+<div>
+<p>Brus, D.J., J.J. de Gruijter, and J.W. van Groenigen. 2007. “Designing Spatial Coverage Samples Using the K-Means Clustering Algorithm.” In <em>Digital Soil Mapping. an Introductory Perspective</em>, edited by P. Lagacherie, A.B. McBratney, and M. Voltz, 183–92. Elsevier.</p>
+</div>
+<div>
+<p>Cochran, W.G. 1977. <em>Sampling Techniques</em>. New York: Wiley.</p>
+</div>
+<div>
+<p>de Gruijter, J.J., D.J. Brus, M.F.P. Bierkens, and M. Knotters. 2006. <em>Sampling for Natural Resource Monitoring</em>. Berlin: Springer.</p>
+</div>
+<div>
+<p>Deville, J.-C, and Y Tillé. 2004. “Efficient Balanced Sampling: The Cube Method.” <em>Biometrika</em> 91: 893–912.</p>
 </div>
 <div>
 <p>———. {1998}. “Unequal probability sampling without replacement through a splitting method.” <em>Biometrika</em> 85 (1): 89–101. doi:<a href="https://doi.org/{10.1093/biomet/85.1.89}">{10.1093/biomet/85.1.89}</a>.</p>
@@ -217,9 +224,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div>
 <p>Grafström, A., N.L.P. Lundström, and L. Schelin. 2012. “Spatially Balanced Sampling Through the Pivotal Method.” <em>Biometrics</em> 68: 514–520.</p>
-</div>
-<div>
-<p>Gruijter, J. J. de, D. J. Brus, M. F. P. Bierkens, and M. Knotters. 2006. <em>Sampling for Natural Resource Monitoring</em>. Berlin: Springer.</p>
 </div>
 <div>
 <p>Lohr, S. L. 1999. <em>Sampling: Design and Analysis</em>. Pacific Grove, USA: Duxbury Press.</p>
@@ -239,6 +243,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div>
 <p>Walvoort, D. J. J., D. J. Brus, and J. J. de Gruijter. 2010. “An R Package for Spatial Coverage Sampling and Random Sampling from Compact Geographical Strata by K-Means.” <em>Computers and Geosciences</em> 36: 1261–7. doi:<a href="https://doi.org/10.1016/j.cageo.2010.04.005">10.1016/j.cageo.2010.04.005</a>.</p>
 </div>
+<div>
+<p>Webster, R., and M. A. Oliver. 1990. <em>Statistical Methods in Soil and Land Resource Survey</em>. Oxford: Oxford University Press.</p>
+</div>
 </div>
 </div>
 
@@ -255,7 +262,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="SpatialCoverage.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="kmeans.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

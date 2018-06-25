@@ -184,7 +184,7 @@ ggplot(data = grdUzbekistan) +
   coord_equal()
 ```
 
-The optimal strata can be constructed with the `R` package `stratification` [@Baillargeon2011]. Take care that the data are sorted in ascending order by the columns used for optimal stratification, see help of function `strata.cumrootf`.
+The optimal strata can be constructed with the R package `stratification` [@Baillargeon2011]. Take care that the data are sorted in ascending order by the columns used for optimal stratification, see help of function `strata.cumrootf`.
 
 ```{r}
 library(stratification)
@@ -223,7 +223,7 @@ ggplot(data = grdUzbekistan) +
 ## Geographical stratification
 When no covariate is available, we may still decide to apply a *geographical stratification*. For instance, a square study area can be divided into $4 \times 4$ equally sized subsquares that are used as strata. When we select one or two points per subsquare, we avoid strong spatial clustering of the sampling points. The geographical stratification improves the *spatial coverage*. When the study variable is spatially structured, think for instance of a spatial trend, then geographical stratification will lead to more precise estimated means (smaller sampling variances).
 
-A simple method for constructing geographical strata is k-means clustering [@bru99] . In this approach the study area is discretized by a large number of pixels (raster cells). These pixels are the objects that are clustered. The clustering variables are simply the x-coordinate and y-coordinate of the centres of the pixels. This method leads to *compact* geographical strata. The method is implemented in the `R` package `spcosa` [@walvoort2010]. Figure \@ref(fig:GeoStrata) shows 20 compact geostrata of equal area^[If the total number of pixels divided by the number of strata is an integer, the stratum sizes are exactly equal, otherwise the difference is 1 pixel.]. In each geostratum two points are selected by simple random sampling. Note that the sampling points are well spread throughout the study area.
+A simple method for constructing geographical strata is k-means clustering [@bru99] . In this approach the study area is discretized by a large number of pixels (raster cells). These pixels are the objects that are clustered. The clustering variables are simply the x-coordinate and y-coordinate of the centres of the pixels. This method leads to *compact* geographical strata. The method is implemented in the R package `spcosa` [@walvoort2010]. Figure \@ref(fig:GeoStrata) shows 20 compact geostrata of equal area^[If the total number of pixels divided by the number of strata is an integer, the stratum sizes are exactly equal, otherwise the difference is 1 pixel.]. In each geostratum two points are selected by simple random sampling. Note that the sampling points are well spread throughout the study area.
 
 ```{r spcosa,cache=TRUE,eval=FALSE}
 library(spcosa)

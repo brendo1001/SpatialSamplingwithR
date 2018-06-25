@@ -6,7 +6,7 @@ Simple random sampling is the most basic form of probability sampling. There are
 
 This distinction is irrelevant for infinite populations. In simple random sampling with replacement a population unit may be selected more than once. 
 
-In ```R``` a simple random sample with or without replacement can be selected by the function ```sample.int``` from the ```base``` package. For instance, a simple random sample without replacement of 10 units from a population of 100 units labeled as 1,2, ... ,100, can be selected by
+In R a simple random sample with or without replacement can be selected by the function ```sample.int``` from the ```base``` package. For instance, a simple random sample without replacement of 10 units from a population of 100 units labeled as 1,2, ... ,100, can be selected by
 
 ```{r}
 set.seed(314)
@@ -22,9 +22,9 @@ When the spatial population is  *infinite* we do not have a list of all units in
 3. Use a point-in-polygon routine to determine wether $(s_{1,\mathrm{ran}}, s_{2,\mathrm{ran}})$ falls within the area.  
 4. Repeat steps 2 and 3 until $n$ locations are selected.
 
-This procedure is implemented in the function `spsample` of `R` package `sp`. Alternatively, we may discretize the study area by a very fine grid, make a list of all the grid nodes, and sample from this list as before (see next chunk). So in this case the infinite population is represented as a very large finite population.
+This procedure is implemented in the function `spsample` of R package `sp` [@Pebesma2005]. Alternatively, we may discretize the study area by a very fine grid, make a list of all the grid nodes, and sample from this list as before (see next chunk). So in this case the infinite population is represented as a very large finite population.
 
-In the next chunk a simple random sample without replacement (SI) of size 40 is selected from Voorst. Note that the class of the `R` object `grdVoorst` is a `data.frame`, so the infinite population is represented by a large, finite population.
+In the next chunk a simple random sample without replacement (SI) of size 40 is selected from Voorst. Note that the class of the R object `grdVoorst` is a `data.frame`, so the infinite population is represented by a large, finite population.
 
 ```{r }
 n <- 40

@@ -7,7 +7,7 @@ MSSD=\frac{1}{N}\sum_{i=1}^{N}\min_{j}\left(D_{ij}^{2}\right) \;,
 \end{equation}
 where $N$ is the total number of nodes of the interpolation grid, and $D_{ij}$ is the distance between the $i$th grid node and the $j$th sampling location. This distance measure can be minimized by the k-means algorithm. The same algorithm is used in Chapter \@ref(STSI) to construct compact geographical strata (shortly referred to as geostrata) for stratified random sampling. In stratified random sampling, one or more sampling locations are selected randomly from each geostratum. For mapping purposes probability sampling is not required. For each geostratum the means of the spatial coordinates of the nodes of that geostratum are calculated, and these centroids are used as sampling locations. This improves the spatial coverage compared to stratified *random* sampling.
 
-In probability sampling we may want to have strata of equal area (clusters with equal numbers of nodes), so that the sampling design becomes self-weighting. For mapping this constraint is not recommended as it may lead to samples with suboptimal spatial coverage. Existing sampling locations can easily be accommodated in the k-means algorithm, by using them as fixed centroids. Spatial coverage and infill samples can be computed with ```R``` package ```spcosa``` [@walvoort2010]. Figure \@ref(fig:spatcovVoorst) shows a spatial coverage sample of the same size as the regular grid in study area Voorst (Figure \@ref(fig:gridVoorst)). Note that the undersampled area in the centre of the study area is now covered by a sampling location.
+In probability sampling we may want to have strata of equal area (clusters with equal numbers of nodes), so that the sampling design becomes self-weighting. For mapping this constraint is not recommended as it may lead to samples with suboptimal spatial coverage. Existing sampling locations can easily be accommodated in the k-means algorithm, by using them as fixed centroids. Spatial coverage and infill samples can be computed with R package ```spcosa``` [@walvoort2010]. Figure \@ref(fig:spatcovVoorst) shows a spatial coverage sample of the same size as the regular grid in study area Voorst (Figure \@ref(fig:gridVoorst)). Note that the undersampled area in the centre of the study area is now covered by a sampling location.
 
 ```{r spatcovVoorst, out.width='100%',fig.asp=0.333, fig.cap="Spatial coverage sample from Voorst"}
 #set number of sampling locations to be selected
@@ -22,10 +22,10 @@ mySample <- spsample(myStrata)
 plot(myStrata, mySample)
 ```
 
-## Spatial infill sampling
-If georeferenced data are available that can be used for mapping the variable of interest, but we need more data for mapping, it is attractive to account for these existing sampling locations when selecting the additional sampling locations. The aim now is to fill in the empty spaces, i.e. the parts of the study area not covered by the existing sampling locations. This is referred to as spatial infill sampling. Figure \@ref(fig:spatialinfillEthiopia) shows a spatial infill sample in three woredas in Ethiopia. The existing data are mainly along roads. Besides, one woreda, the one in tht northeast, is already covered quite well by the existing data.
+## Spatial infill sampling {#SpatialInfill}
+If georeferenced data are available that can be used for mapping the study variable, but we need more data for mapping, it is attractive to account for these existing sampling locations when selecting the additional sampling locations. The aim now is to fill in the empty spaces, i.e. the parts of the study area not covered by the existing sampling locations. This is referred to as spatial infill sampling. Figure \@ref(fig:spatialinfillEthiopia) shows a spatial infill sample for three woredas in Ethiopia. A large set of `legacy' data on soil organic carbon (SOC)  concentration in the topsoil is available, but these data come from strongly spatially clustered locations along roads. This is a nice example of a convenience sample. The legacy data are not ideal for mapping SOC throughout the three woredas. Preferably, additional data are collected in the interior, off-road parts of the woredas, with the exception of the notheastern part where we have already quite a few data.
 
-```{r spatialinfillEthiopia, out.width='70%',fig.asp=1, fig.cap="Spatial infill sample in three woredas of Ethiopia", message=F, cache=T}
+```{r spatialinfillEthiopia, out.width='85%',fig.asp=1, fig.cap="Spatial infill sample in three woredas of Ethiopia", message=F, cache=T}
 gridded(grdEthiopia)<-~s1+s2
 #Set number of new sampling locations to be selected
 n<-100
@@ -33,9 +33,9 @@ n<-100
 ntot<-n+length(priordataEthiopia)
 #Change class of d (existing points) from SpatialPointsDataFrame to SpatialPoints
 priordataEthiopia<-as(priordataEthiopia,"SpatialPoints")
-#grdEthiopia does not have projection attributes, whereas priordataEthiopia does. Remove projection attributes of priordataEthiopia
+#Remove projection attributes of priordataEthiopia
 proj4string(priordataEthiopia)<- NA_character_
-#Compute geostrata with option priorPoints
+#Compute geostrata with argument priorPoints
 set.seed(314)
 myStrata <- stratify(grdEthiopia, nStrata = ntot, priorPoints=priordataEthiopia, nTry=10)
 #Select sampling points of infill sample (centres of geostrata)
@@ -48,3 +48,8 @@ ids <- which(mySample@isPriorPoint==F)
 mySample <- as(mySample,"data.frame")
 mySamplenew <- mySample[ids,]
 ```
+
+#### Exercise ([SpatialInfill.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/SpatialInfill.R)) {-}
+1. Write an R script to select a spatial infill sample of size 100 for the three woredas in Ethiopia. Existing data are in the SpatialPointsDataFrame `priordataEthiopia` stored in `DataThreeWoredasEthiopia.RData`. The data.frame `grdEthiopia` is stored in `CovariatesThreeWoredasEthiopia.RData`   
+2. Compute the actual number of selected new locations (size of infill sample). How comes that more than 100 additional locations are selected? See the warning of function `stratify`  
+3. Change the total number of locations (number of existing  + new locations) so that exactly 100 new locations are selected  

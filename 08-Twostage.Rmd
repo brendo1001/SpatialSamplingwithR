@@ -20,7 +20,7 @@ This sampling algorithm makes use of a list of all sampling units as a sampling 
 
 In the second stage, a *pre-determined* number of secondary sampling units, $m_{i}$, is selected every time psu $i$ is selected. Secondary sample sizes Predetermined means that it is not allowed to decide on the secondary sample sizes (number of ssu's) per selected psu *after the selection of the psu's*.
 
-The `R` code below shows the selection of a two-stage random sample from Voorst. Primary units are 24 blocks of 0.5 km $\times$ 0.5 km. Note that these blocks have unequal size, i.e. the number of pixels within the blocks differs due to build-up area, roads *et cetera*.  Four times a psu is selected, with probabilities proportional to size and with replacement. The second stage sample size $m_i$ equals 10 for all psu's. These units ssu's are selected by simple random sampling. 
+The R code below shows the selection of a two-stage random sample from Voorst. Primary units are 24 blocks of 0.5 km $\times$ 0.5 km. Note that these blocks have unequal size, i.e. the number of pixels within the blocks differs due to build-up area, roads *et cetera*.  Four times a psu is selected, with probabilities proportional to size and with replacement. The second stage sample size $m_i$ equals 10 for all psu's. These units ssu's are selected by simple random sampling. 
 
 ```{r}
 d <- 4 #number of psu selections

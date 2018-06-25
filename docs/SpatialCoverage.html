@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-22">
+<meta name="date" content="2018-06-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="Regulargrid.html">
-<link rel="next" href="references.html">
+<link rel="next" href="kmeans.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -158,7 +158,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
 <li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
-<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#SpatialInfill"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="kmeans.html"><a href="kmeans.html"><i class="fa fa-check"></i><b>14</b> K-means sampling</a><ul>
+<li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
+<li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -180,13 +184,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="SpatialCoverage" class="section level1">
 <h1><span class="header-section-number">Chapter 13</span> Spatial coverage sampling</h1>
-Local undersampling with regular grids can be avoided by relaxing the constraint that the sampling locations are restricted to the nodes of a regular grid. This is what is done in spatial coverage sampling or, in case of a sample that is added to an existing sample, in spatial <em>infill</em> sampling. Spatial coverage and infill samples cover the area or fill in the empty space as uniformly as possible. The sampling locations are obtained by minimizing a criterion that is defined in terms of the geograhic distances between the nodes of a fine interpolation grid and the sampling locations. <span class="citation">Brus, Gruijter, and Groenigen (2007)</span> proposed to minimize the mean of the squared distances of the grid nodes to their nearest sampling location (Mean Squared Shortest Distance):
+Local undersampling with regular grids can be avoided by relaxing the constraint that the sampling locations are restricted to the nodes of a regular grid. This is what is done in spatial coverage sampling or, in case of a sample that is added to an existing sample, in spatial <em>infill</em> sampling. Spatial coverage and infill samples cover the area or fill in the empty space as uniformly as possible. The sampling locations are obtained by minimizing a criterion that is defined in terms of the geograhic distances between the nodes of a fine interpolation grid and the sampling locations. <span class="citation">D. Brus, Gruijter, and Groenigen (2007)</span> proposed to minimize the mean of the squared distances of the grid nodes to their nearest sampling location (Mean Squared Shortest Distance):
 <span class="math display" id="eq:MSSD">\[\begin{equation}
 MSSD=\frac{1}{N}\sum_{i=1}^{N}\min_{j}\left(D_{ij}^{2}\right) \;,
 \tag{13.1}
 \end{equation}\]</span>
 <p>where <span class="math inline">\(N\)</span> is the total number of nodes of the interpolation grid, and <span class="math inline">\(D_{ij}\)</span> is the distance between the <span class="math inline">\(i\)</span>th grid node and the <span class="math inline">\(j\)</span>th sampling location. This distance measure can be minimized by the k-means algorithm. The same algorithm is used in Chapter <a href="STSI.html#STSI">4</a> to construct compact geographical strata (shortly referred to as geostrata) for stratified random sampling. In stratified random sampling, one or more sampling locations are selected randomly from each geostratum. For mapping purposes probability sampling is not required. For each geostratum the means of the spatial coordinates of the nodes of that geostratum are calculated, and these centroids are used as sampling locations. This improves the spatial coverage compared to stratified <em>random</em> sampling.</p>
-<p>In probability sampling we may want to have strata of equal area (clusters with equal numbers of nodes), so that the sampling design becomes self-weighting. For mapping this constraint is not recommended as it may lead to samples with suboptimal spatial coverage. Existing sampling locations can easily be accommodated in the k-means algorithm, by using them as fixed centroids. Spatial coverage and infill samples can be computed with <code>R</code> package <code>spcosa</code> <span class="citation">(Walvoort, Brus, and Gruijter 2010)</span>. Figure <a href="SpatialCoverage.html#fig:spatcovVoorst">13.1</a> shows a spatial coverage sample of the same size as the regular grid in study area Voorst (Figure <a href="Regulargrid.html#fig:gridVoorst">12.1</a>). Note that the undersampled area in the centre of the study area is now covered by a sampling location.</p>
+<p>In probability sampling we may want to have strata of equal area (clusters with equal numbers of nodes), so that the sampling design becomes self-weighting. For mapping this constraint is not recommended as it may lead to samples with suboptimal spatial coverage. Existing sampling locations can easily be accommodated in the k-means algorithm, by using them as fixed centroids. Spatial coverage and infill samples can be computed with R package <code>spcosa</code> <span class="citation">(D. J. J. Walvoort, Brus, and Gruijter 2010)</span>. Figure <a href="SpatialCoverage.html#fig:spatcovVoorst">13.1</a> shows a spatial coverage sample of the same size as the regular grid in study area Voorst (Figure <a href="Regulargrid.html#fig:gridVoorst">12.1</a>). Note that the undersampled area in the centre of the study area is now covered by a sampling location.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#set number of sampling locations to be selected</span>
 n&lt;-<span class="dv">115</span>
 <span class="kw">set.seed</span>(<span class="dv">314</span>)
@@ -203,9 +207,9 @@ mySample &lt;-<span class="st"> </span><span class="kw">spsample</span>(myStrata
 Figure 13.1: Spatial coverage sample from Voorst
 </p>
 </div>
-<div id="spatial-infill-sampling" class="section level2">
+<div id="SpatialInfill" class="section level2">
 <h2><span class="header-section-number">13.1</span> Spatial infill sampling</h2>
-<p>If georeferenced data are available that can be used for mapping the variable of interest, but we need more data for mapping, it is attractive to account for these existing sampling locations when selecting the additional sampling locations. The aim now is to fill in the empty spaces, i.e. the parts of the study area not covered by the existing sampling locations. This is referred to as spatial infill sampling. Figure <a href="SpatialCoverage.html#fig:spatialinfillEthiopia">13.2</a> shows a spatial infill sample in three woredas in Ethiopia. The existing data are mainly along roads. Besides, one woreda, the one in tht northeast, is already covered quite well by the existing data.</p>
+<p>If georeferenced data are available that can be used for mapping the study variable, but we need more data for mapping, it is attractive to account for these existing sampling locations when selecting the additional sampling locations. The aim now is to fill in the empty spaces, i.e. the parts of the study area not covered by the existing sampling locations. This is referred to as spatial infill sampling. Figure <a href="SpatialCoverage.html#fig:spatialinfillEthiopia">13.2</a> shows a spatial infill sample for three woredas in Ethiopia. A large set of `legacy’ data on soil organic carbon (SOC) concentration in the topsoil is available, but these data come from strongly spatially clustered locations along roads. This is a nice example of a convenience sample. The legacy data are not ideal for mapping SOC throughout the three woredas. Preferably, additional data are collected in the interior, off-road parts of the woredas, with the exception of the notheastern part where we have already quite a few data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gridded</span>(grdEthiopia)&lt;-<span class="er">~</span>s1<span class="op">+</span>s2
 <span class="co">#Set number of new sampling locations to be selected</span>
 n&lt;-<span class="dv">100</span>
@@ -213,9 +217,9 @@ n&lt;-<span class="dv">100</span>
 ntot&lt;-n<span class="op">+</span><span class="kw">length</span>(priordataEthiopia)
 <span class="co">#Change class of d (existing points) from SpatialPointsDataFrame to SpatialPoints</span>
 priordataEthiopia&lt;-<span class="kw">as</span>(priordataEthiopia,<span class="st">&quot;SpatialPoints&quot;</span>)
-<span class="co">#grdEthiopia does not have projection attributes, whereas priordataEthiopia does. Remove projection attributes of priordataEthiopia</span>
+<span class="co">#Remove projection attributes of priordataEthiopia</span>
 <span class="kw">proj4string</span>(priordataEthiopia)&lt;-<span class="st"> </span><span class="ot">NA_character_</span>
-<span class="co">#Compute geostrata with option priorPoints</span>
+<span class="co">#Compute geostrata with argument priorPoints</span>
 <span class="kw">set.seed</span>(<span class="dv">314</span>)
 myStrata &lt;-<span class="st"> </span><span class="kw">stratify</span>(grdEthiopia, <span class="dt">nStrata =</span> ntot, <span class="dt">priorPoints=</span>priordataEthiopia, <span class="dt">nTry=</span><span class="dv">10</span>)
 <span class="co">#Select sampling points of infill sample (centres of geostrata)</span>
@@ -223,7 +227,7 @@ mySample &lt;-<span class="st"> </span><span class="kw">spsample</span>(myStrata
 <span class="co">#Plot geostrata and sampling points (centres of geostrata)</span>
 <span class="kw">plot</span>(myStrata, mySample)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:spatialinfillEthiopia"></span>
-<img src="SpatialSampling_files/figure-html/spatialinfillEthiopia-1.png" alt="Spatial infill sample in three woredas of Ethiopia" width="70%" />
+<img src="SpatialSampling_files/figure-html/spatialinfillEthiopia-1.png" alt="Spatial infill sample in three woredas of Ethiopia" width="85%" />
 <p class="caption">
 Figure 13.2: Spatial infill sample in three woredas of Ethiopia
 </p>
@@ -233,7 +237,17 @@ ids &lt;-<span class="st"> </span><span class="kw">which</span>(mySample<span cl
 <span class="co">#Change class of mySample to data.frame</span>
 mySample &lt;-<span class="st"> </span><span class="kw">as</span>(mySample,<span class="st">&quot;data.frame&quot;</span>)
 mySamplenew &lt;-<span class="st"> </span>mySample[ids,]</code></pre></div>
+<div id="exercise-spatialinfill.r" class="section level4 unnumbered">
+<h4>Exercise (<a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/SpatialInfill.R">SpatialInfill.R</a>)</h4>
+<ol style="list-style-type: decimal">
+<li>Write an R script to select a spatial infill sample of size 100 for the three woredas in Ethiopia. Existing data are in the SpatialPointsDataFrame <code>priordataEthiopia</code> stored in <code>DataThreeWoredasEthiopia.RData</code>. The data.frame <code>grdEthiopia</code> is stored in <code>CovariatesThreeWoredasEthiopia.RData</code><br />
+</li>
+<li>Compute the actual number of selected new locations (size of infill sample). How comes that more than 100 additional locations are selected? See the warning of function <code>stratify</code><br />
+</li>
+<li>Change the total number of locations (number of existing + new locations) so that exactly 100 new locations are selected</li>
+</ol>
 
+</div>
 </div>
 </div>
             </section>
@@ -242,7 +256,7 @@ mySamplenew &lt;-<span class="st"> </span>mySample[ids,]</code></pre></div>
         </div>
       </div>
 <a href="Regulargrid.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="kmeans.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

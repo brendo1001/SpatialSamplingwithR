@@ -1,7 +1,7 @@
 % Encoding: UTF-8
 
 @Article{Baillargeon2011,
-  author  = {S. Baillargeon and L. -P. Rivest},
+  author  = {S. Baillargeon and L.-P. Rivest},
   title   = {{The construction of stratified designs in R with the package stratification}},
   journal = {Survey Methodology},
   year    = {2011},
@@ -12,7 +12,7 @@
 
 @Manual{Baillargeon2014,
   title  = {stratification: Univariate Stratification of Survey Populations},
-  author = {Sophie Baillargeon and Louis-Paul Rivest},
+  author = {S. Baillargeon and L.-P. Rivest},
   year   = {2014},
   note   = {R package version 2.2-5},
   url    = {https://CRAN.R-project.org/package=stratification},
@@ -28,7 +28,7 @@
 }
 
 @Article{bra08,
-  author    = {ter Braak, C. J. F. and D. J. Brus and E. J. Pebesma},
+  author    = {ter Braak, C.J.F. and D.J. Brus and E.J. Pebesma},
   title     = {Comparing sampling patterns for kriging the spatial mean temporal trend},
   journal   = {Journal of Agricultural, Biological and Environmental Statistics},
   year      = {2008},
@@ -62,14 +62,14 @@
 }
 
 @Article{Brus2018,
-  author  = {Dick Brus and Lin Yang and A-Xing Zhu},
+  author  = {D.J. Brus and L. Yang and A.X. Zhu},
   title   = {Accounting for access costs in optimal stratification for validation of soil maps},
   journal = {European Journal of Soil Science},
   year    = {2018},
 }
 
 @Article{bru00,
-  author  = {D. J. Brus},
+  author  = {D.J. Brus},
   title   = {Using regression models in design-based estimation of spatial means of soil properties},
   journal = {European Journal of Soil Science},
   year    = {2000},
@@ -78,7 +78,7 @@
 }
 
 @Article{bru94a,
-  author  = {D. J. Brus},
+  author  = {D.J. Brus},
   title   = {Improving design-based estimation of spatial means by soil map stratification. {A} case study of phosphate saturation},
   journal = {Geoderma},
   year    = {1994},
@@ -87,7 +87,7 @@
 }
 
 @Article{Brus2015,
-  author    = {Brus, D. J.},
+  author    = {Brus, D.J.},
   title     = {{Balanced sampling: A versatile sampling approach for statistical soil surveys}},
   journal   = {Geoderma},
   year      = {2015},
@@ -98,7 +98,7 @@
 }
 
 @Article{bru03a,
-  author  = {D. J. Brus and J. J. de Gruijter},
+  author  = {D.J. Brus and J.J. de Gruijter},
   title   = {A method to combine non-probability sample data with probability sample data in estimating spatial means of environmental variables},
   journal = {Environmental Monitoring and Assessment},
   year    = {2003},
@@ -107,7 +107,7 @@
 }
 
 @Article{bru93,
-  author  = {D. J. Brus and J. J. de Gruijter},
+  author  = {D.J. Brus and J.J. de Gruijter},
   title   = {Design-based versus model-based estimates of spatial means. {Theory} and application in environmental soil science},
   journal = {Environmetrics},
   year    = {1993},
@@ -116,7 +116,7 @@
 }
 
 @Article{bru94b,
-  author  = {D. J. Brus and J. J. de Gruijter},
+  author  = {D.J. Brus and J.J. de Gruijter},
   title   = {Estimation of nonergodic variograms and their sampling variance by design-based sampling strategies},
   journal = {Mathematical Geology},
   year    = {1994},
@@ -125,7 +125,7 @@
 }
 
 @Article{bru97,
-  author  = {D. J. Brus and J. J. de Gruijter},
+  author  = {D.J. Brus and J.J. de Gruijter},
   title   = {Random sampling or geostatistical modelling? {C}hoosing between design-based and model-based sampling strategies for soil (with {D}iscussion)},
   journal = {Geoderma},
   year    = {1997},
@@ -134,7 +134,7 @@
 }
 
 @Article{Brus2011,
-  author    = {D. J. Brus and J. J. de Gruijter},
+  author    = {D.J. Brus and J.J. de Gruijter},
   title     = {Design-based {Generalized Least Squares} estimation of status and trend of soil properties from monitoring data},
   journal   = {Geoderma},
   year      = {2011},
@@ -146,7 +146,7 @@
 }
 
 @Article{Brus2012,
-  author    = {D. J. Brus and J. J. de Gruijter},
+  author    = {D.J. Brus and J.J. de Gruijter},
   title     = {A hybrid design-based and model-based sampling approach to estimate the temporal trend of spatial means},
   journal   = {Geoderma},
   year      = {2012},
@@ -158,7 +158,7 @@
 }
 
 @Article{Brus2013,
-  author    = {D. J. Brus and J. J. {de Gruijter}},
+  author    = {D.J. Brus and J.J. {de Gruijter}},
   title     = {Effects of spatial pattern persistence on the performance of sampling designs for regional trend monitoring, analyzed by simulation of space-time fields},
   journal   = {Computers \& Geosciences},
   year      = {2013},
@@ -169,7 +169,7 @@
 }
 
 @InCollection{bru07c,
-  author    = {D. J. Brus and J. J. de Gruijter and J. W. van Groenigen},
+  author    = {D.J. Brus and J.J. de Gruijter and J.W. van Groenigen},
   title     = {Designing spatial coverage samples using the k-means clustering algorithm},
   booktitle = {Digital Soil Mapping. An introductory perspective},
   publisher = {Elsevier},
@@ -181,7 +181,7 @@
 }
 
 @Article{brus2011d,
-  author    = {D. J. Brus and B. Kempen and G. B. M. Heuvelink},
+  author    = {D.J. Brus and B. Kempen and G.B.M. Heuvelink},
   title     = {Sampling for validation of digital soil maps},
   journal   = {European Journal of Soil Science},
   year      = {2011},
@@ -193,7 +193,7 @@
 }
 
 @Article{bru08b,
-  author    = {Brus, D. J. and Knotters, M.},
+  author    = {Brus, D.J. and Knotters, M.},
   title     = {Sampling design for compliance monitoring of surface water quality: A case study in a polder area.},
   journal   = {Water Resources Research},
   year      = {2008},
@@ -205,7 +205,7 @@
 }
 
 @Article{bru01,
-  author  = {D. J. Brus and W. J. M. te Riele},
+  author  = {D.J. Brus and W.J.M. te Riele},
   title   = {Design-based regression estimators for spatial means of soil properties: the use of two-phase sampling when the means of the auxiliary variables are unknown},
   journal = {Geoderma},
   year    = {2001},
@@ -214,7 +214,7 @@
 }
 
 @Article{Brus2016c,
-  author       = {D. J. Brus and N. P. A. Saby},
+  author       = {D.J. Brus and N.P.A. Saby},
   title        = {{Approximating the variance of estimated means for systematic random sampling, illustrated with data of the French Soil Monitoring Network}},
   year         = {2016},
   volume       = {279},
@@ -224,7 +224,7 @@
 }
 
 @Article{bru99,
-  author  = {D. J. Brus and L. E. E. M. Spatjens and J. J. de Gruijter},
+  author  = {D.J. Brus and L.E.E.M. Sp{\"a}tjens and J.J. de Gruijter},
   title   = {A sampling scheme for estimating the mean extractable phosphorus concentration of fields for environmental regulation},
   journal = {Geoderma},
   year    = {1999},
@@ -250,14 +250,14 @@
   title     = {Sampling Techniques},
   publisher = {Wiley},
   year      = {1977},
-  author    = {W. G. Cochran},
+  author    = {W.G. Cochran},
   address   = {New York},
   owner     = {brus003},
   timestamp = {2008.06.09},
 }
 
 @Article{cor94,
-  author  = {L. C. A. Corsten and A. Stein},
+  author  = {L.C.A. Corsten and A. Stein},
   title   = {Nested sampling for estimating spatial semivariograms compared to other designs},
   journal = {Applied Stochastic Models and Data Analysis},
   year    = {1994},
@@ -266,7 +266,7 @@
 }
 
 @Article{Corwin2010,
-  author       = {D.L. Corwin and S. M. Lesch and E. Segal and T. H. Skaggs and S. A. Bradford},
+  author       = {D.L. Corwin and S.M. Lesch and E. Segal and T.H. Skaggs and S.A. Bradford},
   title        = {Comparison of Sampling Strategies for Characterizing Spatial Variability with Apparent Soil Electrical Conductivity Directed Soil Sampling},
   year         = {2010},
   volume       = {15},
@@ -275,7 +275,7 @@
 }
 
 @Article{corwin2005,
-  author    = {Corwin,D. L. and Lesch,S. M.},
+  author    = {Corwin, D.L. and Lesch,S.M.},
   title     = {Characterizing soil spatial variability with apparent soil electrical conductivity: Part II. Case study},
   journal   = {Computers and Electronics in Agriculture},
   year      = {2005},
@@ -289,7 +289,7 @@
 }
 
 @Article{corwin2006,
-  author    = {Corwin,D. L. and Lesch,S. M. and Oster,J. D. and Kaffka,S. R.},
+  author    = {Corwin,D.L. and Lesch,S.M. and Oster, J.D. and Kaffka, S.R.},
   title     = {Monitoring management-induced spatio-temporal changes in soil quality through soil sampling directed by apparent electrical conductivity},
   journal   = {Geoderma},
   year      = {2006},
@@ -303,7 +303,7 @@
 }
 
 @Article{corwin2003,
-  author    = {Corwin,D. L. and Lesch,S. M. and Shouse,P. J. and Soppe,R. and Ayars,J. E.},
+  author    = {Corwin, D.L. and Lesch, S.M. and Shouse, P.J. and Soppe, R. and Ayars, J.E.},
   title     = {Identifying soil properties that influence cotton yield using soil sampling directed by apparent soil electrical conductivity},
   journal   = {Agronomy Journal},
   year      = {2003},
@@ -328,7 +328,7 @@
 }
 
 @Article{Deville1998,
-  author      = {Deville, J.-C and Tille, Y},
+  author      = {Deville, J.-C and Till{\'e}, Y.},
   title       = {{Unequal probability sampling without replacement through a splitting method}},
   journal     = {{Biometrika}},
   year        = {{1998}},
@@ -359,7 +359,7 @@
 }
 
 @Article{Deville2004,
-  author    = {Deville, J.-C and Tille, Y},
+  author    = {Deville, J.-C and Till{\'e}, Y.},
   title     = {Efficient balanced sampling: The cube method.},
   journal   = {Biometrika},
   year      = {2004},
@@ -370,7 +370,7 @@
 }
 
 @Article{Diggle2006,
-  author       = {P.J. Diggle and Lophaven},
+  author       = {P.J. Diggle and S. Lophaven},
   title        = {Bayesian geostatistical design},
   year         = {2006},
   volume       = {?},
@@ -387,7 +387,7 @@
 }
 
 @Article{dom94,
-  author  = {P. Domburg and J. J. de Gruijter and D. J. Brus},
+  author  = {P. Domburg and J.J. {de Gruijter} and D.J. Brus},
   title   = {A structured approach to designing soil survey schemes with prediction of sampling error from variograms},
   journal = {Geoderma},
   year    = {1994},
@@ -396,7 +396,7 @@
 }
 
 @Article{eng94,
-  author  = {E. J. Englund and N. Heravi},
+  author  = {E.J. Englund and N. Heravi},
   title   = {Phased sampling for soil remediation},
   journal = {Environmental and Ecological Statistics},
   year    = {1994},
@@ -405,7 +405,7 @@
 }
 
 @Article{fitzgerald2006,
-  author    = {Fitzgerald,G. J. and Lesch,S. M. and Barnes,E. M. and Luckett,W. E.},
+  author    = {Fitzgerald,G.J. and Lesch,S.M. and Barnes,E.M. and Luckett,W.E.},
   title     = {Directed sampling using remote sensing with a response surface sampling design for site-specific agriculture},
   journal   = {Computers and Electronics in Agriculture},
   year      = {2006},
@@ -430,14 +430,14 @@
 
 @Manual{Grafstrom2016,
   title  = {BalancedSampling: Balanced and Spatially Balanced Sampling},
-  author = {Anton Grafstr{\"o}m and Jonathan Lisic},
+  author = {A. Grafstr{\"o}m and J. Lisic},
   year   = {2016},
   note   = {R package version 1.5.1},
   url    = {https://CRAN.R-project.org/package=BalancedSampling},
 }
 
 @Article{vgr00,
-  author    = {J. W. van Groenigen and G. Pieters and A. Stein},
+  author    = {J.W. {van Groenigen} and G. Pieters and A. Stein},
   title     = {Optimizing spatial sampling for multivariate contamination in urban areas},
   journal   = {Environmetrics},
   year      = {2000},
@@ -448,7 +448,7 @@
 }
 
 @Article{vgr99,
-  author    = {J. W. van Groenigen and W. Siderius and A. Stein},
+  author    = {J.W. {van Groenigen} and W. Siderius and A. Stein},
   title     = {Constrained optimisation of soil sampling for minimisation of the kriging variance},
   journal   = {Geoderma},
   year      = {1999},
@@ -459,7 +459,7 @@
 }
 
 @Article{vgr98,
-  author  = {J. W. van Groenigen and A. Stein},
+  author  = {J.W. {van Groenigen} and A. Stein},
   title   = {Constrained optimization of spatial sampling using continuous simulated annealing},
   journal = {Journal of Environmental Quality},
   year    = {1998},
@@ -468,7 +468,7 @@
 }
 
 @Article{dgr90,
-  author    = {J. J. de Gruijter and C. J. F. ter Braak},
+  author    = {J.J. {de Gruijter} and C.J.F. {ter Braak}},
   title     = {Model-free estimation from spatial samples: a reappraisal of classical sampling theory},
   journal   = {Mathematical Geology},
   year      = {1990},
@@ -482,14 +482,14 @@
   title     = {Sampling for Natural Resource Monitoring},
   publisher = {Springer},
   year      = {2006},
-  author    = {J. J. de Gruijter and D. J. Brus and M. F. P. Bierkens and M. Knotters},
+  author    = {J.J. {de Gruijter} and D.J. Brus and M.F.P. Bierkens and M. Knotters},
   address   = {Berlin},
   owner     = {brus003},
   timestamp = {2009.02.27},
 }
 
 @InProceedings{dgr85,
-  author    = {J. J. de Gruijter and B. A. Marsman},
+  author    = {J.J. {de Gruijter} and B.A. Marsman},
   title     = {Transect sampling for reliable information on mapping units},
   booktitle = {Proceedings of the SSSA-ISSS Workshop on Spatial Variability, Las Vegas, U.S.A., Nov. 30 - Dec. 1, 1984},
   year      = {1985},
@@ -499,7 +499,7 @@
 }
 
 @Article{deGruijter2015,
-  author  = {de Gruijter, J. J. and Minasny, B. and McBratney, A. B.},
+  author  = {de Gruijter, J.J. and Minasny, B. and McBratney, A.B.},
   title   = {Optimizing Stratification and Allocation for Design-Based Estimation of Spatial Means Using Predictions with Error},
   journal = {Journal of Survey Statistics and Methodology},
   year    = {2015},
@@ -508,7 +508,7 @@
 }
 
 @InCollection{heu07,
-  author    = {G.B.M. Heuvelink and D. J. Brus and J. J. de Gruijter},
+  author    = {G.B.M. Heuvelink and D.J. Brus and J.J. {de Gruijter}},
   title     = {Optimization of sample configurations for digital mapping of soil properties},
   booktitle = {Digital Soil Mapping. An introductory perspective},
   publisher = {Elsevier},
@@ -520,7 +520,7 @@
 }
 
 @Article{Knotters2010d,
-  author        = {M. Knotters and D. J. Brus},
+  author        = {M. Knotters and D.J. Brus},
   title         = {Estimating space-time mean concentrations of nutrients in surface waters of variable depth},
   journal       = {Water Resources Research},
   year          = {2010},
@@ -535,7 +535,7 @@
 }
 
 @Article{Knotters2013,
-  author    = {M. Knotters and D. J. Brus},
+  author    = {M. Knotters and D.J. Brus},
   title     = {{Purposive versus random sampling for map validation: a case study on ecotope maps of floodplains in the Netherlands}},
   journal   = {Ecohydrology},
   year      = {2013},
@@ -572,7 +572,7 @@
 }
 
 @Article{lar00b,
-  author  = {R. M. Lark},
+  author  = {R.M. Lark},
   title   = {Estimating variograms of soil properties by the method-of-moments and maximum likelihood},
   journal = {European Journal of Soil Science},
   year    = {2000},
@@ -581,7 +581,7 @@
 }
 
 @Article{lar02,
-  author  = {R. M. Lark},
+  author  = {R.M. Lark},
   title   = {Optimized spatial sampling of soil for estimation of the variogram by maximum likelihood},
   journal = {Geoderma},
   year    = {2002},
@@ -590,7 +590,7 @@
 }
 
 @Article{lark2009,
-  author    = {R. M. Lark},
+  author    = {R.M. Lark},
   title     = {Estimating the regional mean status and change of soil properties: two distinct objectives for soil survey},
   journal   = {European Journal of Soil Science},
   year      = {2009},
@@ -601,7 +601,7 @@
 }
 
 @Article{Lark2012,
-  author    = {Lark, R. M.},
+  author    = {Lark, R.M.},
   title     = {{Some considerations on aggregate sample supports for soil inventory and monitoring}},
   journal   = {{European Journal of Soil Science}},
   year      = {{2012}},
@@ -639,7 +639,7 @@
 }
 
 @Article{Lark2011CAGEO,
-  author               = {Lark, R. M.},
+  author               = {Lark, R.M.},
   title                = {{Spatially nested sampling schemes for spatial variance components: Scope for their optimization}},
   journal              = {Computers \& Geosciences},
   year                 = {{2011}},
@@ -674,7 +674,7 @@
 }
 
 @Article{lark2006,
-  author    = {R. M. Lark and B. R. Cullis and S. J. Welham},
+  author    = {R.M. Lark and B.R. Cullis and S.J. Welham},
   title     = {{On spatial prediction of soil properties in the presence of a spatial trend: the empirical best linear unbiased predictor (E-BLUP) with REML}},
   journal   = {European Journal of Soil Science},
   year      = {2006},
@@ -685,14 +685,14 @@
 }
 
 @Article{Lark2017,
-  author  = {R. M. Lark and E. M. Hamilton and B. Kaninga and K. K. Maseka and M. Mutondo and G. M. Sakala and M. J. Watts},
+  author  = {R.M. Lark and E.M. Hamilton and B.Kaninga and K.K. Maseka and M. Mutondo and G.M. Sakala and M.J. Watts},
   title   = {Planning spatial sampling of the soil from an uncertain reconnaissance variogram},
   journal = {SOIL},
   year    = {2017},
 }
 
 @Article{ISI:000409483900003,
-  author               = {Lark, R. M. and Hamilton, E. M. and Kaninga, B. and Maseka, K. K. and Mutondo, M. and Sakala, G. M. and Watts, M. J.},
+  author               = {Lark, R.M. and Hamilton, E.M. and Kaninga, B. and Maseka, K.K. and Mutondo, M. and Sakala, G.M. and Watts, M.J.},
   title                = {{Nested sampling and spatial analysis for reconnaissance investigations of soil: an example from agricultural land near mine tailings in Zambia}},
   journal              = {{EUROPEAN JOURNAL OF SOIL SCIENCE}},
   year                 = {{2017}},
@@ -739,7 +739,7 @@
 }
 
 @Article{Lark2018,
-  author  = {R. M. Lark and B. Marchant},
+  author  = {R.M. Lark and B. Marchant},
   title   = {How should a spatial-coverage sample design for a geostatistical soil survey be supplemented to support estimation of spatial covariance parameters?},
   journal = {Geoderma},
   year    = {2018},
@@ -749,7 +749,7 @@
 }
 
 @Article{lar06,
-  author    = {R. M. Lark and R. Webster},
+  author    = {R.M. Lark and R. Webster},
   title     = {Geostatistical mapping of geomorphic variables in the presence of trend},
   journal   = {Earth Surface Processes and Landforms},
   year      = {2006},
@@ -767,7 +767,7 @@
 }
 
 @Article{lesch2005,
-  author    = {Lesch, S. M.},
+  author    = {Lesch, S.M.},
   title     = {Sensor-directed response surface sampling designs for characterizing spatial variation in soil properties},
   journal   = {Computers and Electronics in Agriculture},
   year      = {2005},
@@ -780,7 +780,7 @@
 }
 
 @Article{lesch95,
-  author    = {Lesch, S. M. and Strauss, D. J. and Rhoades, J. D.},
+  author    = {Lesch, S.M. and Strauss, D.J. and Rhoades, J.D.},
   title     = {Spatial prediction of soil salinity using electromagnetic induction techniques 2. {An} efficient spatial sampling algorithm suitable for multiple linear regression model identification and estimation.},
   journal   = {Water Resources Research},
   year      = {1995},
@@ -794,7 +794,7 @@
   title     = {Sampling: Design and Analysis},
   publisher = {Duxbury Press},
   year      = {1999},
-  author    = {S. L. Lohr},
+  author    = {S.L. Lohr},
   address   = {Pacific Grove, USA},
   owner     = {brus003},
   timestamp = {2008.06.09},
@@ -807,7 +807,7 @@
   publisher = {Springer Netherlands},
   year      = {2010},
   author    = {Fitzgerald, G.J.},
-  editor    = {Viscarra Rossel, R. A. and McBratney, A. B. and Minasny, B.},
+  editor    = {Viscarra Rossel, R.A. and McBratney, A.B. and Minasny, B.},
   address   = {Sydney, Australia},
   booktitle = {Proximal Soil Sensing},
   owner     = {brus003},
@@ -820,7 +820,7 @@
   title     = {Sampling for High Resolution Soil Mapping},
   publisher = {Springer Netherlands},
   year      = {2010},
-  author    = {de Gruijter, J. J. and McBratney, A. B. and Taylor, J.},
+  author    = {de Gruijter, J.J. and McBratney, A.B. and Taylor, J.},
   editor    = {Viscarra Rossel, R. A. and McBratney, A. B. and Minasny, B.},
   address   = {Sydney, Australia},
   booktitle = {Proximal Soil Sensing},
@@ -840,7 +840,7 @@
 }
 
 @Article{walvoort2010,
-  author    = {D. J. J. Walvoort and D. J. Brus and J. J. de Gruijter},
+  author    = {D.J.J. Walvoort and D.J. Brus and J.J. de Gruijter},
   title     = {An {R} package for spatial coverage sampling and random sampling from compact geographical strata by k-means},
   journal   = {Computers and Geosciences},
   year      = {2010},
@@ -852,7 +852,7 @@
 }
 
 @Article{Akramkhanov2013,
-  author    = {A. Akramkhanov and D. J. Brus and D. J. J. Walvoort},
+  author    = {A. Akramkhanov and D.J. Brus and D.J.J. Walvoort},
   title     = {Geostatistical monitoring of soil salinity in Uzbekistan by repeated EMI surveys},
   journal   = {Geoderma},
   year      = {2013},
@@ -906,6 +906,25 @@
   publisher = {John Wiley \& Sons, Ltd},
   timestamp = {2013.03.07},
   url       = {http://dx.doi.org/10.1002/env.2194},
+}
+
+@Article{Pebesma2005,
+  author    = {E.J. Pebesma and R.S. Bivand},
+  title     = {{Classes and methods for spatial data in R}},
+  journal   = {R News},
+  year      = {2005},
+  volume    = {5(2)},
+  owner     = {brus003},
+  timestamp = {2013.06.07},
+  url       = {http://cran.r-project.org/doc/Rnews/},
+}
+
+@Book{web90,
+  title     = {Statistical Methods in Soil and Land Resource Survey},
+  publisher = {Oxford University Press},
+  year      = {1990},
+  author    = {R. Webster and M. A. Oliver},
+  address   = {Oxford},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

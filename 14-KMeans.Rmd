@@ -1,0 +1,116 @@
+# K-means sampling {#kmeans}
+
+Regular grid sampling and spatial coverage sampling are pure spatial sampling designs. Covariates possibly related
+to the study variable are not accounted for in selecting sampling units. This can be suboptimal when the study variable is related to covariates of which maps are available, think for instance of remote sensing imagery. These maps can then be used in mapping the study variablet using, for instance using a multiple linear regression model. This chapter describes a simple straightforward method for selecting sampling units on the basis of the covariate values of the grid cells.
+
+The sampling methods are illustated with a study area in the Hunter Valley, New South-Wales in Australia. Five quantitative covariates are available: elevation, slope, cosine of aspect, compound topographic index (cti) and normalized difference vegetation index (ndvi). The plot below shows cti and ndvi. The sharp boundaries on the ndvi map coincide with boundaries of agricultural fields.
+
+```{r covariatesHunterValley, echo=F, out.width='50%',fig.asp=1, fig.show='hold', fig.cap="Compount topographic index and normalized difference vegetation index of study area Hunter Valley"}
+ggplot(grdHunterValley) +
+  geom_raster(mapping = aes(x = Easting, y = Northing, fill = cti)) +
+  scale_x_continuous(name = "") +
+  scale_y_continuous(name = "") +
+  scale_fill_gradientn(name="cti",colours=rev(terrain.colors(10))) +
+  coord_fixed()
+
+ggplot(grdHunterValley) +
+  geom_raster(mapping = aes(x = Easting, y = Northing, fill = ndvi)) +
+  scale_x_continuous(name = "") +
+  scale_y_continuous(name = "") +
+  scale_fill_gradientn(name="ndvi",colours=rev(terrain.colors(10))) +
+  coord_fixed()
+```
+
+## Hard k-means {#Hardkmeans}
+
+In hard k-means sampling the covariates are used to cluster the grid cells by the k-means clustering algorithm. Similar to spatial coverage sampling the MSSD is minimized, but now the distance is not measured in geographical space but in a $p$-dimensional space spanned by the $p$ covariates (think of it as a multi-dimensional scatter plot with the covariates along the axes). In hard k-means each unit (grid cell) can only belong to exactly one cluster.
+
+In the next chunk a hard k-means sample of size 20 is selected from the Hunter Valley study area. All five quantitative covariates are used as covariates. To select 20 points 20 clusters are constructed using hard k-means. Note that the number of clusters is based on the required sample size, not as usual in cluster analysis on the number of subregions with a high density of points in the multivariate distribution. The covariates are scaled so that their standard deviations become 1. Grid cells with the shortest scaled Euclidean distance in covariate-space to the centroids of the clusters are selected as the sampling points. Correlation between covariates can be accounted for by computing Mahalanobis distances [@web90].
+
+```{r}
+#Set number of sampling locations to be selected
+n<-20
+#Compute clusters
+set.seed(314)
+myClusters <- kmeans(scale(grdHunterValley[,c(3,4,5,6,7)]), centers=n, iter.max=100,nstart=10)
+grdHunterValley$cluster <- myClusters$cluster
+#Select locations closest to the centers of the clusters
+rdist.out <- rdist(x1=myClusters$centers,x2=scale(grdHunterValley[,c(3,4,5,6,7)]))
+ids.mindist <- apply(rdist.out,MARGIN=1,which.min)
+myKMSample <- grdHunterValley[ids.mindist,]
+```
+
+Figure \@ref(fig:fkmsampleHunterValley) shows the clustering of the grid cells and their centroids used as the selected hard k-means sample. In Figure \@ref(fig:fkmsampleinscatter) the selected sample is plotted in a scatter diagram of cti against ndvi.
+
+## Fuzzy k-means {#Fuzzykmens}
+
+Contrary to hard k-means, fuzzy k-means (also referred to as soft k-means) allows units to belong to one or more clusters. A vector containing k numbers is assigned to every unit, with all numbers in the interval [0,1]. The numbers sum to 1. The numbers indicate the degree to which a unit belongs to each cluster. They are referred to as membership grades. With fuzzy k-means, the centroid of a cluster is the weighted mean of the covariates over all units, using the memberships of that cluster as weights. As before, grid cells with the shortest Euclidean distance in covariate-space to the centroids of these fuzzy clusters are selected as the sampling points. 
+
+Fuzzy k-means clustering can be done with function `FKM` of package `fclust` and function `runFuzme` of R package `fuzme`. R package `fuzme` can also be used for clustering using Mahalanobis distances. Clustering using Mahalanobis distances can also be achieved with function `fanny` of R package `cluster`. My experience is that computing time with these R packages is prohibitive when we have a large number of grid cells. In that case I recommend the software [FuzME](https://sydney.edu.au/agriculture/pal/software/fuzme.shtml).
+
+In the next chunk a sample of size 20 is selected, using the memberships obtained with FuzME as input. In fuzzy k-means clustering a fuzziness exponent of 1.3 is used. The covariates are scaled. Distances are computed as squared Euclidian distances, i.e. correlation between the covariates is not accounted for.
+
+```{r}
+# read memberships computed with FuzMe
+m <- read.csv(file="20_class.txt",sep="")
+m <- m[,-c(1,2,3)]
+# defuzzify, i.e. compute for each gridcell the cluster with largest membership
+grdHunterValley$defuzcluster <- apply(m,MARGIN=1,which.max)
+#select locations with largest membership in cluster 1...k
+units <- apply(m,MARGIN=2,FUN=which.max)
+myFKMSample <- grdHunterValley[units,]
+```
+
+```{r, echo=F}
+tbl <- table(grdHunterValley$defuzcluster,grdHunterValley$cluster)
+res <- apply(tbl,MARGIN=1,FUN=which.max)
+#both defuzzified clusters 3 and 17 have most pixels in hard k-means clusters 13; cluster 20 is missing. I reclassified fuzzy cluster 3 as 20 (although it has few )
+res[3] <- 20
+grdHunterValley$defuzcluster <- as.factor(grdHunterValley$defuzcluster)
+levels(grdHunterValley$defuzcluster) <- as.character(res)
+```
+
+Figure \@ref(fig:fkmsampleHunterValley) shows the selected fuzzy k-means sample in geographical space. The clustering is defuzzified, i.e. for each grid cell the cluster with the largest membership is assigned to this grdicell. Figure \@ref(fig:fkmsampleinscatter) shows the selected fuzzy k-means sample plotted in the same scatter diagram as the k-means sample.
+
+```{r fkmsampleHunterValley,  out.width='50%',fig.asp=1, fig.show='hold', fig.cap="Hard k-means and fuzzy k-means sample from study area Hunter Valley, using five covariates in clustering", echo=F}
+ggplot(grdHunterValley) +
+  geom_raster(mapping = aes(x = Easting/1000, y = Northing/1000, fill = as.character(cluster))) +
+  geom_point(data=myKMSample,mapping=aes(x=Easting/1000,y=Northing/1000),size=2) +
+  ggtitle("Hard k-means")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_x_continuous(name = "Easting (km)") +
+  scale_y_continuous(name = "Northing (km)") +
+  coord_fixed() +
+  theme(legend.position="none")
+
+ggplot(grdHunterValley) +
+  geom_raster(mapping = aes(x = Easting/1000, y = Northing/1000, fill = as.character(defuzcluster))) +
+  geom_point(data=myFKMSample,mapping=aes(x=Easting/1000,y=Northing/1000),size=2) +
+  ggtitle("Fuzzy k-means")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_x_continuous(name = "Easting (km)") +
+  scale_y_continuous(name = "Northing (km)") +
+  coord_fixed() +
+  theme(legend.position="none")
+```
+
+```{r fkmsampleinscatter, out.width='50%',fig.asp=1, fig.show='hold', fig.cap="Hard k-means and fuzzy k-means sample plotted in scatter diagram of compound topographic index against normalized difference vegetation index", echo=F}
+ggplot(grdHunterValley) +
+  geom_point(mapping=aes(x=ndvi,y=cti,colour=as.character(cluster))) +
+  geom_point(data=myKMSample,mapping=aes(x=ndvi,y=cti),size=2) +
+  ggtitle("Hard k-means")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_x_continuous(name = "ndvi") +
+  scale_y_continuous(name = "elevation") +
+  theme(legend.position="none")
+
+ggplot(grdHunterValley) +
+  geom_point(mapping=aes(x=ndvi,y=cti,colour=as.character(defuzcluster))) +
+  geom_point(data=myFKMSample,mapping=aes(x=ndvi,y=cti),size=2) +
+  ggtitle("Fuzzy k-means")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_x_continuous(name = "ndvi") +
+  scale_y_continuous(name = "elevation") +
+  theme(legend.position="none")
+```
+

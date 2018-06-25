@@ -1,6 +1,6 @@
 # Systematic random sampling {#SY}
 
-A simple way of drawing probability samples whose locations are spread uniformly over the study area, is systematic random sampling (SY). Figure \@ref(fig:sampleSY) shows a square grid randomly placed on Voorst.
+A simple way of drawing probability samples whose locations are spread uniformly over the study area, is systematic random sampling (SY). Figure \@ref(fig:sampleSY) shows a square grid randomly placed on study area Voorst.
 
 ```{r }
 set.seed(314)

@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-22">
+<meta name="date" content="2018-06-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -158,7 +158,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
 <li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
-<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#spatial-infill-sampling"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#SpatialInfill"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="kmeans.html"><a href="kmeans.html"><i class="fa fa-check"></i><b>14</b> K-means sampling</a><ul>
+<li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
+<li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -303,7 +307,7 @@ df \approx \frac {\left(\sum_{h=1}^H a_h^2
 Figure 4.4: EM38 measurements at cotton research farm in Khorezm, Uzbekistan
 </p>
 </div>
-<p>The optimal strata can be constructed with the <code>R</code> package <code>stratification</code> <span class="citation">(Baillargeon and Rivest 2011)</span>. Take care that the data are sorted in ascending order by the columns used for optimal stratification, see help of function <code>strata.cumrootf</code>.</p>
+<p>The optimal strata can be constructed with the R package <code>stratification</code> <span class="citation">(Baillargeon and Rivest 2011)</span>. Take care that the data are sorted in ascending order by the columns used for optimal stratification, see help of function <code>strata.cumrootf</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stratification)
 grdUzbekistan &lt;-<span class="st"> </span>grdUzbekistan[<span class="kw">order</span>(grdUzbekistan<span class="op">$</span>EM),]
 <span class="co">#set sample size. This has no effect on the stratification</span>
@@ -342,7 +346,7 @@ Figure 4.5: Optimal strata obtained with cumrootf
 <div id="geographical-stratification" class="section level2">
 <h2><span class="header-section-number">4.4</span> Geographical stratification</h2>
 <p>When no covariate is available, we may still decide to apply a <em>geographical stratification</em>. For instance, a square study area can be divided into <span class="math inline">\(4 \times 4\)</span> equally sized subsquares that are used as strata. When we select one or two points per subsquare, we avoid strong spatial clustering of the sampling points. The geographical stratification improves the <em>spatial coverage</em>. When the study variable is spatially structured, think for instance of a spatial trend, then geographical stratification will lead to more precise estimated means (smaller sampling variances).</p>
-<p>A simple method for constructing geographical strata is k-means clustering <span class="citation">(Brus, Spatjens, and Gruijter 1999)</span> . In this approach the study area is discretized by a large number of pixels (raster cells). These pixels are the objects that are clustered. The clustering variables are simply the x-coordinate and y-coordinate of the centres of the pixels. This method leads to <em>compact</em> geographical strata. The method is implemented in the <code>R</code> package <code>spcosa</code> <span class="citation">(Walvoort, Brus, and Gruijter 2010)</span>. Figure <a href="STSI.html#fig:GeoStrata">4.6</a> shows 20 compact geostrata of equal area<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. In each geostratum two points are selected by simple random sampling. Note that the sampling points are well spread throughout the study area.</p>
+<p>A simple method for constructing geographical strata is k-means clustering <span class="citation">(D. J. Brus, Spatjens, and Gruijter 1999)</span> . In this approach the study area is discretized by a large number of pixels (raster cells). These pixels are the objects that are clustered. The clustering variables are simply the x-coordinate and y-coordinate of the centres of the pixels. This method leads to <em>compact</em> geographical strata. The method is implemented in the R package <code>spcosa</code> <span class="citation">(D. J. J. Walvoort, Brus, and Gruijter 2010)</span>. Figure <a href="STSI.html#fig:GeoStrata">4.6</a> shows 20 compact geostrata of equal area<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. In each geostratum two points are selected by simple random sampling. Note that the sampling points are well spread throughout the study area.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(spcosa)
 <span class="co">#Choose number of geostrata</span>
 H&lt;-<span class="dv">20</span>
