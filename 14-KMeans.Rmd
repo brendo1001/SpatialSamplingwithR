@@ -63,8 +63,8 @@ myFKMSample <- grdHunterValley[units,]
 ```{r, echo=F}
 tbl <- table(grdHunterValley$defuzcluster,grdHunterValley$cluster)
 res <- apply(tbl,MARGIN=1,FUN=which.max)
-#both defuzzified clusters 3 and 17 have most pixels in hard k-means clusters 13; cluster 20 is missing. I reclassified fuzzy cluster 3 as 20 (although it has few )
-res[3] <- 20
+#reclassify some fuzzy clusters
+res[c(14,12,16)] <- c(4,20,17)
 grdHunterValley$defuzcluster <- as.factor(grdHunterValley$defuzcluster)
 levels(grdHunterValley$defuzcluster) <- as.character(res)
 ```
@@ -114,8 +114,9 @@ ggplot(grdHunterValley) +
 ```
 
 #### Exercise ([KMSample.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/KMSample.R)) {-}
-1. Write an R script to select a k-means sample of size 20, using scaled distances. Compute the Mean Squared Shortest **Scaled** Distance (MSSSD) of the k-means sample   
-2. Use [FuzME](https://sydney.edu.au/agriculture/pal/software/fuzme.shtml) to compute a fuzzy clustering for 20 classes, using the five covariates of Hunter Valley in clustering the grid cells. The input file for FuzME is `grdHunterValley4Practicals4FuzME.csv`. Use scaled distances (tic in FuzME in box Metric Distance Diagonal). Use 1.3 as fuzzy exponent, and set maximum number of iterations to 1000    
-3. Write an R script to select the fuzzy k-means sample for this fuzzy clustering, and compute the Mean Squared Shortest **Scaled** Distance (MSSSD) in covariate space (spanned by the five covariates) of the sample using function `rdist`     
-4. Repeat this for Mahalanobis distances   
-5. Compare the MSSSD's of the k-means and the two fuzzy k-means samples  
+1. Write an R script to select a k-means sample of size 20,  using the five **scaled** covariates of Hunter Valley in clustering the grid cells  
+2. Compute the Mean Squared Shortest **Scaled** Distance (MSSSD) of the k-means sample. (use function `rdist` of library `fields` to compute a matrix with scaled distances between grid cells and the k-means sample; then use function `apply` to compute the shortest distance)   
+3. Use [FuzME](https://sydney.edu.au/agriculture/pal/software/fuzme.shtml) to compute a fuzzy clustering for 20 classes,. The input file for FuzME is `grdHunterValley4Practicals4FuzME.csv`. Use scaled distances (in FuzME, in box Metric Distance tic Diagonal). Use 1.3 as fuzzy exponent, and set maximum number of iterations to 1000    
+4. Write an R script to select the fuzzy k-means sample for this fuzzy clustering, and compute the MSSSD       
+5. Repeat this for Mahalanobis distances   
+6. Compare the MSSSD's of the k-means and the two fuzzy k-means samples  
