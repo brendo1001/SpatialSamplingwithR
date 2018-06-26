@@ -22,36 +22,36 @@ ggplot(grdHunterValley) +
 
 ## Hard k-means {#Hardkmeans}
 
-In hard k-means sampling the covariates are used to cluster the grid cells by the k-means clustering algorithm. Similar to spatial coverage sampling the MSSD is minimized, but now the distance is not measured in geographical space but in a $p$-dimensional space spanned by the $p$ covariates (think of it as a multi-dimensional scatter plot with the covariates along the axes). In hard k-means each unit (grid cell) can only belong to exactly one cluster.
+In hard k-means sampling the covariates are used to cluster the grid cells by the k-means clustering algorithm. Similar to spatial coverage sampling (Chapter \@ref(SpatialCoverage) the MSSD is minimized, but now the distance is not measured in geographical space but in a $p$-dimensional space spanned by the $p$ covariates (think of it as a multi-dimensional scatter plot with the covariates along the axes). The covariates are scaled so that their standard deviations become 1. This is needed because, contrary to the x- and y-coordinates used as clustering variables in spatial coverage sampling, the dimensions of the covariates used as clustering variables generally differ, and the ranges of the covariates in the population can largely differ. In clustering the grid cells the Mean Squared Shortest **Scaled** Distance (MSS**S**D) is minimized.
 
-In the next chunk a hard k-means sample of size 20 is selected from the Hunter Valley study area. All five quantitative covariates are used as covariates. To select 20 points 20 clusters are constructed using hard k-means. Note that the number of clusters is based on the required sample size, not as usual in cluster analysis on the number of subregions with a high density of points in the multivariate distribution. The covariates are scaled so that their standard deviations become 1. Grid cells with the shortest scaled Euclidean distance in covariate-space to the centroids of the clusters are selected as the sampling points. Correlation between covariates can be accounted for by computing Mahalanobis distances [@web90].
+In the next chunk a hard k-means sample of size 20 is selected from the Hunter Valley study area. All five quantitative covariates are used as covariates. To select 20 points 20 clusters are constructed using hard k-means. Note that the number of clusters is based on the required sample size, not as usual in cluster analysis on the number of subregions with a high density of points in the multivariate distribution. Grid cells with the shortest scaled Euclidean distance in covariate-space to the centroids of the clusters are selected as the sampling points.
 
 ```{r}
 #Set number of sampling locations to be selected
 n<-20
 #Compute clusters
 set.seed(314)
-myClusters <- kmeans(scale(grdHunterValley[,c(3,4,5,6,7)]), centers=n, iter.max=100,nstart=10)
+myClusters <- kmeans(scale(grdHunterValley[,c(3,4,5,6,7)]), centers=n, iter.max=1000,nstart=10)
 grdHunterValley$cluster <- myClusters$cluster
 #Select locations closest to the centers of the clusters
 rdist.out <- rdist(x1=myClusters$centers,x2=scale(grdHunterValley[,c(3,4,5,6,7)]))
-ids.mindist <- apply(rdist.out,MARGIN=1,which.min)
-myKMSample <- grdHunterValley[ids.mindist,]
+units <- apply(rdist.out,MARGIN=1,which.min)
+myKMSample <- grdHunterValley[units,]
 ```
 
 Figure \@ref(fig:fkmsampleHunterValley) shows the clustering of the grid cells and their centroids used as the selected hard k-means sample. In Figure \@ref(fig:fkmsampleinscatter) the selected sample is plotted in a scatter diagram of cti against ndvi.
 
 ## Fuzzy k-means {#Fuzzykmens}
 
-Contrary to hard k-means, fuzzy k-means (also referred to as soft k-means) allows units to belong to one or more clusters. A vector containing k numbers is assigned to every unit, with all numbers in the interval [0,1]. The numbers sum to 1. The numbers indicate the degree to which a unit belongs to each cluster. They are referred to as membership grades. With fuzzy k-means, the centroid of a cluster is the weighted mean of the covariates over all units, using the memberships of that cluster as weights. As before, grid cells with the shortest Euclidean distance in covariate-space to the centroids of these fuzzy clusters are selected as the sampling points. 
+In hard k-means each unit (grid cell) can only belong to exactly one cluster. Fuzzy k-means (also referred to as soft k-means) allows units to belong to one or more clusters. A vector containing $k$ numbers is assigned to every unit, with all numbers in the interval [0,1]. The numbers sum to 1. The numbers indicate the degree to which a unit belongs to each cluster. They are referred to as membership grades. With fuzzy k-means, the centroid of a cluster is the weighted mean of the covariates over all units, using the memberships of that cluster as weights. As before, grid cells with the shortest Euclidean distance in covariate-space to the centroids of these fuzzy clusters are selected as the sampling points. 
 
 Fuzzy k-means clustering can be done with function `FKM` of package `fclust` and function `runFuzme` of R package `fuzme`. R package `fuzme` can also be used for clustering using Mahalanobis distances. Clustering using Mahalanobis distances can also be achieved with function `fanny` of R package `cluster`. My experience is that computing time with these R packages is prohibitive when we have a large number of grid cells. In that case I recommend the software [FuzME](https://sydney.edu.au/agriculture/pal/software/fuzme.shtml).
 
-In the next chunk a sample of size 20 is selected, using the memberships obtained with FuzME as input. In fuzzy k-means clustering a fuzziness exponent of 1.3 is used. The covariates are scaled. Distances are computed as squared Euclidian distances, i.e. correlation between the covariates is not accounted for.
+In the next chunk a sample of size 20 is selected, using the memberships obtained with FuzME as input. In fuzzy k-means clustering a fuzziness exponent of 1.3 is used. The covariates are scaled. Correlation between the covariates is not accounted for (whcih can be done by selecting Mahalanobis distance as metric distance in FuzME).
 
 ```{r}
 # read memberships computed with FuzMe
-m <- read.csv(file="20_class.txt",sep="")
+m <- read.csv(file="20_class_Diag.txt",sep="")
 m <- m[,-c(1,2,3)]
 # defuzzify, i.e. compute for each gridcell the cluster with largest membership
 grdHunterValley$defuzcluster <- apply(m,MARGIN=1,which.max)
@@ -113,8 +113,9 @@ ggplot(grdHunterValley) +
   theme(legend.position="none")
 ```
 
-#### Exercise {-}
-1. Use [FuzME](https://sydney.edu.au/agriculture/pal/software/fuzme.shtml) to compute a fuzzy clustering for 20 classes, using the five covariates of Hunter Valley and Mahalanobis distances. Use 1.3 as fuzzy exponent.  
-2. Write an R script to select the fuzzy k-means sample for this fuzzy clustering    
-3. Defuzzify the clustering, and plot the sample in a map of the defuzzified clusters, and in a scatter plot of cti against ndvi with the defuzified clsusters of the grid cells as colours   
-4. Repeat this for scaled Euclidian distances (Diagonal in box Metric Distance in FuzME), and compare both the samples  
+#### Exercise ([KMSample.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/KMSample.R)) {-}
+1. Write an R script to select a k-means sample of size 20, using scaled distances. Compute the Mean Squared Shortest **Scaled** Distance (MSSSD) of the k-means sample   
+2. Use [FuzME](https://sydney.edu.au/agriculture/pal/software/fuzme.shtml) to compute a fuzzy clustering for 20 classes, using the five covariates of Hunter Valley in clustering the grid cells. The input file for FuzME is `grdHunterValley4Practicals4FuzME.csv`. Use scaled distances (tic in FuzME in box Metric Distance Diagonal). Use 1.3 as fuzzy exponent, and set maximum number of iterations to 1000    
+3. Write an R script to select the fuzzy k-means sample for this fuzzy clustering, and compute the Mean Squared Shortest **Scaled** Distance (MSSSD) in covariate space (spanned by the five covariates) of the sample using function `rdist`     
+4. Repeat this for Mahalanobis distances   
+5. Compare the MSSSD's of the k-means and the two fuzzy k-means samples  
