@@ -14,7 +14,11 @@ units <- apply(rdist.out,MARGIN=1,which.min)
 myKMSample <- grdHunterValley[units,c(3,4,5,6,7)]
 
 #Compute MSSSD
-rdist.out <- rdist(x1=scale(grdHunterValley[,c(3,4,5,6,7)]),x2=scale(myKMSample))
+
+#Compute population means and sds used above in scale, so that the covariate values in the sample are scaled with the same means and sds
+populationmeans <- apply(grdHunterValley[,c(3,4,5,6,7)],MARGIN=2,FUN=mean)
+populationsds <- apply(grdHunterValley[,c(3,4,5,6,7)],MARGIN=2,FUN=sd)
+rdist.out <- rdist(x1=scale(grdHunterValley[,c(3,4,5,6,7)]),x2=scale(myKMSample,center=populationmeans,scale=populationsds))
 dmin <- apply(rdist.out,MARGIN=1,min)
 MSSSD_km <- mean(dmin^2)
 
@@ -30,7 +34,7 @@ units <- apply(m_dia,MARGIN=2,FUN=which.max)
 myFKMSample_dia <- grdHunterValley[units,c(3,4,5,6,7)]
 
 #Compute MSSSD
-rdist.out <- rdist(x1=scale(grdHunterValley[,c(3,4,5,6,7)]),x2=scale(myFKMSample_dia))
+rdist.out <- rdist(x1=scale(grdHunterValley[,c(3,4,5,6,7)]),x2=scale(myFKMSample_dia,center=populationmeans,scale=populationsds))
 dmin <- apply(rdist.out,MARGIN=1,min)
 MSSSD_fkm_dia <- mean(dmin^2)
 
@@ -41,6 +45,6 @@ m_mah <- m_mah[,-c(1,2,3)]
 units <- apply(m_mah,MARGIN=2,FUN=which.max)
 myFKMSample_mah <- grdHunterValley[units,c(3,4,5,6,7)]
 
-rdist.out <- rdist(x1=scale(grdHunterValley[,c(3,4,5,6,7)]),x2=scale(myFKMSample_mah))
+rdist.out <- rdist(x1=scale(grdHunterValley[,c(3,4,5,6,7)]),x2=scale(myFKMSample_mah,center=populationmeans,scale=populationsds))
 dmin <- apply(rdist.out,MARGIN=1,min)
 MSSSD_fkm_mah <- mean(dmin^2)

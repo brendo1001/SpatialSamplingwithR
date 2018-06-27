@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-26">
+<meta name="date" content="2018-06-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -164,6 +164,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
 <li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
 </ul></li>
+<li class="chapter" data-level="15" data-path="cLHS.html"><a href="cLHS.html"><i class="fa fa-check"></i><b>15</b> Conditioned Latin hypercube sampling</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -232,7 +233,7 @@ y_i &amp;=&amp; \beta_0 + \beta_1 x_i + \epsilon_i \\
 \tag{11.2}
 \end{eqnarray}\]</span>
 <p>In this model the errors are not independent, but spatially correlated. This model is used when mapping by kriging with an external drift (KED). Figure <a href="IntroSamplingforMapping.html#fig:foursamples">11.1</a>(c) shows an optmized sample for KED mapping<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>. Spatial clustering is avoided, the selected units are spread throughout the area. At the same time units near the minimum (unit with coordinates (13.5, 12.5)) and maximum (unit with coordinates (13.5, 6.5)) of the covariate are selected. This example shows that there is no single best sampling design for mapping. The best design depends on the method used for mapping. If we believe that the study variable can better be mapped by KED instead of simple linear regression, because we expect the data to be spatially autocorrelated, the optimal sample largely differs from the optimal sample for mapping using a simple linear regression model.</p>
-<p>If we foresee a quadratic relation, <span class="math inline">\(z_i = \beta_0 + \beta_1x_i + \beta_2x^2_i+\epsilon_i\)</span>, the optimal sample will also include locations with covariate values near the mean of <span class="math inline">\(x\)</span>. And if we expect an even more complicated, non-linear relation, it can be advantageous to select a sample so that the relative frequency distribution of <span class="math inline">\(x\)</span> in the sample and in the population are similar. This can be done by using the covariate <span class="math inline">\(x\)</span> to construct as many strata as the number of sampling unts we want to select. By using evenly spaced quantiles of <span class="math inline">\(x\)</span> as stratum breaks, the strata have equal size. From each stratum one unit is selected (Figure <a href="IntroSamplingforMapping.html#fig:foursamples">11.1</a>(d)). This is the rationale of conditioned Latin hypercube sampling in case we have multiple covariates (Chapter <a href="#cLHS"><strong>??</strong></a>).</p>
+<p>If we foresee a quadratic relation, <span class="math inline">\(z_i = \beta_0 + \beta_1x_i + \beta_2x^2_i+\epsilon_i\)</span>, the optimal sample will also include locations with covariate values near the mean of <span class="math inline">\(x\)</span>. And if we expect an even more complicated, non-linear relation, it can be advantageous to select a sample so that the relative frequency distribution of <span class="math inline">\(x\)</span> in the sample and in the population are similar. This can be done by using the covariate <span class="math inline">\(x\)</span> to construct as many strata as the number of sampling unts we want to select. By using evenly spaced quantiles of <span class="math inline">\(x\)</span> as stratum breaks, the strata have equal size. From each stratum one unit is selected (Figure <a href="IntroSamplingforMapping.html#fig:foursamples">11.1</a>(d)). This is the rationale of conditioned Latin hypercube sampling in case we have multiple covariates (Chapter <a href="cLHS.html#cLHS">15</a>).</p>
 <div id="geometric-versus-model-based-sampling-designs" class="section level2">
 <h2><span class="header-section-number">11.1</span> Geometric versus model-based sampling designs</h2>
 <p>At the highest level we may distinguish geometric from model-based sampling designs for mapping. A square grid and a triangular grid are examples of geometric sampling designs; the sampling locations show a regular, geometric spatial pattern. In other geometric sampling designs the spatial pattern is not that nicely regular. Yet these are classified as geometric sampling designs when the samples are obtained by minimizing a geometric criterion, i.e. a criterion defined in terms of distances between the sampling locations and the nodes of a fine prediction grid discretizing the study area (Chapters <a href="SpatialCoverage.html#SpatialCoverage">13</a> and <a href="kmeans.html#kmeans">14</a>).</p>

@@ -942,4 +942,24 @@
   unique-id = {{ISI:A1979GW16700012}},
 }
 
+@Article{Minasny2006,
+  author    = {Minasny, B. and McBratney, A.B.},
+  title     = {A conditioned {L}atin hypercube method for sampling in the presence of ancillary information},
+  journal   = {Computers \& Geosciences},
+  year      = {2006},
+  volume    = {32},
+  pages     = {1378-1388},
+  doi       = {10.1016/j.cageo.2005.12.009},
+  owner     = {brus003},
+  timestamp = {2009.12.10},
+}
+
+@Manual{Alessandro2016,
+  title  = {spsann: Optimization of Sample Configurations using Spatial Simulated Annealing},
+  author = {Alessandro Samuel-Rosa},
+  year   = {2016},
+  note   = {R package version 2.0-0},
+  url    = {https://CRAN.R-project.org/package=spsann},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-26">
+<meta name="date" content="2018-06-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="SpatialCoverage.html">
-<link rel="next" href="references.html">
+<link rel="next" href="cLHS.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -164,6 +164,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
 <li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
 </ul></li>
+<li class="chapter" data-level="15" data-path="cLHS.html"><a href="cLHS.html"><i class="fa fa-check"></i><b>15</b> Conditioned Latin hypercube sampling</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -185,16 +186,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="kmeans" class="section level1">
 <h1><span class="header-section-number">Chapter 14</span> K-means sampling</h1>
 <p>Regular grid sampling and spatial coverage sampling are pure spatial sampling designs. Covariates possibly related to the study variable are not accounted for in selecting sampling units. This can be suboptimal when the study variable is related to covariates of which maps are available, think for instance of remote sensing imagery. These maps can then be used in mapping the study variable by, for instance, a multiple linear regression model. This chapter describes a simple, straightforward method for selecting sampling units on the basis of the covariate values of the grid cells.</p>
-<p>The sampling methods are illustated with a study area in the Hunter Valley, New South-Wales in Australia. Five quantitative covariates are available: elevation, slope, cosine of aspect, compound topographic index (cti) and normalized difference vegetation index (ndvi). The plot below shows cti and ndvi. The sharp boundaries on the ndvi map coincide with boundaries of agricultural fields.</p>
+<p>The sampling methods are illustated with a study area in the Hunter Valley, New South-Wales in Australia. Five quantitative covariates are available: elevation, slope, cosine of aspect, compound topographic index (cti) and normalized difference vegetation index (ndvi). The plot below shows maps of these five covariates. The sharp boundaries on the ndvi map coincide with boundaries of agricultural fields.</p>
 <div class="figure" style="text-align: center"><span id="fig:covariatesHunterValley"></span>
-<img src="SpatialSampling_files/figure-html/covariatesHunterValley-1.png" alt="Compount topographic index and normalized difference vegetation index of study area Hunter Valley" width="50%" /><img src="SpatialSampling_files/figure-html/covariatesHunterValley-2.png" alt="Compount topographic index and normalized difference vegetation index of study area Hunter Valley" width="50%" />
+<img src="SpatialSampling_files/figure-html/covariatesHunterValley-1.png" alt="Five covariates of study area Hunter Valley used in k-means sampling" width="50%" /><img src="SpatialSampling_files/figure-html/covariatesHunterValley-2.png" alt="Five covariates of study area Hunter Valley used in k-means sampling" width="50%" /><img src="SpatialSampling_files/figure-html/covariatesHunterValley-3.png" alt="Five covariates of study area Hunter Valley used in k-means sampling" width="50%" /><img src="SpatialSampling_files/figure-html/covariatesHunterValley-4.png" alt="Five covariates of study area Hunter Valley used in k-means sampling" width="50%" /><img src="SpatialSampling_files/figure-html/covariatesHunterValley-5.png" alt="Five covariates of study area Hunter Valley used in k-means sampling" width="50%" />
 <p class="caption">
-Figure 14.1: Compount topographic index and normalized difference vegetation index of study area Hunter Valley
+Figure 14.1: Five covariates of study area Hunter Valley used in k-means sampling
 </p>
 </div>
 <div id="Hardkmeans" class="section level2">
 <h2><span class="header-section-number">14.1</span> Hard k-means</h2>
-<p>In hard k-means sampling the covariates are used to cluster the grid cells by the k-means clustering algorithm. Similar to spatial coverage sampling (Chapter <a href="SpatialCoverage.html#SpatialCoverage">13</a> the MSSD is minimized, but now the distance is not measured in geographical space but in a <span class="math inline">\(p\)</span>-dimensional space spanned by the <span class="math inline">\(p\)</span> covariates (think of it as a multi-dimensional scatter plot with the covariates along the axes). The covariates are scaled so that their standard deviations become 1. This is needed because, contrary to the x- and y-coordinates used as clustering variables in spatial coverage sampling, the dimensions of the covariates used as clustering variables generally differ, and the ranges of the covariates in the population can largely differ. In clustering the grid cells the Mean Squared Shortest <strong>Scaled</strong> Distance (MSS<strong>S</strong>D) is minimized.</p>
+<p>In hard k-means sampling the covariates are used to cluster the grid cells by the k-means clustering algorithm. Similar to spatial coverage sampling (Chapter <a href="SpatialCoverage.html#SpatialCoverage">13</a> the MSSD is minimized, but now the distance is not measured in geographical space but in a <span class="math inline">\(p\)</span>-dimensional space spanned by the <span class="math inline">\(p\)</span> covariates (think of it as a multi-dimensional scatter plot with the covariates along the axes). The covariates are scaled so that their standard deviations become 1. This is needed because, contrary to the x- and y-coordinates used as clustering variables in spatial coverage sampling, the dimensions of the covariates used as clustering variables generally differ, and the ranges of the covariates in the population can largely differ. In the clustering of the grid cells the Mean Squared Shortest <strong>Scaled</strong> Distance (MSS<strong>S</strong>D)<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> is minimized.</p>
 <p>In the next chunk a hard k-means sample of size 20 is selected from the Hunter Valley study area. All five quantitative covariates are used as covariates. To select 20 points 20 clusters are constructed using hard k-means. Note that the number of clusters is based on the required sample size, not as usual in cluster analysis on the number of subregions with a high density of points in the multivariate distribution. Grid cells with the shortest scaled Euclidean distance in covariate-space to the centroids of the clusters are selected as the sampling points.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Set number of sampling locations to be selected</span>
 n&lt;-<span class="dv">20</span>
@@ -207,6 +208,13 @@ rdist.out &lt;-<span class="st"> </span><span class="kw">rdist</span>(<span clas
 units &lt;-<span class="st"> </span><span class="kw">apply</span>(rdist.out,<span class="dt">MARGIN=</span><span class="dv">1</span>,which.min)
 myKMSample &lt;-<span class="st"> </span>grdHunterValley[units,]</code></pre></div>
 <p>Figure <a href="kmeans.html#fig:fkmsampleHunterValley">14.2</a> shows the clustering of the grid cells and their centroids used as the selected hard k-means sample. In Figure <a href="kmeans.html#fig:fkmsampleinscatter">14.3</a> the selected sample is plotted in a scatter diagram of cti against ndvi.</p>
+<p>The MSSSD of the selected sample is computed by:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">populationmeans &lt;-<span class="st"> </span><span class="kw">apply</span>(grdHunterValley[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)],<span class="dt">MARGIN=</span><span class="dv">2</span>,<span class="dt">FUN=</span>mean)
+populationsds &lt;-<span class="st"> </span><span class="kw">apply</span>(grdHunterValley[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)],<span class="dt">MARGIN=</span><span class="dv">2</span>,<span class="dt">FUN=</span>sd)
+rdist.out &lt;-<span class="st"> </span><span class="kw">rdist</span>(<span class="dt">x1=</span><span class="kw">scale</span>(grdHunterValley[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)]),<span class="dt">x2=</span><span class="kw">scale</span>(myKMSample[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)],<span class="dt">center=</span>populationmeans,<span class="dt">scale=</span>populationsds))
+dmin &lt;-<span class="st"> </span><span class="kw">apply</span>(rdist.out,<span class="dt">MARGIN=</span><span class="dv">1</span>,min)
+MSSSD &lt;-<span class="st"> </span><span class="kw">mean</span>(dmin<span class="op">^</span><span class="dv">2</span>)</code></pre></div>
+<p>The MSSSD of the selected sample equals 1.106.</p>
 </div>
 <div id="Fuzzykmens" class="section level2">
 <h2><span class="header-section-number">14.2</span> Fuzzy k-means</h2>
@@ -239,7 +247,7 @@ Figure 14.3: Hard k-means and fuzzy k-means sample plotted in scatter diagram of
 <ol style="list-style-type: decimal">
 <li>Write an R script to select a k-means sample of size 20, using the five <strong>scaled</strong> covariates of Hunter Valley in clustering the grid cells<br />
 </li>
-<li>Compute the Mean Squared Shortest <strong>Scaled</strong> Distance (MSSSD) of the k-means sample. (use function <code>rdist</code> of library <code>fields</code> to compute a matrix with scaled distances between grid cells and the k-means sample; then use function <code>apply</code> to compute the shortest distance)<br />
+<li>Compute the Mean Squared Shortest <strong>Scaled</strong> Distance (MSSSD) of the k-means sample<br />
 </li>
 <li>Use <a href="https://sydney.edu.au/agriculture/pal/software/fuzme.shtml">FuzME</a> to compute a fuzzy clustering for 20 classes,. The input file for FuzME is <code>grdHunterValley4Practicals4FuzME.csv</code>. Use scaled distances (in FuzME, in box Metric Distance tic Diagonal). Use 1.3 as fuzzy exponent, and set maximum number of iterations to 1000<br />
 </li>
@@ -253,13 +261,19 @@ Figure 14.3: Hard k-means and fuzzy k-means sample plotted in scatter diagram of
 </div>
 </div>
 </div>
+<div class="footnotes">
+<hr />
+<ol start="5">
+<li id="fn5"><p>The name scaled distance can be confusing. Not the distances are scaled, but the distances are computed in a space spanned by the scaled covariates<a href="kmeans.html#fnref5">↩</a></p></li>
+</ol>
+</div>
             </section>
 
           </div>
         </div>
       </div>
 <a href="SpatialCoverage.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="cLHS.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

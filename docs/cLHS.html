@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial sampling with R</title>
+  <meta name="description" content="Spatial sampling with R">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial sampling with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial sampling with R" />
+  
+  
+  
+
+<meta name="author" content="Dick J. Brus">
+
+
+<meta name="date" content="2018-06-27">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="kmeans.html">
+<link rel="next" href="references.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Foreword</a></li>
+<li class="chapter" data-level="1" data-path="GeneralIntro.html"><a href="GeneralIntro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>2.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="2.2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.2</b> Simulated population</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator-1"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
+<li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
+<li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="STSI.html"><a href="STSI.html"><i class="fa fa-check"></i><b>4</b> Stratified random sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="STSI.html"><a href="STSI.html#estimation-of-the-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>4.1</b> Estimation of the mean and its sampling variance</a></li>
+<li class="chapter" data-level="4.2" data-path="STSI.html"><a href="STSI.html#confidence-interval-estimate"><i class="fa fa-check"></i><b>4.2</b> Confidence interval estimate</a></li>
+<li class="chapter" data-level="4.3" data-path="STSI.html"><a href="STSI.html#cumrootf"><i class="fa fa-check"></i><b>4.3</b> Optimal stratification</a></li>
+<li class="chapter" data-level="4.4" data-path="STSI.html"><a href="STSI.html#geographical-stratification"><i class="fa fa-check"></i><b>4.4</b> Geographical stratification</a></li>
+<li class="chapter" data-level="4.5" data-path="STSI.html"><a href="STSI.html#STSIallocation"><i class="fa fa-check"></i><b>4.5</b> Allocation of sample size to strata</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="SY.html"><a href="SY.html"><i class="fa fa-check"></i><b>5</b> Systematic random sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="SY.html"><a href="SY.html#EstVarSY"><i class="fa fa-check"></i><b>5.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="pps.html"><a href="pps.html"><i class="fa fa-check"></i><b>6</b> Sampling with probabilities proportional to size</a><ul>
+<li class="chapter" data-level="6.1" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-with-replacement-ppswr"><i class="fa fa-check"></i><b>6.1</b> Probability-proportional-to-size sampling with replacement (ppswr)</a></li>
+<li class="chapter" data-level="6.2" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-without-replacement-ppswor"><i class="fa fa-check"></i><b>6.2</b> Probability-proportional-to-size sampling without replacement (ppswor)</a></li>
+<li class="chapter" data-level="6.3" data-path="pps.html"><a href="pps.html#spatial-version-of-ppswor"><i class="fa fa-check"></i><b>6.3</b> Spatial version of ppswor</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a><ul>
+<li class="chapter" data-level="" data-path="Twostage.html"><a href="Twostage.html#questions-9"><i class="fa fa-check"></i>Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>8.2</b> Stratified two-stage random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
+<li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.1.1</b> Regression estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator"><i class="fa fa-check"></i><b>9.2</b> Ratio estimator</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.2.1</b> Ratio estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-with-unknown-mean-of-covariate"><i class="fa fa-check"></i><b>9.3</b> Regression estimator with unknown mean of covariate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="Balanced.html"><a href="Balanced.html"><i class="fa fa-check"></i><b>10</b> Balanced sampling</a><ul>
+<li class="chapter" data-level="10.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sample-versus-balanced-sampling-design"><i class="fa fa-check"></i><b>10.1</b> Balanced sample versus balanced sampling design</a></li>
+<li class="chapter" data-level="10.2" data-path="Balanced.html"><a href="Balanced.html#unequal-inclusion-probabilities"><i class="fa fa-check"></i><b>10.2</b> Unequal inclusion probabilities</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a><ul>
+<li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
+<li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#SpatialInfill"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="kmeans.html"><a href="kmeans.html"><i class="fa fa-check"></i><b>14</b> K-means sampling</a><ul>
+<li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
+<li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="cLHS.html"><a href="cLHS.html"><i class="fa fa-check"></i><b>15</b> Conditioned Latin hypercube sampling</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial sampling with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="cLHS" class="section level1">
+<h1><span class="header-section-number">Chapter 15</span> Conditioned Latin hypercube sampling</h1>
+<p>This chapter describes an experimental design that has been adapted for spatial surveys. An adaptation is necessary because in contrast to experiments in observational studies one is not free to choose combinations of levels of different factors. When two covariates are strongly correlated it may happen that there are no locations with a relatively large value for one covariate and a relatively small value for the other covariate. In experimental research it is possible to select combinations of levels of factors so that the factors are independent.</p>
+<p>In a full factorial design all combinations of factor levels are observed. With <span class="math inline">\(k\)</span> factors and <span class="math inline">\(l\)</span> levels per factor the total number of observations is <span class="math inline">\(l^k\)</span> . With numerous factors and/or numerous levels per factor this becomes unfeasible in practice. Alternative experimental designs have been developed that need less observations but still provide detailed information about how the variable of interest responds to changes in the factor levels. In this chapter I describe and illustrate the survey sampling analogue of Latin hypercube sampling. Response surface sampling will follow in a next chapter.</p>
+<p>Latin hypercube sampling (LHS) is used in designing (computer) experiments with numerous covariates and/or factors of which we want to study the effect on the output <span class="citation">(McKay, Beckman, and Conover {1979})</span>. Suppose we have only two covariates, e.g. application rates for N and P in agricultural experiment, and 4 levels for each covariate. It is evident that the best option is to have multiple plots for all <span class="math inline">\(4 \times 4\)</span> combinations. This is referred to as a full factorial design. With numerous covariates and/or levels per covariate, this becomes unfeasible. A much cheaper alternative then is an experiment with, for all covariates, exactly one observation per level. So in the agricultural experiment this would entail four observations, distributed in a square in such way that we have in all rows and in all columns one observation. This is referred to as a Latin square. The generalisation of a Latin square to a higher number of dimensions is a Latin hypercube.</p>
+<p><span class="citation">Minasny and McBratney (2006)</span> adapted LHS for observational studies; this adaptation is referred to as conditioned LHS (cLHS). For each covariate a series of intervals (marginal strata) is defined. The breaks of the marginal strata are chosen such that the numbers of grid cells in these marginal strata are equal. This can be done by using the quantiles corresponding with evenly spaced cumulative probabilities as stratum breaks. For instance, for five marginal strata we use the quantiles corresponding with the cumulative probabilities 0.2, 0.4, 0.6 and 0.8.</p>
+<p><span class="citation">Minasny and McBratney (2006)</span> developed a search algorithm, based on heuristic rules and an annealing schedule, to select a cLHS (see for an explanation of annealing, Chapter <a href="#MBLocations"><strong>??</strong></a>). The objective function that is minimized is the weighted sum of three components: * O1: the sum over all marginal strata of the absolute difference between the marginal stratum sample size and the targeted sample size (equal to 1)<br />
+* O2: the sum over all classes of categorical covariates of the absolute difference between the sample proportion of a given class and the population proportion of that class * O3: the sum over all entries of the correlation matrix of the absolute difference of the correlation in the population and in the sample</p>
+<p>With cLHS the marginal distributions of the covariates in the sample are close to these distributions in the population. This can be advantageous for mapping methods that do not rely on linear relations, for instance in machine learning techniques like classification and regression trees (CART), and random forests.</p>
+<p>cLH sampling is illustrated with the Hunter Valley data used before in k-means sampling (Chapter <a href="kmeans.html#kmeans">14</a>). To speed up the computations a subgrid is selected with a spacing of <span class="math inline">\(50 \times 50\)</span> m (the original cell size is <span class="math inline">\(25 \times 25\)</span> m).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gridded</span>(grdHunterValley) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Easting&quot;</span>,<span class="st">&quot;Northing&quot;</span>)
+subgrid &lt;-<span class="st"> </span><span class="kw">spsample</span>(grdHunterValley,<span class="dt">type=</span><span class="st">&quot;regular&quot;</span>,<span class="dt">cellsize=</span><span class="dv">50</span>,<span class="dt">offset=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>))
+subgriddata &lt;-<span class="st"> </span>(subgrid <span class="op">%over%</span><span class="st"> </span>grdHunterValley)
+grd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">coordinates</span>(subgrid),subgriddata)
+grdHunterValley &lt;-<span class="st"> </span><span class="kw">as</span>(grdHunterValley,<span class="st">&quot;data.frame&quot;</span>)</code></pre></div>
+<p>cLHS samples can be selected with function <code>optimCLHS</code> of R package <code>spsann</code> <span class="citation">(Samuel-Rosa 2016)</span>. First the candidate sampling points and the covariates are specified.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(spsann)
+candi &lt;-<span class="st"> </span>grd[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]
+<span class="kw">names</span>(candi) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>)
+covars &lt;-<span class="st"> </span>grd[, <span class="dv">3</span><span class="op">:</span><span class="dv">7</span>]</code></pre></div>
+<p>The next step is to define the annealing schedule. Note that both the initial acceptance rate and the initial temperature are set, which may seem weird as the acceptance rate is a function of the initial temperature: <span class="math inline">\(P =e^{\frac{-\Delta f}{T}}\)</span>. The initial acceptance rate is used as a threshold value. If an initial temperature is chosen that leads to an acceptance rate smaller than the chosen value for the initial acceptance rate, then the optimization stops. In this case a larger value for the initial temperature must be chosen.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">schedule &lt;-<span class="st"> </span><span class="kw">scheduleSPSANN</span>(<span class="dt">initial.acceptance =</span> <span class="fl">0.8</span>,<span class="dt">initial.temperature =</span> <span class="fl">0.05</span>,
+                           <span class="dt">temperature.decrease=</span><span class="fl">0.95</span>,
+                           <span class="dt">chains=</span><span class="dv">1000</span>,
+                           <span class="dt">chain.length=</span><span class="dv">4</span>,
+                           <span class="dt">stopping=</span><span class="dv">10</span>,
+                           <span class="dt">x.min=</span><span class="dv">10</span>,<span class="dt">y.min=</span><span class="dv">10</span>,
+                           <span class="dt">cellsize=</span><span class="dv">50</span>)</code></pre></div>
+<p>Finally, specify the weights for <span class="math inline">\(O1\)</span> and <span class="math inline">\(O3\)</span> in the objective function, and start the simulated annealing algorithm.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">O1 =</span> <span class="fl">0.5</span>, <span class="dt">O3 =</span> <span class="fl">0.5</span>)
+samplesize&lt;-<span class="dv">20</span>
+<span class="kw">set.seed</span>(<span class="dv">314</span>)
+optimCLHS.out &lt;-<span class="st"> </span><span class="kw">optimCLHS</span>(
+  <span class="dt">points =</span> samplesize, <span class="dt">candi =</span> candi, <span class="dt">covars =</span> covars, <span class="dt">use.coords =</span> <span class="ot">FALSE</span>, 
+  <span class="dt">schedule =</span> schedule, <span class="dt">track=</span><span class="ot">TRUE</span>, <span class="dt">weights =</span> weights, <span class="dt">progress=</span><span class="ot">NULL</span>)</code></pre></div>
+<pre><code>## 
+## 81% of acceptance in the 1st chain
+## running time = 25.77 seconds</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mycLHSample &lt;-<span class="st"> </span><span class="kw">data.frame</span>(optimCLHS.out<span class="op">$</span>points,grd[optimCLHS.out<span class="op">$</span>points<span class="op">$</span>id,<span class="dv">3</span><span class="op">:</span><span class="dv">7</span>])</code></pre></div>
+<p>Figure <a href="cLHS.html#fig:cLHSHunterValley">15.1</a> shows the selected sample in a map of compound topographic index, which is one of the five covariates used in sampling.</p>
+<div class="figure" style="text-align: center"><span id="fig:cLHSHunterValley"></span>
+<img src="SpatialSampling_files/figure-html/cLHSHunterValley-1.png" alt="Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index, which is one of the five covariates used in sampling" width="70%" />
+<p class="caption">
+Figure 15.1: Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index, which is one of the five covariates used in sampling
+</p>
+</div>
+<p>Figure <a href="cLHS.html#fig:cLHSHunterValleyinscatter">15.2</a> shows the sample plotted in a scatter diagram of cti against ndvi. The horizontal and vertical lines in this scatter diagram are at the boundaries of the marginal strata of cti and ndvi, respectively. The number of points within the horizontal and vertical bars are equal (marginal strata have equal size), which explains that the intervals are the narrowest where the density of points in the plot is highest. We can see in Figure <a href="cLHS.html#fig:cLHSHunterValleyinscatter">15.2</a>, for instance, that in the first marginal stratum of cti there are two sampling locations, whereas in the 7<sup>th</sup> and 8<sup>th</sup> marginal ndvi strata no sampling locations are selected.</p>
+<div class="figure" style="text-align: center"><span id="fig:cLHSHunterValleyinscatter"></span>
+<img src="SpatialSampling_files/figure-html/cLHSHunterValleyinscatter-1.png" alt="Conditioned Latin hypercube sample plotted in scatter diagram of compound topographic index against normalized difference vegetation index" width="70%" />
+<p class="caption">
+Figure 15.2: Conditioned Latin hypercube sample plotted in scatter diagram of compound topographic index against normalized difference vegetation index
+</p>
+</div>
+<p>Figure <a href="cLHS.html#fig:MarginalStratumSampleSizes">15.3</a> shows the sample sizes for all 100 marginal strata. Ideally, all marginal strata contain one sampling unit.</p>
+<div class="figure" style="text-align: center"><span id="fig:MarginalStratumSampleSizes"></span>
+<img src="SpatialSampling_files/figure-html/MarginalStratumSampleSizes-1.png" alt="Sample sizes of marginal strata" width="100%" />
+<p class="caption">
+Figure 15.3: Sample sizes of marginal strata
+</p>
+</div>
+<p>For all marginal strata with one sampling location the contribution to component O1 of the criterion is zero. For strata with zero or two sampling locations, the contribution is one. There is one marginal stratum, the 18<sup>th</sup> marginal stratum of aspect, that has three sampling locations, so that the contribution of this stratum to O1 equals 2.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">O1 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">abs</span>(counts<span class="op">-</span><span class="dv">1</span>))</code></pre></div>
+<p>For the selected sample component O1 equals 24. In package <code>spsann</code> this number is divided by the total number of marginal strata, and multiplied by the weight. Fig <a href="cLHS.html#fig:tracecLHS">15.4</a> shows the trace of the objective function components O1 and O3, i.e. the values during the optimization. First the trace is extracted from the output of function <code>optimCLHS</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trace &lt;-<span class="st"> </span>optimCLHS.out<span class="op">$</span>objective<span class="op">$</span>energy</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:tracecLHS"></span>
+<img src="SpatialSampling_files/figure-html/tracecLHS-1.png" alt="Trace of O1 (black) and O3 (red) during optimization of conditioned Latin hypercube sampling from Hunter Valley" width="100%" />
+<p class="caption">
+Figure 15.4: Trace of O1 (black) and O3 (red) during optimization of conditioned Latin hypercube sampling from Hunter Valley
+</p>
+</div>
+<p>The final value of O1 in the <code>data.frame</code> <code>trace</code> equals 0.12, which equals the value of O1 computed above as a sum, divided by the total number of marginal strata (100) and multiplied by the weight for O1 (0.5).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(corpopulation &lt;-<span class="st"> </span><span class="kw">cor</span>(grd[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)]))</code></pre></div>
+<pre><code>##             elevation       slope      aspect         cti        ndvi
+## elevation  1.00000000  0.76713639  0.01000011 -0.44371020 -0.08527735
+## slope      0.76713639  1.00000000  0.01941342 -0.48705948  0.01332772
+## aspect     0.01000011  0.01941342  1.00000000 -0.01011080 -0.01050931
+## cti       -0.44371020 -0.48705948 -0.01011080  1.00000000  0.06137475
+## ndvi      -0.08527735  0.01332772 -0.01050931  0.06137475  1.00000000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(corsample &lt;-<span class="st"> </span><span class="kw">cor</span>(mycLHSample[,<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>)]))</code></pre></div>
+<pre><code>##              elevation        slope       aspect         cti         ndvi
+## elevation  1.000000000  0.752011642 -0.005350369 -0.54025450 -0.098692778
+## slope      0.752011642  1.000000000 -0.005814333 -0.53490165  0.033692176
+## aspect    -0.005350369 -0.005814333  1.000000000  0.02457119 -0.007660007
+## cti       -0.540254501 -0.534901650  0.024571188  1.00000000  0.047632805
+## ndvi      -0.098692778  0.033692176 -0.007660007  0.04763280  1.000000000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">O3 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">abs</span>(corpopulation<span class="op">-</span>corsample))</code></pre></div>
+<p>Component O3 of the minimization criterion equals 0.57.</p>
+<p>Conditioned Latin hypercube samples can also be selected with R package <code>cLHS</code> <span class="citation">(Roudier 2011)</span>.</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="kmeans.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/16-cLHS.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
