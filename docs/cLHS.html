@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-27">
+<meta name="date" content="2018-06-28">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -164,7 +164,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
 <li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="cLHS.html"><a href="cLHS.html"><i class="fa fa-check"></i><b>15</b> Conditioned Latin hypercube sampling</a></li>
+<li class="chapter" data-level="15" data-path="cLHS.html"><a href="cLHS.html"><i class="fa fa-check"></i><b>15</b> Conditioned Latin hypercube sampling</a><ul>
+<li class="chapter" data-level="15.1" data-path="cLHS.html"><a href="cLHS.html#cLHIS"><i class="fa fa-check"></i><b>15.1</b> Conditioned Latin hypercube infill sampling</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -189,14 +191,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In a full factorial design all combinations of factor levels are observed. With <span class="math inline">\(k\)</span> factors and <span class="math inline">\(l\)</span> levels per factor the total number of observations is <span class="math inline">\(l^k\)</span> . With numerous factors and/or numerous levels per factor this becomes unfeasible in practice. Alternative experimental designs have been developed that need less observations but still provide detailed information about how the variable of interest responds to changes in the factor levels. In this chapter I describe and illustrate the survey sampling analogue of Latin hypercube sampling. Response surface sampling will follow in a next chapter.</p>
 <p>Latin hypercube sampling (LHS) is used in designing (computer) experiments with numerous covariates and/or factors of which we want to study the effect on the output <span class="citation">(McKay, Beckman, and Conover {1979})</span>. Suppose we have only two covariates, e.g. application rates for N and P in agricultural experiment, and 4 levels for each covariate. It is evident that the best option is to have multiple plots for all <span class="math inline">\(4 \times 4\)</span> combinations. This is referred to as a full factorial design. With numerous covariates and/or levels per covariate, this becomes unfeasible. A much cheaper alternative then is an experiment with, for all covariates, exactly one observation per level. So in the agricultural experiment this would entail four observations, distributed in a square in such way that we have in all rows and in all columns one observation. This is referred to as a Latin square. The generalisation of a Latin square to a higher number of dimensions is a Latin hypercube.</p>
 <p><span class="citation">Minasny and McBratney (2006)</span> adapted LHS for observational studies; this adaptation is referred to as conditioned LHS (cLHS). For each covariate a series of intervals (marginal strata) is defined. The breaks of the marginal strata are chosen such that the numbers of grid cells in these marginal strata are equal. This can be done by using the quantiles corresponding with evenly spaced cumulative probabilities as stratum breaks. For instance, for five marginal strata we use the quantiles corresponding with the cumulative probabilities 0.2, 0.4, 0.6 and 0.8.</p>
-<p><span class="citation">Minasny and McBratney (2006)</span> developed a search algorithm, based on heuristic rules and an annealing schedule, to select a cLHS (see for an explanation of annealing, Chapter <a href="#MBLocations"><strong>??</strong></a>). The objective function that is minimized is the weighted sum of three components: * O1: the sum over all marginal strata of the absolute difference between the marginal stratum sample size and the targeted sample size (equal to 1)<br />
-* O2: the sum over all classes of categorical covariates of the absolute difference between the sample proportion of a given class and the population proportion of that class * O3: the sum over all entries of the correlation matrix of the absolute difference of the correlation in the population and in the sample</p>
+<p><span class="citation">Minasny and McBratney (2006)</span> developed a search algorithm, based on heuristic rules and an annealing schedule, to select a cLHS (see for an explanation of annealing, Chapter <a href="#MBLocations"><strong>??</strong></a>). The objective function that is minimized is the weighted sum of three components:<br />
+* O1: the sum over all marginal strata of the absolute difference between the marginal stratum sample size and the targeted sample size (equal to 1)<br />
+* O2: the sum over all classes of categorical covariates of the absolute difference between the sample proportion of a given class and the population proportion of that class<br />
+* O3: the sum over all entries of the correlation matrix of the absolute difference of the correlation in the population and in the sample</p>
 <p>With cLHS the marginal distributions of the covariates in the sample are close to these distributions in the population. This can be advantageous for mapping methods that do not rely on linear relations, for instance in machine learning techniques like classification and regression trees (CART), and random forests.</p>
-<p>cLH sampling is illustrated with the Hunter Valley data used before in k-means sampling (Chapter <a href="kmeans.html#kmeans">14</a>). To speed up the computations a subgrid is selected with a spacing of <span class="math inline">\(50 \times 50\)</span> m (the original cell size is <span class="math inline">\(25 \times 25\)</span> m).</p>
+<p>cLH sampling is illustrated with the Hunter Valley data used before in k-means sampling (Chapter <a href="kmeans.html#kmeans">14</a>). To speed up the computations a subgrid is selected with a spacing of 50 <span class="math inline">\(\times\)</span> 50 m (the original cell size is 25 <span class="math inline">\(\times\)</span> 25 m).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gridded</span>(grdHunterValley) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Easting&quot;</span>,<span class="st">&quot;Northing&quot;</span>)
 subgrid &lt;-<span class="st"> </span><span class="kw">spsample</span>(grdHunterValley,<span class="dt">type=</span><span class="st">&quot;regular&quot;</span>,<span class="dt">cellsize=</span><span class="dv">50</span>,<span class="dt">offset=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>))
 subgriddata &lt;-<span class="st"> </span>(subgrid <span class="op">%over%</span><span class="st"> </span>grdHunterValley)
-grd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">coordinates</span>(subgrid),subgriddata)
+grd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">coordinates</span>(subgrid),subgriddata[,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>])
 grdHunterValley &lt;-<span class="st"> </span><span class="kw">as</span>(grdHunterValley,<span class="st">&quot;data.frame&quot;</span>)</code></pre></div>
 <p>cLHS samples can be selected with function <code>optimCLHS</code> of R package <code>spsann</code> <span class="citation">(Samuel-Rosa 2016)</span>. First the candidate sampling points and the covariates are specified.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(spsann)
@@ -211,7 +215,7 @@ covars &lt;-<span class="st"> </span>grd[, <span class="dv">3</span><span class=
                            <span class="dt">stopping=</span><span class="dv">10</span>,
                            <span class="dt">x.min=</span><span class="dv">10</span>,<span class="dt">y.min=</span><span class="dv">10</span>,
                            <span class="dt">cellsize=</span><span class="dv">50</span>)</code></pre></div>
-<p>Finally, specify the weights for <span class="math inline">\(O1\)</span> and <span class="math inline">\(O3\)</span> in the objective function, and start the simulated annealing algorithm.</p>
+<p>Finally, specify the weights for O1 and O3 in the objective function, and start the simulated annealing algorithm.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">O1 =</span> <span class="fl">0.5</span>, <span class="dt">O3 =</span> <span class="fl">0.5</span>)
 samplesize&lt;-<span class="dv">20</span>
 <span class="kw">set.seed</span>(<span class="dv">314</span>)
@@ -224,12 +228,12 @@ optimCLHS.out &lt;-<span class="st"> </span><span class="kw">optimCLHS</span>(
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mycLHSample &lt;-<span class="st"> </span><span class="kw">data.frame</span>(optimCLHS.out<span class="op">$</span>points,grd[optimCLHS.out<span class="op">$</span>points<span class="op">$</span>id,<span class="dv">3</span><span class="op">:</span><span class="dv">7</span>])</code></pre></div>
 <p>Figure <a href="cLHS.html#fig:cLHSHunterValley">15.1</a> shows the selected sample in a map of compound topographic index, which is one of the five covariates used in sampling.</p>
 <div class="figure" style="text-align: center"><span id="fig:cLHSHunterValley"></span>
-<img src="SpatialSampling_files/figure-html/cLHSHunterValley-1.png" alt="Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index, which is one of the five covariates used in sampling" width="70%" />
+<img src="SpatialSampling_files/figure-html/cLHSHunterValley-1.png" alt="Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index" width="70%" />
 <p class="caption">
-Figure 15.1: Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index, which is one of the five covariates used in sampling
+Figure 15.1: Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index
 </p>
 </div>
-<p>Figure <a href="cLHS.html#fig:cLHSHunterValleyinscatter">15.2</a> shows the sample plotted in a scatter diagram of cti against ndvi. The horizontal and vertical lines in this scatter diagram are at the boundaries of the marginal strata of cti and ndvi, respectively. The number of points within the horizontal and vertical bars are equal (marginal strata have equal size), which explains that the intervals are the narrowest where the density of points in the plot is highest. We can see in Figure <a href="cLHS.html#fig:cLHSHunterValleyinscatter">15.2</a>, for instance, that in the first marginal stratum of cti there are two sampling locations, whereas in the 7<sup>th</sup> and 8<sup>th</sup> marginal ndvi strata no sampling locations are selected.</p>
+<p>Figure <a href="cLHS.html#fig:cLHSHunterValleyinscatter">15.2</a> shows the sample plotted in a scatter diagram of cti against ndvi. Each black dot represents one grid cell in the population. The horizontal and vertical lines in this scatter diagram are at the boundaries of the marginal strata of cti and ndvi, respectively. The number of black dots within the horizontal and vertical bars are equal (marginal strata have equal size), which explains that the intervals are the narrowest where the density of black dots in the plot is highest. We can see in Figure <a href="cLHS.html#fig:cLHSHunterValleyinscatter">15.2</a>, for instance, that in the first marginal stratum of cti there are two sampling locations, whereas in the 7<sup>th</sup> and 8<sup>th</sup> marginal ndvi strata no sampling locations are selected.</p>
 <div class="figure" style="text-align: center"><span id="fig:cLHSHunterValleyinscatter"></span>
 <img src="SpatialSampling_files/figure-html/cLHSHunterValleyinscatter-1.png" alt="Conditioned Latin hypercube sample plotted in scatter diagram of compound topographic index against normalized difference vegetation index" width="70%" />
 <p class="caption">
@@ -243,9 +247,9 @@ Figure 15.2: Conditioned Latin hypercube sample plotted in scatter diagram of co
 Figure 15.3: Sample sizes of marginal strata
 </p>
 </div>
-<p>For all marginal strata with one sampling location the contribution to component O1 of the criterion is zero. For strata with zero or two sampling locations, the contribution is one. There is one marginal stratum, the 18<sup>th</sup> marginal stratum of aspect, that has three sampling locations, so that the contribution of this stratum to O1 equals 2.</p>
+<p>For all marginal strata with one sampling location the contribution to component O1 of the criterion is zero. For strata with zero or two sampling locations, the contribution is one. There is one marginal stratum, the 18<sup>th</sup> marginal stratum of aspect, that has three sampling locations, so the contribution of this stratum to O1 equals 2.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">O1 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">abs</span>(counts<span class="op">-</span><span class="dv">1</span>))</code></pre></div>
-<p>For the selected sample component O1 equals 24. In package <code>spsann</code> this number is divided by the total number of marginal strata, and multiplied by the weight. Fig <a href="cLHS.html#fig:tracecLHS">15.4</a> shows the trace of the objective function components O1 and O3, i.e. the values during the optimization. First the trace is extracted from the output of function <code>optimCLHS</code>.</p>
+<p>For the selected sample component O1 equals 24. Fig <a href="cLHS.html#fig:tracecLHS">15.4</a> shows the trace of the objective function components O1 and O3, i.e. the values during the optimization. This trace can be extracted from the output of function <code>optimCLHS</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trace &lt;-<span class="st"> </span>optimCLHS.out<span class="op">$</span>objective<span class="op">$</span>energy</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:tracecLHS"></span>
 <img src="SpatialSampling_files/figure-html/tracecLHS-1.png" alt="Trace of O1 (black) and O3 (red) during optimization of conditioned Latin hypercube sampling from Hunter Valley" width="100%" />
@@ -253,7 +257,7 @@ Figure 15.3: Sample sizes of marginal strata
 Figure 15.4: Trace of O1 (black) and O3 (red) during optimization of conditioned Latin hypercube sampling from Hunter Valley
 </p>
 </div>
-<p>The final value of O1 in the <code>data.frame</code> <code>trace</code> equals 0.12, which equals the value of O1 computed above as a sum, divided by the total number of marginal strata (100) and multiplied by the weight for O1 (0.5).</p>
+<p>Note that in package <code>spsann</code> O1 is not computed as the sum of the absolute values of the stratum sample sizes minus 1, but as the mean. The final value of O1 in the <code>data.frame</code> <code>trace</code> equals 0.12, which equals the value of O1 computed above as a sum, divided by the total number of marginal strata (100) and multiplied by the weight for O1 (0.5).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(corpopulation &lt;-<span class="st"> </span><span class="kw">cor</span>(grd[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)]))</code></pre></div>
 <pre><code>##             elevation       slope      aspect         cti        ndvi
 ## elevation  1.00000000  0.76713639  0.01000011 -0.44371020 -0.08527735
@@ -271,7 +275,65 @@ Figure 15.4: Trace of O1 (black) and O3 (red) during optimization of conditioned
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">O3 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">abs</span>(corpopulation<span class="op">-</span>corsample))</code></pre></div>
 <p>Component O3 of the minimization criterion equals 0.57.</p>
 <p>Conditioned Latin hypercube samples can also be selected with R package <code>cLHS</code> <span class="citation">(Roudier 2011)</span>.</p>
+<div id="cLHIS" class="section level2">
+<h2><span class="header-section-number">15.1</span> Conditioned Latin hypercube infill sampling</h2>
+<p>Neither <code>spsann</code>, nor <code>clhs</code> can be used for selecting a conditioned Latin hyercube sample in addition to existing data, as in spatial infill sampling (Chapter <a href="SpatialCoverage.html#SpatialCoverage">13</a>). A conditioned Latin hypercube <strong>infill</strong> sample (cLHIS) can be selected with function <code>anneal.LHS</code>, included in the R script <a href="https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/Functions4SSA.R">Functions4SSA.R</a>. To illustrate cLHIS, I selected randomly ten points from the study area Hunter Valley that served as existing data (legacy sample). Twenty new points are selected by cLHIS.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&#39;Exercises/Functions4SSA.R&#39;</span>)
+<span class="co">#In which columns of the grid are the coordinates and covariates?</span>
+col.xy &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)
+col.cov &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)
+<span class="co"># Select legacy sample</span>
+<span class="kw">set.seed</span>(<span class="dv">314</span>)
+nlegacy &lt;-<span class="st"> </span><span class="dv">10</span>
+units &lt;-<span class="st"> </span><span class="kw">sample.int</span>(<span class="kw">nrow</span>(grd),nlegacy)
+legacy &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(
+  <span class="dt">coords=</span>grd[units,col.xy])
+<span class="co">#Select initial new sample</span>
+nnew &lt;-<span class="st"> </span><span class="dv">20</span>
+units &lt;-<span class="st"> </span><span class="kw">sample.int</span>(<span class="kw">nrow</span>(grd),nnew)
+mySample &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(
+  <span class="dt">coords=</span>grd[units,col.xy])
+<span class="co">#Compute lower bounds of marginal strata</span>
+ntot &lt;-<span class="st"> </span>nlegacy<span class="op">+</span>nnew
+by=<span class="dv">1</span><span class="op">/</span>ntot
+probs&lt;-<span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>,<span class="dt">to=</span><span class="dv">1</span>,<span class="dt">by=</span>by)
+lb &lt;-<span class="st"> </span><span class="kw">apply</span>(grd[,<span class="dv">3</span><span class="op">:</span><span class="dv">7</span>],<span class="dt">MARGIN=</span><span class="dv">2</span>,<span class="dt">FUN=</span><span class="cf">function</span>(x) <span class="kw">quantile</span>(x,<span class="dt">probs=</span>probs,<span class="dt">type=</span><span class="dv">7</span>))
+lb &lt;-<span class="st"> </span>lb[<span class="op">-</span><span class="kw">length</span>(probs),]
+<span class="co">#Compute population correlation matrix of covariates</span>
+R&lt;-<span class="kw">cor</span>(grd[,col.cov])
+<span class="co">#Set weight of O1. 1-W01  is the  weight for O3</span>
+wO1&lt;-<span class="fl">0.5</span>
+<span class="co">#Start the annealing</span>
+<span class="kw">gridded</span>(grd)&lt;-<span class="er">~</span>x1<span class="op">+</span>x2
+annealingResult &lt;-<span class="st"> </span><span class="kw">anneal.cLHS</span>(
+    <span class="dt">d =</span> mySample,
+    <span class="dt">g =</span> grd,
+    <span class="dt">legacy =</span> legacy,
+    <span class="dt">lb =</span> lb,
+    <span class="dt">wO1=</span>wO1,
+    <span class="dt">R=</span>R,
+    <span class="dt">initialTemperature =</span> <span class="fl">0.01</span>,
+    <span class="dt">coolingRate =</span> <span class="fl">0.8</span>,
+    <span class="dt">maxAccepted =</span> <span class="dv">10</span><span class="op">*</span><span class="kw">length</span>(mySample),
+    <span class="dt">maxPermuted =</span> <span class="dv">10</span><span class="op">*</span><span class="kw">length</span>(mySample),
+    <span class="dt">maxNoChange=</span><span class="dv">50</span>,
+    <span class="dt">verbose =</span> <span class="st">&quot;FALSE&quot;</span>)
+mycLHISample&lt;-<span class="kw">as</span>(annealingResult<span class="op">$</span>optSample, <span class="st">&quot;data.frame&quot;</span>)</code></pre></div>
+<p>Figure <a href="cLHS.html#fig:cLHISHunterValley">15.5</a> shows the selected Latin hypercube infill sample in a map of cti, and in Figure <a href="cLHS.html#fig:cLHISHunterValleyinscatter">15.6</a> the sample is plotted in a scatter diagram of cti against ndvi. Clearly the marginal strata already covered by the legacy sample are avoided by the additional sample.</p>
+<div class="figure" style="text-align: center"><span id="fig:cLHISHunterValley"></span>
+<img src="SpatialSampling_files/figure-html/cLHISHunterValley-1.png" alt="Conditioned Latin hypercube infill sample (black dots) from study area Hunter Valley in a map of compound topographic index; legacy sample: red dots" width="70%" />
+<p class="caption">
+Figure 15.5: Conditioned Latin hypercube infill sample (black dots) from study area Hunter Valley in a map of compound topographic index; legacy sample: red dots
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:cLHISHunterValleyinscatter"></span>
+<img src="SpatialSampling_files/figure-html/cLHISHunterValleyinscatter-1.png" alt="Conditioned Latin hypercube infill sample (green dots) plotted in scatter diagram of compound topographic index against normalized difference vegetation index; legacy sample: red dots" width="70%" />
+<p class="caption">
+Figure 15.6: Conditioned Latin hypercube infill sample (green dots) plotted in scatter diagram of compound topographic index against normalized difference vegetation index; legacy sample: red dots
+</p>
+</div>
 
+</div>
 </div>
             </section>
 

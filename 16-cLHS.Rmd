@@ -8,27 +8,26 @@ Latin hypercube sampling (LHS) is used in designing (computer) experiments with 
 
 @Minasny2006 adapted LHS for observational studies; this adaptation is referred to as conditioned LHS (cLHS). For each covariate a series of intervals (marginal strata) is defined. The breaks of the marginal strata are chosen such that the numbers of grid cells in these marginal strata are equal. This can be done by using the quantiles corresponding with evenly spaced cumulative probabilities as stratum breaks. For instance, for five marginal strata we use the quantiles corresponding with the cumulative probabilities 0.2, 0.4, 0.6 and 0.8.
 
-@Minasny2006 developed a search algorithm, based on heuristic rules and an annealing schedule, to select a cLHS (see for an explanation of annealing, Chapter \@ref(MBLocations)). The objective function that is minimized is the weighted sum of three components:
+@Minasny2006 developed a search algorithm, based on heuristic rules and an annealing schedule, to select a cLHS (see for an explanation of annealing, Chapter \@ref(MBLocations)). The objective function that is minimized is the weighted sum of three components:   
 * O1: the sum over all marginal strata of the absolute difference between the marginal stratum sample size and the targeted sample size (equal to 1)   
-* O2: the sum over all classes of categorical covariates of the absolute difference between the sample proportion of a given class and the population proportion of that class
+* O2: the sum over all classes of categorical covariates of the absolute difference between the sample proportion of a given class and the population proportion of that class   
 * O3: the sum over all entries of the correlation matrix of the absolute difference of the correlation in the population and in the sample  
 
 With cLHS the marginal distributions of the covariates in the sample are close to these distributions in the population. This can be advantageous for mapping methods that do not rely on linear relations, for instance in machine learning techniques like classification and regression trees (CART), and random forests.
 
-cLH sampling is illustrated with the Hunter Valley data used before in k-means sampling (Chapter \@ref(kmeans)). To speed up the computations a subgrid is selected with a spacing of $50 \times 50$ m (the original cell size is $25 \times 25$ m).
+cLH sampling is illustrated with the Hunter Valley data used before in k-means sampling (Chapter \@ref(kmeans)). To speed up the computations a subgrid is selected with a spacing of 50 $\times$ 50 m (the original cell size is 25 $\times$ 25 m).
 
 ```{r}
 gridded(grdHunterValley) <- c("Easting","Northing")
 subgrid <- spsample(grdHunterValley,type="regular",cellsize=50,offset=c(0.5,0.5))
 subgriddata <- (subgrid %over% grdHunterValley)
-grd <- data.frame(coordinates(subgrid),subgriddata)
+grd <- data.frame(coordinates(subgrid),subgriddata[,1:5])
 grdHunterValley <- as(grdHunterValley,"data.frame")
 ```
 
 ```{r,echo=F}
 names(grd)[c(3,4,5,6,7)]<-c("elevation","slope","aspect","cti","ndvi")
 ```
-
 
 cLHS samples can be selected with function `optimCLHS` of R package `spsann` [@Alessandro2016].
 First the candidate sampling points and the covariates are specified.
@@ -52,7 +51,7 @@ schedule <- scheduleSPSANN(initial.acceptance = 0.8,initial.temperature = 0.05,
                            cellsize=50)
 ```
 
-Finally, specify the weights for $O1$ and $O3$ in the objective function, and start the simulated annealing algorithm.
+Finally, specify the weights for O1 and O3 in the objective function, and start the simulated annealing algorithm.
 
 ```{r, cache=T, message=FALSE}
 weights <- list(O1 = 0.5, O3 = 0.5)
@@ -66,7 +65,7 @@ mycLHSample <- data.frame(optimCLHS.out$points,grd[optimCLHS.out$points$id,3:7])
 
 Figure \@ref(fig:cLHSHunterValley) shows the selected sample in a map of compound topographic index, which is one of the five covariates used in sampling. 
 
-```{r cLHSHunterValley, out.width='70%',fig.asp=1, fig.cap="Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index, which is one of the five covariates used in sampling", echo=F}
+```{r cLHSHunterValley, out.width='70%',fig.asp=1, fig.cap="Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index", echo=F}
 ggplot(data=grd) +
   geom_raster(mapping = aes(x = x1/1000, y = x2/1000, fill = cti))+  
   geom_point(data = mycLHSample, mapping = aes(x = x/1000, y = y/1000), colour = "black",size=2) +
@@ -76,19 +75,13 @@ ggplot(data=grd) +
   coord_fixed()
 ```
 
-Figure \@ref(fig:cLHSHunterValleyinscatter) shows the sample plotted in a scatter diagram of cti against ndvi. The horizontal and vertical lines in this scatter diagram are at the boundaries of the marginal strata of cti and ndvi, respectively. The number of points within the horizontal and vertical bars are equal (marginal strata have equal size), which explains that the intervals are the narrowest where the density of points in the plot is highest. We can see in Figure \@ref(fig:cLHSHunterValleyinscatter), for instance, that in the first marginal stratum of cti there are two sampling locations, whereas in the 7^th^ and 8^th^ marginal ndvi strata no sampling locations are selected. 
+Figure \@ref(fig:cLHSHunterValleyinscatter) shows the sample plotted in a scatter diagram of cti against ndvi. Each black dot represents one grid cell in the population. The horizontal and vertical lines in this scatter diagram are at the boundaries of the marginal strata of cti and ndvi, respectively. The number of black dots within the horizontal and vertical bars are equal (marginal strata have equal size), which explains that the intervals are the narrowest where the density of black dots in the plot is highest. We can see in Figure \@ref(fig:cLHSHunterValleyinscatter), for instance, that in the first marginal stratum of cti there are two sampling locations, whereas in the 7^th^ and 8^th^ marginal ndvi strata no sampling locations are selected. 
 
 ```{r cLHSHunterValleyinscatter,  out.width='70%',fig.asp=1, fig.cap="Conditioned Latin hypercube sample plotted in scatter diagram of compound topographic index against normalized difference vegetation index", echo=F}
 by=1/samplesize
 probs<-seq(from=0,to=1,by=by)
-last<-length(probs)
-p <- 5
-lb<-matrix(nrow=length(probs)-1,ncol=p)
-for (i in 1:p) {
-  q<-quantile(grd[,i+2],probs=probs,type=7)
-  lb[,i]<-q[-last]
-}
-
+lb <- apply(grd[,3:7],MARGIN=2,FUN=function(x) quantile(x,probs=probs,type=7))
+lb <- lb[-length(probs),]
 ggplot(data=grd) +
   geom_point(mapping = aes(x = ndvi, y = cti), colour = "black", size=1, alpha=0.5) +
   geom_point(data=mycLHSample, mapping = aes(x = ndvi, y = cti), colour = "red", size=2) +
@@ -101,6 +94,7 @@ ggplot(data=grd) +
 Figure \@ref(fig:MarginalStratumSampleSizes) shows the sample sizes for all 100 marginal strata. Ideally, all marginal strata contain one sampling unit.
 
 ```{r MarginalStratumSampleSizes, out.width='100%',fig.asp=0.4, fig.cap="Sample sizes of marginal strata", echo=F}
+p <- ncol(grd)-2
 stratum<-matrix(nrow=nrow(mycLHSample),ncol=p)
 for ( i in 1:p) {
   stratum[,i]<-findInterval(mycLHSample[,i+3],lb[,i])
@@ -124,13 +118,13 @@ ggplot(countslf) +
   scale_y_continuous(name = "Sample size",breaks=c(0,1,2,3))
 ```
 
-For all marginal strata with one sampling location the contribution to component O1 of the criterion is zero. For strata with zero or two sampling locations, the contribution is one. There is one marginal stratum, the 18^th^ marginal stratum of aspect, that has three sampling locations, so that the contribution of this stratum to O1 equals 2.
+For all marginal strata with one sampling location the contribution to component O1 of the criterion is zero. For strata with zero or two sampling locations, the contribution is one. There is one marginal stratum, the 18^th^ marginal stratum of aspect, that has three sampling locations, so the contribution of this stratum to O1 equals 2.
 
 ```{r}
 O1 <- sum(abs(counts-1))
 ```
 
-For the selected sample component O1 equals `r O1`. In package `spsann` this number is divided by the total number of marginal strata, and multiplied by the weight. Fig \@ref(fig:tracecLHS) shows the trace of the objective function components O1 and O3, i.e. the values during the optimization. First the trace is extracted from the output of function `optimCLHS`.
+For the selected sample component O1 equals `r O1`. Fig \@ref(fig:tracecLHS) shows the trace of the objective function components O1 and O3, i.e. the values during the optimization. This trace can be extracted from the output of function `optimCLHS`:
 
 ```{r}
 trace <- optimCLHS.out$objective$energy
@@ -138,13 +132,13 @@ trace <- optimCLHS.out$objective$energy
 
 ```{r tracecLHS, out.width='100%',fig.asp=0.4, fig.cap="Trace of O1 (black) and O3 (red) during optimization of conditioned Latin hypercube sampling from Hunter Valley", echo=F}
 ggplot(trace) +
-  geom_line(mapping = aes(x=1:nrow(optimCLHS.out$objective$energy),y = O1), colour = "black",size=1) +
-  geom_line(mapping = aes(x=1:nrow(optimCLHS.out$objective$energy),y = O3), colour = "red",size=1) +
+  geom_line(mapping = aes(x=1:nrow(optimCLHS.out$objective$energy),y = O1), colour = "black",size=0.8) +
+  geom_line(mapping = aes(x=1:nrow(optimCLHS.out$objective$energy),y = O3), colour = "red",size=0.8) +
   scale_x_continuous(name = "Chain") +
   scale_y_continuous(name = "Component")
 ```
 
-The final value of O1 in the `data.frame` `trace` equals `r trace$O1[nrow(trace)]`, which equals the value of O1 computed above as a sum, divided by the total number of marginal strata (100) and multiplied by the weight for O1 (0.5).
+Note that in package `spsann` O1 is not computed as the sum of the absolute values of the stratum sample sizes minus 1, but as the mean. The final value of O1 in the `data.frame` `trace` equals `r trace$O1[nrow(trace)]`, which equals the value of O1 computed above as a sum, divided by the total number of marginal strata (100) and multiplied by the weight for O1 (0.5).
 
 ```{r}
 (corpopulation <- cor(grd[,c(3,4,5,6,7)]))
@@ -155,4 +149,84 @@ O3 <- sum(abs(corpopulation-corsample))
 
 Component O3 of the minimization criterion equals `r round(O3,3)`.
 
-Conditioned Latin hypercube samples can also be selected with R package `cLHS` [@roudier2011].
+Conditioned Latin hypercube samples can also be selected with R package `cLHS` [@roudier2011]. 
+
+## Conditioned Latin hypercube infill sampling {#cLHIS}
+
+Neither `spsann`, nor `clhs` can be used for selecting a conditioned Latin hyercube sample in addition to existing data, as in spatial infill sampling (Chapter \@ref(SpatialCoverage)). A conditioned Latin hypercube **infill** sample (cLHIS) can be selected with function `anneal.LHS`, included in the R script [Functions4SSA.R](https://github.com/DickBrus/SpatialSamplingwithR/blob/master/Exercises/Functions4SSA.R). To illustrate cLHIS, I selected randomly ten points from the study area Hunter Valley that served as existing data (legacy sample). Twenty new points are selected by cLHIS.
+
+```{r, cache=T}
+source('Exercises/Functions4SSA.R')
+#In which columns of the grid are the coordinates and covariates?
+col.xy <- c(1,2)
+col.cov <- c(3,4,5,6,7)
+# Select legacy sample
+set.seed(314)
+nlegacy <- 10
+units <- sample.int(nrow(grd),nlegacy)
+legacy <- SpatialPoints(
+  coords=grd[units,col.xy])
+#Select initial new sample
+nnew <- 20
+units <- sample.int(nrow(grd),nnew)
+mySample <- SpatialPoints(
+  coords=grd[units,col.xy])
+#Compute lower bounds of marginal strata
+ntot <- nlegacy+nnew
+by=1/ntot
+probs<-seq(from=0,to=1,by=by)
+lb <- apply(grd[,3:7],MARGIN=2,FUN=function(x) quantile(x,probs=probs,type=7))
+lb <- lb[-length(probs),]
+#Compute population correlation matrix of covariates
+R<-cor(grd[,col.cov])
+#Set weight of O1. 1-W01  is the  weight for O3
+wO1<-0.5
+#Start the annealing
+gridded(grd)<-~x1+x2
+annealingResult <- anneal.cLHS(
+    d = mySample,
+    g = grd,
+    legacy = legacy,
+    lb = lb,
+    wO1=wO1,
+    R=R,
+    initialTemperature = 0.01,
+    coolingRate = 0.8,
+    maxAccepted = 10*length(mySample),
+    maxPermuted = 10*length(mySample),
+    maxNoChange=50,
+    verbose = "FALSE")
+mycLHISample<-as(annealingResult$optSample, "data.frame")
+```
+
+Figure \@ref(fig:cLHISHunterValley) shows the selected Latin hypercube infill sample in a map of cti, and in Figure \@ref(fig:cLHISHunterValleyinscatter) the sample is plotted in a scatter diagram of cti against ndvi. Clearly the marginal strata already covered by the legacy sample are avoided by the additional sample.
+
+```{r cLHISHunterValley, out.width='70%',fig.asp=1, fig.cap="Conditioned Latin hypercube infill sample (black dots) from study area Hunter Valley in a map of compound topographic index; legacy sample: red dots", echo=F}
+legacy <- as(legacy,"data.frame")
+ggplot(data=as(grd,"data.frame")) +
+  geom_raster(mapping = aes(x = x1/1000, y = x2/1000, fill = cti))+  
+  geom_point(data = mycLHISample, mapping = aes(x = x1/1000, y = x2/1000), colour = "black",size=2) +
+  geom_point(data = legacy, mapping = aes(x = x1/1000, y = x2/1000), colour = "red",size=2) +
+  scale_x_continuous(name = "Easting (km)") +
+  scale_y_continuous(name = "Northing (km)") +    
+  scale_fill_gradientn(name="cti",colours=rev(terrain.colors(10))) +
+#  scale_fill_gradient(name="cti",low = "darkblue", high = "red")+
+  coord_fixed()
+```
+
+```{r cLHISHunterValleyinscatter, out.width='70%',fig.asp=1, fig.cap="Conditioned Latin hypercube infill sample (green dots) plotted in scatter diagram of compound topographic index against normalized difference vegetation index; legacy sample: red dots", echo=F}
+coordinates(mycLHISample)<-~x1+x2
+mycLHISample <- over(mycLHISample,grd)                
+coordinates(legacy)<-~x1+x2
+legacy <- over(legacy,grd)                
+grd <- as(grd,"data.frame")
+ggplot(data=grd) +
+  geom_point(mapping = aes(x = ndvi, y = cti), colour = "black",size=1,alpha=0.5) +
+  geom_point(data=as.data.frame(mycLHISample), mapping = aes(x = ndvi, y = cti), colour = "green",size=2) +
+  geom_point(data=as.data.frame(legacy), mapping = aes(x = ndvi, y = cti), colour = "red",size=2) +
+  geom_vline(xintercept=lb[-1,5],colour="grey")+
+  geom_hline(yintercept=lb[-1,4],colour="grey")+
+  scale_x_continuous(name = "ndvi") +
+  scale_y_continuous(name = "cti")
+```
+
