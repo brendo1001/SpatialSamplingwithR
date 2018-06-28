@@ -164,13 +164,11 @@ col.cov <- c(3,4,5,6,7)
 set.seed(314)
 nlegacy <- 10
 units <- sample.int(nrow(grd),nlegacy)
-legacy <- SpatialPoints(
-  coords=grd[units,col.xy])
+legacy <- SpatialPoints(coords=grd[units,col.xy])
 #Select initial new sample
 nnew <- 20
 units <- sample.int(nrow(grd),nnew)
-mySample <- SpatialPoints(
-  coords=grd[units,col.xy])
+mySample <- SpatialPoints(coords=grd[units,col.xy])
 #Compute lower bounds of marginal strata
 ntot <- nlegacy+nnew
 by=1/ntot
@@ -191,10 +189,10 @@ annealingResult <- anneal.cLHS(
     wO1=wO1,
     R=R,
     initialTemperature = 0.01,
-    coolingRate = 0.8,
+    coolingRate = 0.9,
     maxAccepted = 10*length(mySample),
     maxPermuted = 10*length(mySample),
-    maxNoChange=50,
+    maxNoChange=20,
     verbose = "FALSE")
 mycLHISample<-as(annealingResult$optSample, "data.frame")
 ```
