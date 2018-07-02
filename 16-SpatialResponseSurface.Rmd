@@ -1,0 +1,150 @@
+# Spatial response surface sampling {#SpatialResponseSurface}
+
+Similar to conditioned Latin hypercube sampling, spatial response surface sampling is an experimental design adapted for spatial surveys. Experimental response surface designs aim at finding an optimum of the response within specified ranges of the factors. There are many types of response surface designs, see @myers2002. A commonly used response surface design is the central composite design; the data of this design are used to fit a curved, quadratic surface (multiple linear regression model with quadratic terms).
+
+@lesch95 adapted the response surface methodology so that it can be applied in observational studies. Several problems needed to be tackled. First, when multiple covariates are used, the covariates must be decorrelated. Second, when sampling locations are spatially clustered, the assumption in linear regression modelling of spatially uncorrelated model residuals can be violated. To tackle these two problems \citet{lesch95} proposed the following procedure (see also @lesch2005):   
+1. Transform covariate matrix into a scaled, centered, de-correlated matrix by principal components analysis (PCA)   
+2. Choose response surface design type   
+3. Select candidate sampling locations based on the distance from the design-points in PC-space. Select multiple locations per design-point   
+4. Select combination of candidate sampling locations with the highest value for criterion that quantifies how uniform the sample is spread across the study area   
+
+The response surface sampling approach is an example of a model-based sampling design. From that viewpoint I should have described this sampling design hereafter in the part of the book on model-based sampling. With response surface sampling one assumes that some type of low order (linear or quadratic) regression model can be used to accurately approximate the relationship between the study variable and the covariates. Sampling locations are then selected to implicitly optimize the estimation of this model. However, this optimization is done under one or more spatial constraints. Unconstrained optimization of the sampling design under the linear regression model will not prevent the locations from spatial clustering, see Figure \@ref(fig:foursamples)(b). The assumption of independent data might be violated when the sampling locations are spatially clustered.  For that reason the response surface sampling design selects samples with good spatial coverage, so that the design becomes robust against violation of the independence assumption.
+
+This design has been applied, amongst others, for mapping soil salinity (ECe), using electromagnetic induction (EM) measurements and surface array conductivity measurements as predictors in multiple linear regression models. For applications, see @corwin2005, @lesch2005, @fitzgerald2006, @Corwin2010 and @Fitzgerald2010.
+
+This sampling design is illustrated with the Cotton Research Field in Uzbekistan. ECa was measured with the EM device in vertical dipole mode with transmitters at 1 m and 50 cm from the receiver. The measurements are one on transects covering the Cotton Research Field (Figure \@ref(fig:EMdataUzbekistan). The natural logs of the EM measurements are first interpolated to a 25 $times$ 25 m. grid by ordinary kriging. These interpolated EM data are then used as covariates in response surface sampling (Figure \@ref(fig:EMdataUzbekistan). The two covariates are strongly correlated, $r=0.73$.
+
+```{r EMdataUzbekistan, out.width='50%', fig.asp=.6, fig.show='hold', fig.cap="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates", echo=F,message=F}
+dat <- read.csv(file="UzbekistanEMv1m05m.csv")
+dat$lnEMv1m <- log(dat$EMv1mt)
+dat$lnEMv05m <- log(dat$EMv05mt)
+dat <- na.omit(dat)
+coordinates(dat) <- ~ x * y
+proj4string(dat) <- CRS("+proj=longlat +datum=WGS84") #=  +init=epsg:4326
+dat <- spTransform(dat, CRS = CRS("+proj=tmerc +lat_0=0.000000000 +lon_0=63.000000000 +k=1.000000 +x_0=500000.000 +y_0=0.000 +ellps=krass +units=m"))
+dat <- as(dat,"data.frame")
+
+ggplot(dat)+
+  geom_point(mapping=aes(x=x/1000,y=y/1000,colour=lnEMv1m),size=0.5)+
+  ggtitle("1 m.")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_colour_gradient("ln(EM)",low = "darkblue", high = "red",limits=c(2.4,5.4))+
+  scale_x_continuous(name="Easting (km)",limits=c(305.5,308))+
+  scale_y_continuous(name="Northing (km)")
+
+ggplot(dat)+
+  geom_point(mapping=aes(x=x/1000,y=y/1000,colour=lnEMv05m),size=0.5)+
+  ggtitle("0.5 m.")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_colour_gradient(name="ln(EM)",low = "darkblue", high = "red",limits=c(4.2,5.8))+
+  scale_x_continuous(name="Easting (km)",limits=c(305.5,308))+
+  scale_y_continuous(name="Northing (km)")
+
+#read shape file with with polygon of study area
+shpCRF <- readOGR(dsn = ".", layer = "CottonResearchField")
+prj <- proj4string(shpCRF)
+shpCRF <- spTransform(shpCRF, CRS = CRS("+proj=tmerc +lat_0=0.000000000 +lon_0=63.000000000 +k=1.000000 +x_0=500000.000 +y_0=0.000 +ellps=krass +units=m"))
+
+#make grid with prediction nodes
+myGrid <- spsample(x = shpCRF, type = "regular", offset = c(0.5, 0.5), cellsize=25)
+gridded(myGrid) <- TRUE
+
+#change class of dat to SpatialPointsDataFrame of package sp
+coordinates(dat)<-c("x","y")
+
+#estimate experimental variogram
+variogram1m <- variogram(lnEMv1m ~ 1,data=dat)
+variogram05m <- variogram(lnEMv05m ~ 1,data=dat)
+
+#fit variogram model
+vgm1m <- vgm(psill = 0.15, model = "Exp", range = 200, nugget = 0.05)
+vgm05m <- vgm(psill = 0.02, model = "Exp", range = 200, nugget = 0.01)
+
+variogramModel1m <- fit.variogram(variogram1m, model = vgm1m, fit.sills = TRUE, fit.ranges=TRUE)
+variogramModel05m <- fit.variogram(variogram05m, model = vgm05m, fit.sills = TRUE, fit.ranges=TRUE)
+
+#subsample EM data, too many for prediction
+dat <- dat[seq(from = 1, to = nrow(dat), by = 10), ]
+
+proj4string(myGrid) <- NA_character_
+#ordinary kriging
+EMpred  <- krige(
+    lnEMv1m ~ 1,
+    dat,
+    newdata = myGrid,
+    model = variogramModel1m,
+    nmax = 20
+    )
+gridded(EMpred)<-F
+grd <- as(EMpred,"data.frame")
+grd<-grd[,-4]
+names(grd)[3]<-"lnEM1m"
+
+EMpred  <- krige(
+  lnEMv05m ~ 1,
+  dat,
+  newdata = myGrid,
+  model = variogramModel05m,
+  nmax = 20
+)
+gridded(EMpred)<-F
+df <- as(EMpred,"data.frame")
+grd$lnEM05m<-df[,3]
+
+ggplot(grd)+
+  geom_raster(aes(x=x1/1000,y=x2/1000,fill=lnEM1m))+
+  ggtitle("1 m.")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_fill_gradient(low = "darkblue", high = "red",name="ln(EM)",limits=c(2.4,5.4))+
+  scale_x_continuous(name="Easting (km)",limits=c(305.5,308))+
+  scale_y_continuous(name="Northing (km)")
+
+ggplot(grd)+
+  geom_raster(aes(x=x1/1000,y=x2/1000,fill=lnEM05m))+
+  ggtitle("0.5 m.")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_fill_gradient(low = "darkblue", high = "red",name="ln(EM)",limits=c(4.2,5.8))+
+  scale_x_continuous(name="Easting (km)",limits=c(305.5,308))+
+  scale_y_continuous(name="Northing (km)")
+```
+
+I used the software [ESAP](https://www.ars.usda.gov/pacific-west-area/riverside-ca/us-salinity-laboratory/docs/esap-model/) to select a response surface sample. For a manual of ESAP, see @Lesch2000ESAPManual. In ESAP, either one or two variables can be chosen as covariates, and the possible sample sizes are 6, 12 or 20 points. Covariate data are centered, scaled, and in case of two covariates, decorrelated using PCA. Outliers are detected, which can be either deleted or masked. During the optimization a criterion is printed to the sceeen measuring how uniform the sample is distributed throughout the study area. Ideally, for the final sample this number should be 1.30 or less. For non-rectangular areas this threshold value must be multiplied by 1/$p$, with $p$ the proportion of the area of the rectangular bounding box covered by the study area. Figure \@ref(fig:ResponSurfaceSampleUzbekistan) shows a response surface sample of 12 points, plotted on one of the two covariates used in sampling. The uniformity criterion of this sample equals 1.92. The proportion $p$ equals about 0.49, leading to a threshold value of 2.65, so that we can conclude from this that the uniformity is excellent.  
+
+```{r ResponSurfaceSampleUzbekistan, out.width='100%', fig.asp=.6, fig.cap="Response surface sample from the cotton research field in Uzbekistan, using interpolated measurements of EM (transmitters at 1 and 0.5 m) as covariates", echo=F, cache=T}
+
+myRSSample <- read.csv(file="ESAPSample_Uzbekistan.txt",header=F,sep="")
+names(myRSSample) <- c("id","dlevel1","dlevel2","ds1_std","ds2_std","x","y")
+
+ggplot(grd)+
+  geom_raster(aes(x=x1/1000,y=x2/1000,fill=lnEM1m))+
+  geom_point(data=myRSSample,mapping=aes(x=x/1000,y=y/1000),size=2)+
+  ggtitle("1 m.")+
+  theme(plot.title = element_text(size=16, hjust=0.5))+
+  scale_fill_gradient(low = "darkblue", high = "red",name="ln(EM)",limits=c(2.4,5.4))+
+  scale_x_continuous(name="Easting (km)")+
+  scale_y_continuous(name="Northing (km)")
+```
+
+Figure \@ref(fig:RSSDesignPoints) shows the principal component scores of the selected response surface sample, together with the design points. Especially for the three design points with PC2-scores 1.75 and 2.5, the selected sampling units are at quite a distance from the associated design points. This is simply because in the population no units are available close to these design points. 
+
+```{r RSSDesignPoints, out.width='50%', fig.asp=1, fig.cap="Design points (dots) and principal component scores of selected response surface sample (triangles)",echo=F}
+ggplot(myRSSample)+
+ geom_point(aes(x=dlevel1,y=dlevel2),size=3)+
+ geom_point(aes(x=ds1_std,y=ds2_std),shape=2,size=3)+
+ scale_x_continuous(name="PC1")+
+ scale_y_continuous(name="PC2")+
+ coord_equal()
+```
+
+In Figure \@ref(fig:RSSinscatter) the selected sample is plotted in the scatter diagram of the covariates.
+
+```{r RSSinscatter, out.width='80%', fig.asp=.6, fig.cap="Response surface sample plotted in scatter diagrom of covariates",echo=F}
+res <- grd[myRSSample$id,]
+ggplot(data=grd) +
+  geom_point(mapping = aes(x = lnEM1m, y = lnEM05m), colour = "black",size=1,alpha=0.1) +
+  geom_point(data=res, mapping = aes(x = lnEM1m, y = lnEM05m), shape=2,colour="red",size=2) +
+  scale_x_continuous(name = "ln(EM)  1m") +
+  scale_y_continuous(name = "ln(EM)  0.5m") +
+  coord_equal()
+```
+

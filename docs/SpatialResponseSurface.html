@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial sampling with R</title>
+  <meta name="description" content="Spatial sampling with R">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial sampling with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial sampling with R" />
+  
+  
+  
+
+<meta name="author" content="Dick J. Brus">
+
+
+<meta name="date" content="2018-07-02">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="cLHS.html">
+<link rel="next" href="references.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Foreword</a></li>
+<li class="chapter" data-level="1" data-path="GeneralIntro.html"><a href="GeneralIntro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>2.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="2.2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.2</b> Simulated population</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator-1"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
+<li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
+<li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="STSI.html"><a href="STSI.html"><i class="fa fa-check"></i><b>4</b> Stratified random sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="STSI.html"><a href="STSI.html#estimation-of-the-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>4.1</b> Estimation of the mean and its sampling variance</a></li>
+<li class="chapter" data-level="4.2" data-path="STSI.html"><a href="STSI.html#confidence-interval-estimate"><i class="fa fa-check"></i><b>4.2</b> Confidence interval estimate</a></li>
+<li class="chapter" data-level="4.3" data-path="STSI.html"><a href="STSI.html#cumrootf"><i class="fa fa-check"></i><b>4.3</b> Optimal stratification</a></li>
+<li class="chapter" data-level="4.4" data-path="STSI.html"><a href="STSI.html#geographical-stratification"><i class="fa fa-check"></i><b>4.4</b> Geographical stratification</a></li>
+<li class="chapter" data-level="4.5" data-path="STSI.html"><a href="STSI.html#STSIallocation"><i class="fa fa-check"></i><b>4.5</b> Allocation of sample size to strata</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="SY.html"><a href="SY.html"><i class="fa fa-check"></i><b>5</b> Systematic random sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="SY.html"><a href="SY.html#EstVarSY"><i class="fa fa-check"></i><b>5.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="pps.html"><a href="pps.html"><i class="fa fa-check"></i><b>6</b> Sampling with probabilities proportional to size</a><ul>
+<li class="chapter" data-level="6.1" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-with-replacement-ppswr"><i class="fa fa-check"></i><b>6.1</b> Probability-proportional-to-size sampling with replacement (ppswr)</a></li>
+<li class="chapter" data-level="6.2" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-without-replacement-ppswor"><i class="fa fa-check"></i><b>6.2</b> Probability-proportional-to-size sampling without replacement (ppswor)</a></li>
+<li class="chapter" data-level="6.3" data-path="pps.html"><a href="pps.html#spatial-version-of-ppswor"><i class="fa fa-check"></i><b>6.3</b> Spatial version of ppswor</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a><ul>
+<li class="chapter" data-level="" data-path="Twostage.html"><a href="Twostage.html#questions-9"><i class="fa fa-check"></i>Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>8.2</b> Stratified two-stage random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
+<li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.1.1</b> Regression estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator"><i class="fa fa-check"></i><b>9.2</b> Ratio estimator</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.2.1</b> Ratio estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-with-unknown-mean-of-covariate"><i class="fa fa-check"></i><b>9.3</b> Regression estimator with unknown mean of covariate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="Balanced.html"><a href="Balanced.html"><i class="fa fa-check"></i><b>10</b> Balanced sampling</a><ul>
+<li class="chapter" data-level="10.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sample-versus-balanced-sampling-design"><i class="fa fa-check"></i><b>10.1</b> Balanced sample versus balanced sampling design</a></li>
+<li class="chapter" data-level="10.2" data-path="Balanced.html"><a href="Balanced.html#unequal-inclusion-probabilities"><i class="fa fa-check"></i><b>10.2</b> Unequal inclusion probabilities</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a><ul>
+<li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
+<li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#SpatialInfill"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="kmeans.html"><a href="kmeans.html"><i class="fa fa-check"></i><b>14</b> K-means sampling</a><ul>
+<li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
+<li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="cLHS.html"><a href="cLHS.html"><i class="fa fa-check"></i><b>15</b> Conditioned Latin hypercube sampling</a><ul>
+<li class="chapter" data-level="15.1" data-path="cLHS.html"><a href="cLHS.html#cLHIS"><i class="fa fa-check"></i><b>15.1</b> Conditioned Latin hypercube infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="SpatialResponseSurface.html"><a href="SpatialResponseSurface.html"><i class="fa fa-check"></i><b>16</b> Spatial response surface sampling</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial sampling with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="SpatialResponseSurface" class="section level1">
+<h1><span class="header-section-number">Chapter 16</span> Spatial response surface sampling</h1>
+<p>Similar to conditioned Latin hypercube sampling, spatial response surface sampling is an experimental design adapted for spatial surveys. Experimental response surface designs aim at finding an optimum of the response within specified ranges of the factors. There are many types of response surface designs, see <span class="citation">Myers, Montgomery, and Anderson-Cook (2002)</span>. A commonly used response surface design is the central composite design; the data of this design are used to fit a curved, quadratic surface (multiple linear regression model with quadratic terms).</p>
+<p><span class="citation">Lesch, Strauss, and Rhoades (1995)</span> adapted the response surface methodology so that it can be applied in observational studies. Several problems needed to be tackled. First, when multiple covariates are used, the covariates must be decorrelated. Second, when sampling locations are spatially clustered, the assumption in linear regression modelling of spatially uncorrelated model residuals can be violated. To tackle these two problems  proposed the following procedure (see also <span class="citation">Lesch (2005)</span>):<br />
+1. Transform covariate matrix into a scaled, centered, de-correlated matrix by principal components analysis (PCA)<br />
+2. Choose response surface design type<br />
+3. Select candidate sampling locations based on the distance from the design-points in PC-space. Select multiple locations per design-point<br />
+4. Select combination of candidate sampling locations with the highest value for criterion that quantifies how uniform the sample is spread across the study area</p>
+<p>The response surface sampling approach is an example of a model-based sampling design. From that viewpoint I should have described this sampling design hereafter in the part of the book on model-based sampling. With response surface sampling one assumes that some type of low order (linear or quadratic) regression model can be used to accurately approximate the relationship between the study variable and the covariates. Sampling locations are then selected to implicitly optimize the estimation of this model. However, this optimization is done under one or more spatial constraints. Unconstrained optimization of the sampling design under the linear regression model will not prevent the locations from spatial clustering, see Figure <a href="IntroSamplingforMapping.html#fig:foursamples">11.1</a>(b). The assumption of independent data might be violated when the sampling locations are spatially clustered. For that reason the response surface sampling design selects samples with good spatial coverage, so that the design becomes robust against violation of the independence assumption.</p>
+<p>This design has been applied, amongst others, for mapping soil salinity (ECe), using electromagnetic induction (EM) measurements and surface array conductivity measurements as predictors in multiple linear regression models. For applications, see <span class="citation">Corwin and Lesch (2005)</span>, <span class="citation">Lesch (2005)</span>, <span class="citation">Fitzgerald et al. (2006)</span>, <span class="citation">Corwin et al. (2010)</span> and <span class="citation">Fitzgerald (2010)</span>.</p>
+<p>This sampling design is illustrated with the Cotton Research Field in Uzbekistan. ECa was measured with the EM device in vertical dipole mode with transmitters at 1 m and 50 cm from the receiver. The measurements are one on transects covering the Cotton Research Field (Figure <a href="SpatialResponseSurface.html#fig:EMdataUzbekistan">16.1</a>. The natural logs of the EM measurements are first interpolated to a 25 <span class="math inline">\(times\)</span> 25 m. grid by ordinary kriging. These interpolated EM data are then used as covariates in response surface sampling (Figure <a href="SpatialResponseSurface.html#fig:EMdataUzbekistan">16.1</a>. The two covariates are strongly correlated, <span class="math inline">\(r=0.73\)</span>.</p>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;.&quot;, layer: &quot;CottonResearchField&quot;
+## with 1 features
+## It has 4 fields</code></pre>
+<pre><code>## [using ordinary kriging]</code></pre>
+<pre><code>## [using ordinary kriging]</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:EMdataUzbekistan"></span>
+<img src="SpatialSampling_files/figure-html/EMdataUzbekistan-1.png" alt="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates" width="50%" /><img src="SpatialSampling_files/figure-html/EMdataUzbekistan-2.png" alt="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates" width="50%" /><img src="SpatialSampling_files/figure-html/EMdataUzbekistan-3.png" alt="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates" width="50%" /><img src="SpatialSampling_files/figure-html/EMdataUzbekistan-4.png" alt="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates" width="50%" />
+<p class="caption">
+Figure 16.1: Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates
+</p>
+</div>
+<p>I used the software <a href="https://www.ars.usda.gov/pacific-west-area/riverside-ca/us-salinity-laboratory/docs/esap-model/">ESAP</a> to select a response surface sample. For a manual of ESAP, see <span class="citation">Lesch, Rhoades, and Corwin (2000)</span>. In ESAP, either one or two variables can be chosen as covariates, and the possible sample sizes are 6, 12 or 20 points. Covariate data are centered, scaled, and in case of two covariates, decorrelated using PCA. Outliers are detected, which can be either deleted or masked. During the optimization a criterion is printed to the sceeen measuring how uniform the sample is distributed throughout the study area. Ideally, for the final sample this number should be 1.30 or less. For non-rectangular areas this threshold value must be multiplied by 1/<span class="math inline">\(p\)</span>, with <span class="math inline">\(p\)</span> the proportion of the area of the rectangular bounding box covered by the study area. Figure <a href="SpatialResponseSurface.html#fig:ResponSurfaceSampleUzbekistan">16.2</a> shows a response surface sample of 12 points, plotted on one of the two covariates used in sampling. The uniformity criterion of this sample equals 1.92. The proportion <span class="math inline">\(p\)</span> equals about 0.49, leading to a threshold value of 2.65, so that we can conclude from this that the uniformity is excellent.</p>
+<div class="figure" style="text-align: center"><span id="fig:ResponSurfaceSampleUzbekistan"></span>
+<img src="SpatialSampling_files/figure-html/ResponSurfaceSampleUzbekistan-1.png" alt="Response surface sample from the cotton research field in Uzbekistan, using interpolated measurements of EM (transmitters at 1 and 0.5 m) as covariates" width="100%" />
+<p class="caption">
+Figure 16.2: Response surface sample from the cotton research field in Uzbekistan, using interpolated measurements of EM (transmitters at 1 and 0.5 m) as covariates
+</p>
+</div>
+<p>Figure <a href="SpatialResponseSurface.html#fig:RSSDesignPoints">16.3</a> shows the principal component scores of the selected response surface sample, together with the design points. Especially for the three design points with PC2-scores 1.75 and 2.5, the selected sampling units are at quite a distance from the associated design points. This is simply because in the population no units are available close to these design points.</p>
+<div class="figure" style="text-align: center"><span id="fig:RSSDesignPoints"></span>
+<img src="SpatialSampling_files/figure-html/RSSDesignPoints-1.png" alt="Design points (dots) and principal component scores of selected response surface sample (triangles)" width="50%" />
+<p class="caption">
+Figure 16.3: Design points (dots) and principal component scores of selected response surface sample (triangles)
+</p>
+</div>
+<p>In Figure <a href="SpatialResponseSurface.html#fig:RSSinscatter">16.4</a> the selected sample is plotted in the scatter diagram of the covariates.</p>
+<div class="figure" style="text-align: center"><span id="fig:RSSinscatter"></span>
+<img src="SpatialSampling_files/figure-html/RSSinscatter-1.png" alt="Response surface sample plotted in scatter diagrom of covariates" width="80%" />
+<p class="caption">
+Figure 16.4: Response surface sample plotted in scatter diagrom of covariates
+</p>
+</div>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="cLHS.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/16-SpatialResponseSurface.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

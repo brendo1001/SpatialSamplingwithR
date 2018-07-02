@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-06-28">
+<meta name="date" content="2018-07-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="kmeans.html">
-<link rel="next" href="references.html">
+<link rel="next" href="SpatialResponseSurface.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -167,6 +167,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="15" data-path="cLHS.html"><a href="cLHS.html"><i class="fa fa-check"></i><b>15</b> Conditioned Latin hypercube sampling</a><ul>
 <li class="chapter" data-level="15.1" data-path="cLHS.html"><a href="cLHS.html#cLHIS"><i class="fa fa-check"></i><b>15.1</b> Conditioned Latin hypercube infill sampling</a></li>
 </ul></li>
+<li class="chapter" data-level="16" data-path="SpatialResponseSurface.html"><a href="SpatialResponseSurface.html"><i class="fa fa-check"></i><b>16</b> Spatial response surface sampling</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -187,7 +188,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="cLHS" class="section level1">
 <h1><span class="header-section-number">Chapter 15</span> Conditioned Latin hypercube sampling</h1>
-<p>This chapter describes an experimental design that has been adapted for spatial surveys. An adaptation is necessary because in contrast to experiments in observational studies one is not free to choose combinations of levels of different factors. When two covariates are strongly correlated it may happen that there are no locations with a relatively large value for one covariate and a relatively small value for the other covariate. In experimental research it is possible to select combinations of levels of factors so that the factors are independent.</p>
+<p>This chapter and the next chapter on respoinse surface sampling are about experimental designs that are adapted for spatial surveys. An adaptation is necessary because in contrast to experiments in observational studies one is not free to choose combinations of levels of different factors. When two covariates are strongly correlated it may happen that there are no locations with a relatively large value for one covariate and a relatively small value for the other covariate. In experimental research it is possible to select combinations of levels of factors so that the factors are independent.</p>
 <p>In a full factorial design all combinations of factor levels are observed. With <span class="math inline">\(k\)</span> factors and <span class="math inline">\(l\)</span> levels per factor the total number of observations is <span class="math inline">\(l^k\)</span> . With numerous factors and/or numerous levels per factor this becomes unfeasible in practice. Alternative experimental designs have been developed that need less observations but still provide detailed information about how the variable of interest responds to changes in the factor levels. In this chapter I describe and illustrate the survey sampling analogue of Latin hypercube sampling. Response surface sampling will follow in a next chapter.</p>
 <p>Latin hypercube sampling (LHS) is used in designing (computer) experiments with numerous covariates and/or factors of which we want to study the effect on the output <span class="citation">(McKay, Beckman, and Conover {1979})</span>. Suppose we have only two covariates, e.g. application rates for N and P in agricultural experiment, and 4 levels for each covariate. It is evident that the best option is to have multiple plots for all <span class="math inline">\(4 \times 4\)</span> combinations. This is referred to as a full factorial design. With numerous covariates and/or levels per covariate, this becomes unfeasible. A much cheaper alternative then is an experiment with, for all covariates, exactly one observation per level. So in the agricultural experiment this would entail four observations, distributed in a square in such way that we have in all rows and in all columns one observation. This is referred to as a Latin square. The generalisation of a Latin square to a higher number of dimensions is a Latin hypercube.</p>
 <p><span class="citation">Minasny and McBratney (2006)</span> adapted LHS for observational studies; this adaptation is referred to as conditioned LHS (cLHS). For each covariate a series of intervals (marginal strata) is defined. The breaks of the marginal strata are chosen such that the numbers of grid cells in these marginal strata are equal. This can be done by using the quantiles corresponding with evenly spaced cumulative probabilities as stratum breaks. For instance, for five marginal strata we use the quantiles corresponding with the cumulative probabilities 0.2, 0.4, 0.6 and 0.8.</p>
@@ -286,13 +287,11 @@ col.cov &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv"
 <span class="kw">set.seed</span>(<span class="dv">314</span>)
 nlegacy &lt;-<span class="st"> </span><span class="dv">10</span>
 units &lt;-<span class="st"> </span><span class="kw">sample.int</span>(<span class="kw">nrow</span>(grd),nlegacy)
-legacy &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(
-  <span class="dt">coords=</span>grd[units,col.xy])
+legacy &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords=</span>grd[units,col.xy])
 <span class="co">#Select initial new sample</span>
 nnew &lt;-<span class="st"> </span><span class="dv">20</span>
 units &lt;-<span class="st"> </span><span class="kw">sample.int</span>(<span class="kw">nrow</span>(grd),nnew)
-mySample &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(
-  <span class="dt">coords=</span>grd[units,col.xy])
+mySample &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords=</span>grd[units,col.xy])
 <span class="co">#Compute lower bounds of marginal strata</span>
 ntot &lt;-<span class="st"> </span>nlegacy<span class="op">+</span>nnew
 by=<span class="dv">1</span><span class="op">/</span>ntot
@@ -313,10 +312,10 @@ annealingResult &lt;-<span class="st"> </span><span class="kw">anneal.cLHS</span
     <span class="dt">wO1=</span>wO1,
     <span class="dt">R=</span>R,
     <span class="dt">initialTemperature =</span> <span class="fl">0.01</span>,
-    <span class="dt">coolingRate =</span> <span class="fl">0.8</span>,
+    <span class="dt">coolingRate =</span> <span class="fl">0.9</span>,
     <span class="dt">maxAccepted =</span> <span class="dv">10</span><span class="op">*</span><span class="kw">length</span>(mySample),
     <span class="dt">maxPermuted =</span> <span class="dv">10</span><span class="op">*</span><span class="kw">length</span>(mySample),
-    <span class="dt">maxNoChange=</span><span class="dv">50</span>,
+    <span class="dt">maxNoChange=</span><span class="dv">20</span>,
     <span class="dt">verbose =</span> <span class="st">&quot;FALSE&quot;</span>)
 mycLHISample&lt;-<span class="kw">as</span>(annealingResult<span class="op">$</span>optSample, <span class="st">&quot;data.frame&quot;</span>)</code></pre></div>
 <p>Figure <a href="cLHS.html#fig:cLHISHunterValley">15.5</a> shows the selected Latin hypercube infill sample in a map of cti, and in Figure <a href="cLHS.html#fig:cLHISHunterValleyinscatter">15.6</a> the sample is plotted in a scatter diagram of cti against ndvi. Clearly the marginal strata already covered by the legacy sample are avoided by the additional sample.</p>
@@ -341,7 +340,7 @@ Figure 15.6: Conditioned Latin hypercube infill sample (green dots) plotted in s
         </div>
       </div>
 <a href="kmeans.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="SpatialResponseSurface.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -370,7 +369,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/DickBrus/SpatialSamplingwithR/16-cLHS.Rmd",
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/15-cLHS.Rmd",
 "text": "Edit"
 },
 "download": null,

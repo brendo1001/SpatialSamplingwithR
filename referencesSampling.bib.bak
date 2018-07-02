@@ -962,4 +962,10 @@
   url    = {https://CRAN.R-project.org/package=spsann},
 }
 
+@Manual{roudier2011,
+  title  = {clhs: a R package for conditioned Latin hypercube sampling.},
+  author = {Pierre Roudier},
+  year   = {2011},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
