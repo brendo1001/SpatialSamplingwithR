@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-07-02">
+<meta name="date" content="2018-07-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="cLHS.html">
-<link rel="next" href="references.html">
+<link rel="next" href="Introkriging.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -168,6 +168,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="15.1" data-path="cLHS.html"><a href="cLHS.html#cLHIS"><i class="fa fa-check"></i><b>15.1</b> Conditioned Latin hypercube infill sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="16" data-path="SpatialResponseSurface.html"><a href="SpatialResponseSurface.html"><i class="fa fa-check"></i><b>16</b> Spatial response surface sampling</a></li>
+<li class="chapter" data-level="17" data-path="Introkriging.html"><a href="Introkriging.html"><i class="fa fa-check"></i><b>17</b> Introduction to kriging</a><ul>
+<li class="chapter" data-level="17.0.1" data-path="Introkriging.html"><a href="Introkriging.html#kriging-with-an-external-drift"><i class="fa fa-check"></i><b>17.0.1</b> Kriging with an external drift</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -197,12 +200,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The response surface sampling approach is an example of a model-based sampling design. From that viewpoint I should have described this sampling design hereafter in the part of the book on model-based sampling. With response surface sampling one assumes that some type of low order (linear or quadratic) regression model can be used to accurately approximate the relationship between the study variable and the covariates. Sampling locations are then selected to implicitly optimize the estimation of this model. However, this optimization is done under one or more spatial constraints. Unconstrained optimization of the sampling design under the linear regression model will not prevent the locations from spatial clustering, see Figure <a href="IntroSamplingforMapping.html#fig:foursamples">11.1</a>(b). The assumption of independent data might be violated when the sampling locations are spatially clustered. For that reason the response surface sampling design selects samples with good spatial coverage, so that the design becomes robust against violation of the independence assumption.</p>
 <p>This design has been applied, amongst others, for mapping soil salinity (ECe), using electromagnetic induction (EM) measurements and surface array conductivity measurements as predictors in multiple linear regression models. For applications, see <span class="citation">Corwin and Lesch (2005)</span>, <span class="citation">Lesch (2005)</span>, <span class="citation">Fitzgerald et al. (2006)</span>, <span class="citation">Corwin et al. (2010)</span> and <span class="citation">Fitzgerald (2010)</span>.</p>
 <p>This sampling design is illustrated with the Cotton Research Field in Uzbekistan. ECa was measured with the EM device in vertical dipole mode with transmitters at 1 m and 50 cm from the receiver. The measurements are one on transects covering the Cotton Research Field (Figure <a href="SpatialResponseSurface.html#fig:EMdataUzbekistan">16.1</a>. The natural logs of the EM measurements are first interpolated to a 25 <span class="math inline">\(times\)</span> 25 m. grid by ordinary kriging. These interpolated EM data are then used as covariates in response surface sampling (Figure <a href="SpatialResponseSurface.html#fig:EMdataUzbekistan">16.1</a>. The two covariates are strongly correlated, <span class="math inline">\(r=0.73\)</span>.</p>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;.&quot;, layer: &quot;CottonResearchField&quot;
-## with 1 features
-## It has 4 fields</code></pre>
-<pre><code>## [using ordinary kriging]</code></pre>
-<pre><code>## [using ordinary kriging]</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:EMdataUzbekistan"></span>
 <img src="SpatialSampling_files/figure-html/EMdataUzbekistan-1.png" alt="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates" width="50%" /><img src="SpatialSampling_files/figure-html/EMdataUzbekistan-2.png" alt="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates" width="50%" /><img src="SpatialSampling_files/figure-html/EMdataUzbekistan-3.png" alt="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates" width="50%" /><img src="SpatialSampling_files/figure-html/EMdataUzbekistan-4.png" alt="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates" width="50%" />
 <p class="caption">
@@ -238,7 +235,7 @@ Figure 16.4: Response surface sample plotted in scatter diagrom of covariates
         </div>
       </div>
 <a href="cLHS.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="Introkriging.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

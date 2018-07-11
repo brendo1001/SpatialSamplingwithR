@@ -6,10 +6,10 @@ For mapping a model-based sampling approach is the only option. We cannot afford
 
 As an illustration, consider the following model:
 \begin{equation}
-z_i = \beta_0 + \beta_1 x_i + \epsilon_i \;,
+Z_i = \beta_0 + \beta_1 x_i + \epsilon_i \;,
 (\#eq:simplelinearregressionmodel)
 \end{equation}
-with $z_i$ the study variable of unit $i$, $\beta_0$ and $\beta_1$ regression coefficients and $\epsilon_i$ the error (residual) at unit $i$, normally distributed with mean zero and a constant variance $\sigma^2$. The errors are assumed independent, so that $Cov(\epsilon_i,\epsilon_j)=0$ for all $i \neq j$. Figure \@ref(fig:foursamples) shows a simple random sample without replacement (subfigure a) and the sample optimized for mapping with a simple linear regression model (subfigure b). Both samples are plotted in a map of the covariate (predictor). 
+with $Z_i$ the study variable of unit $i$, $\beta_0$ and $\beta_1$ regression coefficients and $\epsilon_i$ the error (residual) at unit $i$, normally distributed with mean zero and a constant variance $\sigma^2$. The errors are assumed independent, so that $Cov(\epsilon_i,\epsilon_j)=0$ for all $i \neq j$. Figure \@ref(fig:foursamples) shows a simple random sample without replacement (subfigure a) and the sample optimized for mapping with a simple linear regression model (subfigure b). Both samples are plotted in a map of the covariate (predictor). 
 
 ```{r, echo=F}
 #define discretisation grid
@@ -153,7 +153,7 @@ ggplot(data = grid) +
 
 ```
 
-The optimized sample for mapping with a simple linear regression model contains the units with the smallest or the largest values of the covariate $x$. The optimized sample shows strong spatial clustering. Spatial clustering is not avoided because in a simple linear regression model we assume that the data are independent. The standard errors of both regression coefficients are considerably smaller for the optimized sample (Table \@ref(tab:sebetas)). The joint uncertainty about the two regression coefficients, quantified by the determinant of the variance-covariance matrix of the estimated regression coefficients, equals 0.0020 for the simple random sample and 0.00010 for the optimized sample. When we are less uncertain about the regression coefficients, we are also less uncertain about the estimates of the study variable obtained with the simple linear regression model at (unobserved) locations of a fine grid discretizing the study area used for mapping the study variable. So, we conclude that for mapping with a simple linear gression model, simple random sampling is not a good option. 
+The optimized sample for mapping with a simple linear regression model contains the units with the smallest or the largest values of the covariate $x$. The optimized sample shows strong spatial clustering. Spatial clustering is not avoided because in a simple linear regression model we assume that the data are independent. The standard errors of both regression coefficients are considerably smaller for the optimized sample (Table \@ref(tab:sebetas)). The joint uncertainty about the two regression coefficients, quantified by the determinant of the variance-covariance matrix of the estimated regression coefficients, equals 0.0020 for the simple random sample and 0.00010 for the optimized sample. When we are less uncertain about the regression coefficients, we are also less uncertain about the estimates of the study variable obtained with the simple linear regression model at (unobserved) locations of a fine grid discretizing the study area used for mapping the study variable. So, we conclude that for mapping with a simple linear regression model, simple random sampling is not a good option. 
 
 ```{r sebetas, tidy=FALSE, echo=F}
 tbl <- data.frame(x=c("SI","Optimized"),y=c(1.51,1.08),z=c(0.086,0.051),d=c(0.0020,0.00010))
@@ -167,14 +167,14 @@ knitr::kable(
 
 The following model differs slightly from Equation \@ref(eq:simplelinearregressionmodel): 
 \begin{eqnarray}
-y_i &=& \beta_0 + \beta_1 x_i + \epsilon_i \\
+Z_i &=& \beta_0 + \beta_1 x_i + \epsilon_i \\
 \epsilon_i &\sim& \mathcal{N}(0,\sigma^2)\\
-\mathrm{cov}(\epsilon_i,\epsilon_j) &=& C(d_{i,j}) \;.
+\mathrm{Cov}(\epsilon_i,\epsilon_j) &=& C(\mathbf{h}) \;.
 (\#eq:KEDmodel)
 \end{eqnarray}
-In this model the errors are not independent, but spatially correlated. This model is used when mapping by kriging with an external drift (KED). Figure \@ref(fig:foursamples)(c) shows an optmized sample for KED mapping^[Which sample is optimal for KED also depends on how strong the spatial correlation is, see Chapter \@ref(MBKED)]. Spatial clustering is avoided, the selected units are spread throughout the area.  At the same time units near the minimum (unit with coordinates (13.5, 12.5)) and maximum (unit with coordinates (13.5, 6.5)) of the covariate are selected. This example shows that there is no single best sampling design for mapping. The best design depends on the method used for mapping. If we believe that the study variable can better be mapped by KED instead of simple linear regression, because we expect the data to be spatially autocorrelated, the optimal sample largely differs from the optimal sample for mapping using a simple linear regression model.
+In this model the errors are not independent, but spatially correlated. This spatial correlation is modeled as a function of the vector $\mathbf{h}$ separating two locations^[Often the covariance is modeled as the length of the vector only.]. Model \@ref(eq:KEDmodel) is used when mapping by kriging with an external drift (KED). Figure \@ref(fig:foursamples)(c) shows an optmized sample for KED mapping^[Which sample is optimal for KED also depends on how strong the spatial correlation is, see Chapter \@ref(MBKED)]. Spatial clustering is avoided, the selected units are spread throughout the area.  At the same time units near the minimum (unit with coordinates (13.5, 12.5)) and maximum (unit with coordinates (13.5, 6.5)) of the covariate are selected. This example shows that there is no single best sampling design for mapping. The best design depends on the method used for mapping. If we believe that the study variable can better be mapped by KED instead of simple linear regression, because we expect the data to be spatially autocorrelated, the optimal sample largely differs from the optimal sample for mapping using a simple linear regression model.
 
-If we foresee a quadratic relation, $z_i = \beta_0 + \beta_1x_i + \beta_2x^2_i+\epsilon_i$, the optimal sample will also include locations with covariate values near the mean of $x$. And if we expect an even more complicated, non-linear relation, it can be advantageous to select a sample so that the relative frequency distribution of $x$ in the sample and in the population are similar. This can be done by using the covariate $x$ to construct as many strata as the number of sampling unts we want to select. By using evenly spaced quantiles of $x$ as stratum breaks, the strata have equal size. From each  stratum one unit is selected (Figure \@ref(fig:foursamples)(d)). This is the rationale of conditioned Latin hypercube sampling in case we have multiple covariates (Chapter \@ref(cLHS)).
+If we foresee a quadratic relation, $Z_i = \beta_0 + \beta_1x_i + \beta_2x^2_i+\epsilon_i$, the optimal sample will also include locations with covariate values near the mean of $x$. And if we expect an even more complicated, non-linear relation, it can be advantageous to select a sample so that the relative frequency distribution of $x$ in the sample and in the population are similar. This can be done by using the covariate $x$ to construct as many strata as the number of sampling unts we want to select. By using evenly spaced quantiles of $x$ as stratum breaks, the strata have equal size. From each  stratum one unit is selected (Figure \@ref(fig:foursamples)(d)). This is the rationale of conditioned Latin hypercube sampling in case we have multiple covariates (Chapter \@ref(cLHS)).
 
 ## Geometric versus model-based sampling designs
 

@@ -1,0 +1,334 @@
+# Model-based optimization of grid spacing {#MBgridspacing}
+
+This is the first chapter on model-based sampling. In Chapters \@ref{SpatialCoverage} and \@ref{kmeans} a geometric criterion is minimized, i.e. a criterion defined in terms of distances, either in geographic space \@ref{SpatialCoverage}, or in feature space \@ref{kmeans}. In model-based sampling the minimization criterion is a function of the variance of the prediction errors.
+
+This first chapter on model-based sampling is about optimization of the spacing of a regular grid, i.e. the distance between neighbouring points in the grid. In case the budget for the survey may not exceed a given amount, and the total costs can be approximated by the costs per point multiplied by the sample szie, this spacing can be derived from the affordable sample size (Chapter \@ref{Regulargrid}). The larger this sample size, the smaller the grid spacing can be. The alternative is to derive the grid spacing from a requirement on the precision of the map. Here and in following chapters I assume that the map is constructed by kriging, see Chapter \@ref(Introkriging) for an introduction. 
+
+
+## Optimal grid-spacing with ordinary kriging
+
+Suppose that we require the *maximum* kriging variance not to exceed a given threshold. The question then is what is the tolerable grid spacing given this requirement. Ignoring the relatively large variances near the border of the study area, we expect the kriging variance to be largest at the centres of the grid cells. These points have the largest distance to the points of the sampling grid. The larger the grid spacing, the larger the kriging variance at these centres. The question is how large the spacing can be, so that the maximum kriging variance is just below the threshold.
+
+For finding this maximum grid spacing one must have prior knowledge of the spatial variation. I first consider the situation in which it is reasonable to assume that the mean of the study variable is constant throughout the study area. With the mean unknown, this implies that ordinary kriging is used for mapping.  Further, we need a variogram of the study variable. In practice we often do not have a reliable estimate of the variogram. In the best case scenario we have some existing data that can be used to estimate the variogram. In other cases such data are lacking, and a best guess of the variogram must be made, for instance using data from other, similar areas.
+
+There is no simple equation that relates the grid spacing to the kriging variance. What can be done is to calculate the kriging variance for a range of grid spacings, plot the kriging variances at the cell centres against the grid spacing, and use this plot inversely to determine the maximum grid spacing, given a constraint on the maximum kriging variance.
+
+In the next chunks this procedure is used to compute the tolerable spacing of a square grid for mapping soil organic carbon (SOC) in the three woredas of Ethiopia. The legacy data used before to design a spatial infill sample (Chapter \@ref(SpatialCoverage)), are now used to estimate a variogram.
+
+```{r}
+library(gstat)
+#estimate experimental variogram
+vg <- variogram(SOC~1, data = priordataEthiopia,cutoff=20)
+#fit variogram model
+vgmodel <- fit.variogram(vg, model = vgm(psill = 0.6, model = "Sph", range = 10, nugget = 0.4))
+```
+
+```{r variogramSOCEthiopia, out.width='70%',fig.asp=0.7, fig.cap="Variogram (experimental and fitted spherical model) of SOC estiamted from legacy data in three woredas of Ethiopia", message=F, echo=F, results='hide'}
+fitted<-variogramLine(vgmodel,maxdist=20,n=1000)
+ggplot(data=vg) +
+  geom_point(mapping=aes(x=dist,y=gamma),size=3) +
+  geom_smooth(data=fitted,mapping=aes(x=dist,y=gamma),colour="red")+
+  scale_x_continuous(name= "Distance (km)") +
+  scale_y_continuous(name= "Semivariance",limits=c(0,1.1))
+```
+
+To evaluate a series of grid spacings a square grid is generated. The number of gridpoints is the square of an even number, so that the coordinates of the evaluation point (prediction point) can be computed as the average of the coordinates of the gridpoints (the evaluation point is at the centre of a grid cell).
+
+```{r, cache=T,message=F,results='hide'}
+#construct sampling grid
+xgrid<-c(0,1,2,3)
+ygrid<-xgrid
+xygrid<-expand.grid(xgrid,ygrid)
+names(xygrid)<-c("x","y")
+#set grid spacings to be evaluated
+spacing<-seq(from=5,to=12,by=1)
+MaxKV<-numeric(length=length(spacing))
+for (i in 1:length(spacing)) {
+  xsc<-xygrid$x*spacing[i]
+  ysc<-xygrid$y*spacing[i]
+  xygridsc<-data.frame(x=xsc,y=ysc,z=1)
+  coordinates(xygridsc)<-~x+y
+  xypred<-data.frame(x=mean(xsc),y=mean(ysc))
+  coordinates(xypred)<-~x+y
+  prediction  <- krige(
+    z ~ 1,
+    xygridsc,
+    xypred,
+    model = vgmodel,
+    debug.level=0
+  )
+  MaxKV[i]<-prediction$var1.var
+}
+df<-data.frame(spacing,MaxKV)
+```
+
+From Figure \@ref(fig:MaxOKVvsSpacingEthiopia)  we can conclude, for instance, that for a maximum kriging variance of 0.8 the grid spacing may not exceed about 6.5 km.
+
+```{r MaxOKVvsSpacingEthiopia, out.width='70%',fig.asp=0.7, fig.cap="Maximum ordinary kriging variance of predictions of SOC as a function of the spacing of a square grid", message=F, echo=F}
+ggplot() +
+    geom_point(data=df,mapping=aes(x=spacing,y=MaxKV),size=3) +
+    scale_x_continuous(name = "Grid spacing (km)") +
+    scale_y_continuous(name = "Maximum kriging variance",limits=c(0.7,0.95))
+```
+
+## Controlling the mean ordinary kriging variance
+
+In the previous section the maximum kriging variance, at the centre of the grid cells, is used to decide on the grid spacing. An alternative is to use the mean kriging variance (MKV), i.e. the kriging variance averaged over all nodes of a fine prediction grid covering the study area, as a criterion. In this case a GIS file of the study area is needed (note that in the previous section such file was not used).
+
+For a requirement on the mean kriging variance instead of the maximum kriging variance, I propose the following procedure:
+
+1. Specify variogram type and parameter values
+2. Select a simple random sample of locations
+3. Select a square grid with a given spacing
+4. Compute the ordinary kriging variance at the selected sampling locations
+5. Compute the sample average of the kriging variance
+6. Repeat this for other grid spacings
+
+The simple random sample of step 2 is used to *estimate* the population mean kriging variance (MKV). The sample should be large enough, say $>$ 1000 points, so that the estimate has high precision. In step 3 the square grid can be selected either using a fixed or a random starting point. In the latter case, steps 3 - 5 must be repeated several times, leading to multiple values for the estimated MKV for each grid spacing. Note that the procedure is very general, and can also be used to determine the tolerable grid spacing for, for instance, the P95 of the kriging variance.
+
+For each grid-spacing the average of the kriging variance at the randomly selected points is computed, and plotted against the grid-spacing.
+
+```{r, cache=T, results='hide'}
+set.seed(314)
+ids<-sample.int(nrow(grdEthiopia),size=1000, replace=T)
+mysample<-grdEthiopia[ids,]
+#select random point within the selected grid cells of 1 km x 1 km)
+mysample$s1 <- jitter(mysample$s1,0.5)
+mysample$s2 <- jitter(mysample$s2,0.5)
+coordinates(mysample)<-~s1+s2
+gridded(grdEthiopia)<-~s1+s2
+
+MKV<-samplesize <- numeric(length=length(spacing))
+for (i in 1:length(spacing)) {
+  mygridxy<-spsample(x=grdEthiopia,cellsize=spacing[i],type="regular",offset=c(0.5,0.5))
+  #add a dummy variable
+  mygrid<-data.frame(s1=mygridxy$x1,s2=mygridxy$x2,dummy=1)
+  samplesize[i] <- nrow(mygrid)
+  coordinates(mygrid)<-~s1+s2
+  predictions  <- krige(
+    dummy ~ 1,
+    mygrid,
+    newdata = mysample,
+    model = vgmodel,
+    nmax = 100,
+    debug.level=0
+    )
+    MKV[i]<-mean(predictions$var1.var)
+}
+df<-data.frame(spacing,samplesize,MKV)
+```
+
+```{r MOKVvsSpacingEthiopia, out.width='70%',fig.asp=0.7, fig.cap="Mean ordinary kriging variance of predictions of SOC as a function of the spacing of a square grid",echo=F}
+ggplot(data=df)+
+  geom_point(mapping=aes(x=spacing,y=MKV),size=3)+
+  scale_x_continuous(name="Spacing (km)")+
+  scale_y_continuous(name="Mean Kriging Variance",limits=c(0.7,0.95))
+```
+
+From Figure \@ref(fig:MOKVvsSpacingEthiopia) we can see that for a mean kriging variance of 0.8 the tolerable grid spacing is about 8 km, which is somewhat larger (leading to a smaller sample size) than for a maximum kriging variance of 0.8.
+
+## Optimal grid-spacing for kriging with an external drift
+
+In the previous section we assumed a constant mean for the variable of interest. I now consider the case where we have covariates that are related to the variable of interest. A model is calibrated that is the sum of a linear combination of the covariates (spatial trend) and a spatially structured residual, see Equation \@ref(eq:KEDmodel2). Predictions at the nodes of an interpolation grid are obtained by kriging with an external drift (KED).
+
+The SOC data of the three woredas of Ethiopia are used to estimate the parameters (regression coeffcients and variogram parameters) of the model. To keep it simple this is done in a very simple way. First a multiple linear regression model is fitted by Ordinary Least Squares (OLS). Then the experimental variogram of the OLS residuals is estimated, and a variogram model is fitted^[This simple procedure leads to biased estimates of the model parameters. Unbiased estimates can be obtained by Restricted Maximum Likelihood (REML) estimation.].
+
+```{r}
+vgresid <- variogram(SOC~dem+rfl_NIR+rfl_red+lst, data = priordataEthiopia, cutoff=20)
+vgmresidfit <- fit.variogram(vgresid, model = vgm(model = "Sph", psill = 0.2, range = 6, nugget = 0.5))
+```
+
+```{r MKEDVvsSpacingEthiopia, out.width='70%',fig.asp=0.7, fig.cap="Mean ordinary kriging variance of predictions of SOC as a function of the spacing of a square grid",echo=F, results='hide'}
+fitted<-variogramLine(vgmresidfit,maxdist=20,n=1000)
+ggplot(data=vgresid) +
+  geom_point(mapping=aes(x=dist,y=gamma),size=3) +
+  geom_smooth(data=fitted,mapping=aes(x=dist,y=gamma),colour="red")+
+  scale_x_continuous(name= "Distance (km)") +
+  scale_y_continuous(name= "Semivariance",limits=c(0,1.1))
+```
+The sill of the residual variogram is smaller than that of the variogram of SOC. This is because part of the variance of SOC is explained by the covariates.
+
+The mean kriging variance as obtained with KED is used as the criterion to be minimized. With KED the kriging variance is also a function of the values of the covariates at the sampling locations and prediction location. Compared to the procedure above for Ordinary Kriging, in the chunk below a slightly different procedure is used. The square grid of a given spacing is randomly placed on the area (option ```offset``` in function ```spsample``` is not used), and this is repeated several times.
+
+```{r, message=F,cache=T}
+#Set number of times grid sampling of a given spacing is repeated
+r<-10
+
+MKEDV<-matrix(nrow=length(spacing),ncol=r)
+set.seed(314)
+for (i in 1:length(spacing)) {
+  for (j in 1:r) {
+    mygridxy<-spsample(x=grdEthiopia,cellsize=spacing[i],type="regular")
+    mygrid<-data.frame(s1=mygridxy$x1,s2=mygridxy$x2,dummy=1)
+    coordinates(mygrid)<-~s1+s2
+    mygrd<-data.frame(mygrid %over% grdEthiopia,mygrid)
+    coordinates(mygrd)<-~s1+s2
+    predictions  <- krige(
+      dummy ~ dem+rfl_NIR+rfl_red+lst,
+      mygrd,
+      newdata = mysample,
+      model = vgmresidfit,
+      nmax = 100,
+      debug.level=0
+    )
+    MKEDV[i,j]<-mean(predictions$var1.var)
+  }
+}
+dfKED<-data.frame(spacing,MKEDV)
+```
+
+```{r MKEDVvsSpacingEthiopia, out.width='70%',fig.asp=0.7, fig.cap="Mean kriging variance with KED of predictions of SOC as a function of the spacing of a square grid",echo=F}
+ggplot(data=dfKED)+
+  geom_point(mapping=aes(x=spacing,y=X1),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X2),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X3),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X4),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X5),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X6),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X7),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X8),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X9),size=2,alpha=0.5,colour="red")+
+  geom_point(mapping=aes(x=spacing,y=X10),size=2,alpha=0.5,colour="red")+
+  scale_x_continuous(name="Spacing (km)")+
+  scale_y_continuous(name="Mean kriging variance",limits=c(0.7,0.95))
+```
+
+## Bayesian approach
+In practice we do not know the variogram. In the best case we have prior data that can be used to estimate the variogram. However, even in this case we are uncertain about the variogram type and the variogram parameters. Recently, Lark2017 worked out a Bayesian approach to account for this uncertainty. A sample from the multivariate posterior distribution of the variogram parameters is obtained by Markov Chain Monte Carlo (MCMC). 
+
+```{r}
+spherical <- function(D, pars) {
+  C <- ifelse(D<pars[3],pars[1]*pars[2]*(1 - (1.5*D/pars[3]) + 0.5*(D/pars[3])^3),0)
+  diag(C) <- pars[1]
+  C
+}
+
+#Define loglikelihood
+ll <-function(pars) {
+  C<-spherical(D,pars)
+  cholC <- try(chol(C),silent=TRUE)
+  if (!is.character(cholC)){
+    C_inv <- chol2inv(chol(C))
+    ### estimate the unknown mean
+    XC <- crossprod(X, C_inv)
+    XCy <- XC %*% y
+    XCX <- XC %*% X
+    betahat <- solve(XCX , XCy)
+    e <- y - as.numeric(betahat)
+    eC <- crossprod(e, C_inv)
+    eCe <- eC %*% e
+    logDetC <- determinant(x = C, logarithm = TRUE)$modulus
+    logLik<- as.numeric(-0.5 * (logDetC + eCe +length(y)*log(2*pi)))
+    return(logLik)
+  }else{return(-Inf)}
+}
+```
+
+Estimate variogram parameters by maximum likelihood. Note that not the nugget and partial sill are estimated, but the sill and the proportion spatally structured variance. Estimates of the parameters as obtained by the method-of-moments are used as starting values in ML estimation. 
+
+```{r}
+# compute matrix with Euclidian distances between sampling points
+D <- spDists(priordataEthiopia)
+
+# Estimate variogram by method-of-moments
+vg <- variogram(SOC~1,data=priordataEthiopia)
+vgfit <- fit.variogram(vg,model=vgm("Sph",psill=0.6,range=10,nugget=0.6))
+
+# Estimate variogram by maximum likelihood
+sigma2.ini <- vgfit$psill[1]+vgfit$psill[2]
+xi.ini <- vgfit$psill[2]/sigma2.ini #proportion spatially structured variance 
+phi.ini <- vgfit$range[2]
+pars <- c(sigma2.ini,xi.ini,phi.ini)
+
+X <- matrix(1 , nrow(priordataEthiopia) , 1)
+y <- priordataEthiopia$SOC
+vgML <- optim(pars, ll, control = list(fnscale = -1))
+```
+
+Now generate a sample from the posterior distribution of the variogram parameters by MCMC and differential evolution (terBraak2008). Prior distributions for the sill variance, proportion of variance that is spatially structured, and range are all uniform with lower bounds equal to zero and upper bounds equal to 5 (mg/kg)$^2$, 1 and 100 km, respectively.
+
+```{r, eval=F}
+library(BayesianTools)
+sigma2.ini <- vgML$par[1]
+xi.ini <- vgML$par[2]
+phi.ini <- vgML$par[3]
+
+priors <- createUniformPrior(lower = c(0,0,0), upper = c(5,1,100))
+setup <- createBayesianSetup(likelihood=ll,prior=priors,best=c(sigma2.ini,xi.ini,phi.ini), names=c("sigma2","xi","phi"))
+
+set.seed(314)
+DEzs.out <- runMCMC(setup,sampler="DEzs")
+save(DEzs.out,file="DEzs_Ethiopia.RData")
+```
+
+Each unit of the sample is used to compute the kriging variances at the simple random sample of evaluation points.  
+
+```{r, eval=F}
+load(file="DEzs_Ethiopia.RData")
+mcmcsam <- getSample(DEzs.out,start=1000,numSamples=1000)
+mcmcsample <-data.frame(mcmcsam)
+
+MKV<-matrix(nrow=length(spacing),ncol=nrow(mcmcsample))
+for (i in 1:length(spacing)) {
+    mygridxy<-spsample(x=grdEthiopia,cellsize=spacing[i],type="regular",offset=c(0.5,0.5))
+    mygrid<-data.frame(s1=mygridxy$x1,s2=mygridxy$x2,dummy=1)
+    coordinates(mygrid)<-~s1+s2
+  for (j in 1:nrow(mcmcsample)) {
+    vgfit$psill[1] <- (1-mcmcsample$xi[j])*mcmcsample$sigma2[j]
+    vgfit$psill[2] <- mcmcsample$xi[j]*mcmcsample$sigma2[j]
+    vgfit$range[2] <- mcmcsample$phi[j]    
+    predictions  <- krige(
+      dummy ~ 1,
+      mygrid,
+      newdata = mysample,
+      model = vgfit,
+      nmax = 100,
+      debug.level=0
+    )
+    MKV[i,j]<-mean(predictions$var1.var)
+  }
+}
+
+save(MKV,file="MOKV_Bayesian_Ethiopia.RData")
+```
+
+Set a target for the mean kriging variance (MKV), and compute for each variogram parameter vector the tolerable grid spacing. The figure below shows the histogram of the tolerable grid spacing for a mean ordinary kriging variance of 0.8 for the Ethiopia case study. The grid spacing with the largest number of MCMC samples equals 8 km, which corresponds with the tolerable grid spacing derived above for Ordinary Kriging.
+
+```{r}
+load(file="MOKV_Bayesian_Ethiopia.RData")
+
+# Set target for MKV
+t.MKV <- 0.8
+
+spacing.tol <- numeric(length=ncol(MKV))
+for (i in 1:ncol(MKV)) {
+  spacing.tol[i] <- approx(x=MKV[,i],y=spacing,xout=t.MKV)$y
+}
+```
+
+Now compute the proportion of MCMC samples with a MKV smaller or equal to the target MKV of 0.8, as a function of the grid spacing. The resulting figure shows, for instance, that if we require a probability of 80\% that the MKV does not exceed the target MKV of 0.8, the tolerable grid spacing is about 6.25 km. With a grid spacing of 8 km as determined before, the probability that the MKV exceeds 0.8 is about 55\%.
+
+```{r, echo=F}
+ggplot()+
+  geom_histogram(mapping=aes(spacing.tol),binwidth=1,colour="orange")+
+  scale_x_continuous(name="Tolerable grid spacing",breaks=seq(5:12))+
+  scale_y_continuous(name="# MCMC samples")
+```
+
+Compute for each grid spacing the porportion of MCMC samples with MKV smaller or equal to the target MKV.
+
+```{r}
+F <- numeric(length=length(spacing))
+for (i in 1:length(spacing)) {
+  F[i] <- sum(MKV[i,] < t.MKV)
+}
+F <- F/ncol(MKV)
+df <- data.frame(spacing,F)
+```
+
+```{r, echo=F}
+ggplot(df)+
+  geom_line(mapping=aes(x=spacing,y=F),colour="red")+
+  scale_x_continuous(breaks=spacing,name="Grid spacing")+
+  scale_y_continuous(limits=c(0,1),breaks=seq(from=0,to=1,by=0.2),name="Proprortion of MCMC samples")
+```

@@ -605,11 +605,13 @@ getCriterion.cLHS<-function(d,g,lb,wO1,R)  {
   for (i in 1:nrow(lb)) {
     counts[i,]<-apply(stratum, MARGIN=2, function(x,i) sum(x==i), i=i)
   }
-  O1<-mean(abs(counts-length(d)/nrow(lb)))
+  O1<-mean(abs(counts-1))
   
   #compute sum of absolute differences of correlations
   r<-cor(as.data.frame(d)[1:ncol(d)])
-  O3<-mean(abs(R-r))
+  dr <- abs(R-r)
+  offdiagonal <- (!row(dr)==col(dr))
+  O3<-mean(dr[offdiagonal])
   
   #compute LHS criterion
   E<-wO1*O1+(1-wO1)*O3

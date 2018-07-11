@@ -25,7 +25,7 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-07-02">
+<meta name="date" content="2018-07-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -168,6 +168,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="15.1" data-path="cLHS.html"><a href="cLHS.html#cLHIS"><i class="fa fa-check"></i><b>15.1</b> Conditioned Latin hypercube infill sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="16" data-path="SpatialResponseSurface.html"><a href="SpatialResponseSurface.html"><i class="fa fa-check"></i><b>16</b> Spatial response surface sampling</a></li>
+<li class="chapter" data-level="17" data-path="Introkriging.html"><a href="Introkriging.html"><i class="fa fa-check"></i><b>17</b> Introduction to kriging</a><ul>
+<li class="chapter" data-level="17.0.1" data-path="Introkriging.html"><a href="Introkriging.html#kriging-with-an-external-drift"><i class="fa fa-check"></i><b>17.0.1</b> Kriging with an external drift</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -198,7 +201,7 @@ Figure 14.1: Five covariates of study area Hunter Valley used in k-means samplin
 </div>
 <div id="Hardkmeans" class="section level2">
 <h2><span class="header-section-number">14.1</span> Hard k-means</h2>
-<p>In hard k-means sampling the covariates are used to cluster the grid cells by the k-means clustering algorithm. Similar to spatial coverage sampling (Chapter <a href="SpatialCoverage.html#SpatialCoverage">13</a> the MSSD is minimized, but now the distance is not measured in geographical space but in a <span class="math inline">\(p\)</span>-dimensional space spanned by the <span class="math inline">\(p\)</span> covariates (think of it as a multi-dimensional scatter plot with the covariates along the axes). The covariates are scaled so that their standard deviations become 1. This is needed because, contrary to the x- and y-coordinates used as clustering variables in spatial coverage sampling, the dimensions of the covariates used as clustering variables generally differ, and the ranges of the covariates in the population can largely differ. In the clustering of the grid cells the Mean Squared Shortest <strong>Scaled</strong> Distance (MSS<strong>S</strong>D)<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> is minimized.</p>
+<p>In hard k-means sampling the covariates are used to cluster the grid cells by the k-means clustering algorithm. Similar to spatial coverage sampling (Chapter <a href="SpatialCoverage.html#SpatialCoverage">13</a> the MSSD is minimized, but now the distance is not measured in geographical space but in a <span class="math inline">\(p\)</span>-dimensional space spanned by the <span class="math inline">\(p\)</span> covariates (think of it as a multi-dimensional scatter plot with the covariates along the axes). The covariates are scaled so that their standard deviations become 1. This is needed because, contrary to the x- and y-coordinates used as clustering variables in spatial coverage sampling, the dimensions of the covariates used as clustering variables generally differ, and the ranges of the covariates in the population can largely differ. In the clustering of the grid cells the Mean Squared Shortest <strong>Scaled</strong> Distance (MSS<strong>S</strong>D)<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> is minimized.</p>
 <p>In the next chunk a hard k-means sample of size 20 is selected from the Hunter Valley study area. All five quantitative covariates are used as covariates. To select 20 points 20 clusters are constructed using hard k-means. Note that the number of clusters is based on the required sample size, not as usual in cluster analysis on the number of subregions with a high density of points in the multivariate distribution. Grid cells with the shortest scaled Euclidean distance in covariate-space to the centroids of the clusters are selected as the sampling points.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Set number of sampling locations to be selected</span>
 n&lt;-<span class="dv">20</span>
@@ -266,8 +269,8 @@ Figure 14.3: Hard k-means and fuzzy k-means sample plotted in scatter diagram of
 </div>
 <div class="footnotes">
 <hr />
-<ol start="5">
-<li id="fn5"><p>The name scaled distance can be confusing. Not the distances are scaled, but the distances are computed in a space spanned by the scaled covariates<a href="kmeans.html#fnref5">↩</a></p></li>
+<ol start="6">
+<li id="fn6"><p>The name scaled distance can be confusing. Not the distances are scaled, but the distances are computed in a space spanned by the scaled covariates<a href="kmeans.html#fnref6">↩</a></p></li>
 </ol>
 </div>
             </section>

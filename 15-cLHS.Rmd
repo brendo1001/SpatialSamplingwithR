@@ -8,14 +8,18 @@ Latin hypercube sampling (LHS) is used in designing (computer) experiments with 
 
 @Minasny2006 adapted LHS for observational studies; this adaptation is referred to as conditioned LHS (cLHS). For each covariate a series of intervals (marginal strata) is defined. The breaks of the marginal strata are chosen such that the numbers of grid cells in these marginal strata are equal. This can be done by using the quantiles corresponding with evenly spaced cumulative probabilities as stratum breaks. For instance, for five marginal strata we use the quantiles corresponding with the cumulative probabilities 0.2, 0.4, 0.6 and 0.8.
 
-@Minasny2006 developed a search algorithm, based on heuristic rules and an annealing schedule, to select a cLHS (see for an explanation of annealing, Chapter \@ref(MBLocations)). The objective function that is minimized is the weighted sum of three components:   
-* O1: the sum over all marginal strata of the absolute difference between the marginal stratum sample size and the targeted sample size (equal to 1)   
-* O2: the sum over all classes of categorical covariates of the absolute difference between the sample proportion of a given class and the population proportion of that class   
-* O3: the sum over all entries of the correlation matrix of the absolute difference of the correlation in the population and in the sample  
+The minimization criterion proposed by @Minasny2006 is a weighted sum of three components:   
+* O1: the sum over all marginal strata of the absolute deviations of the marginal stratum sample size from  the targeted sample size (equal to 1)   
+* O2: the sum over all classes of categorical covariates of the absolute deviations of the sample proportion of a given class from the population proportion of that class   
+* O3: the sum over all entries of the correlation matrix of the absolute deviation of the correlation in the sample from the correlation in the population  
+
+In R package `spsann` [@Alessandro2016] the components are not computed as sums but as means, which conforms with a Fortran code provided by Minasny after the publication of their paper. The reason is that the magnitude of the three components become more similar. So component O1 is computed as the sum of the absolute deviations, divided by the total number of marginal strata. Component O3 is computed as the sum divided by $p \cdot p/2 + p$, with $p$ the number of covariates.  In following versions of `spsann` (later than version 2.0-0), O3 will be computed as the mean of the deviations over all off-diagonal entries of the correlation matrix. 
+
+The criterion is minimized by simulated annealing (see for an explanation of annealing, Chapter \@ref(MBLocations)).
 
 With cLHS the marginal distributions of the covariates in the sample are close to these distributions in the population. This can be advantageous for mapping methods that do not rely on linear relations, for instance in machine learning techniques like classification and regression trees (CART), and random forests.
 
-cLH sampling is illustrated with the Hunter Valley data used before in k-means sampling (Chapter \@ref(kmeans)). To speed up the computations a subgrid is selected with a spacing of 50 $\times$ 50 m (the original cell size is 25 $\times$ 25 m).
+cLH sampling is illustrated with the Hunter Valley data that are used before in k-means sampling (Chapter \@ref(kmeans)). To speed up the computations a subgrid is selected with a spacing of 50 $\times$ 50 m (the original cell size is 25 $\times$ 25 m).
 
 ```{r}
 gridded(grdHunterValley) <- c("Easting","Northing")
@@ -39,7 +43,7 @@ names(candi) <- c("x","y")
 covars <- grd[, 3:7]
 ```
 
-The next step is to define the annealing schedule. Note that both the initial acceptance rate and the initial temperature are set, which may seem weird as the acceptance rate is a function of the initial temperature: $P =e^{\frac{-\Delta f}{T}}$. The initial acceptance rate is used as a threshold value. If an initial temperature is chosen that leads to an acceptance rate smaller than the chosen value for the initial acceptance rate, then the optimization stops. In this case a larger value for the initial temperature must be chosen.
+The next step is to define the annealing schedule. Note that both the initial acceptance rate and the initial temperature are set, which may seem weird as the acceptance rate is a function of the initial temperature: $P =e^{\frac{-\Delta f}{T}}$, see Chapter \@ref(MBLocations)). The initial acceptance rate is used as a threshold value. If an initial temperature is chosen that leads to an acceptance rate smaller than the chosen value for the initial acceptance rate, then the optimization stops. In this case a larger value for the initial temperature must be chosen.
 
 ```{r}
 schedule <- scheduleSPSANN(initial.acceptance = 0.8,initial.temperature = 0.05,
@@ -51,7 +55,7 @@ schedule <- scheduleSPSANN(initial.acceptance = 0.8,initial.temperature = 0.05,
                            cellsize=50)
 ```
 
-Finally, specify the weights for O1 and O3 in the objective function, and start the simulated annealing algorithm.
+Finally, the weights for components O1 and O3 of the minimization criterion are specified, and the simulated annealing algorithm is started.
 
 ```{r, cache=T, message=FALSE}
 weights <- list(O1 = 0.5, O3 = 0.5)
@@ -63,7 +67,7 @@ optimCLHS.out <- optimCLHS(
 mycLHSample <- data.frame(optimCLHS.out$points,grd[optimCLHS.out$points$id,3:7])
 ```
 
-Figure \@ref(fig:cLHSHunterValley) shows the selected sample in a map of compound topographic index, which is one of the five covariates used in sampling. 
+Figure \@ref(fig:cLHSHunterValley) shows the selected sample in a map of compound topographic index (cti), which is one of the five covariates used in sampling. 
 
 ```{r cLHSHunterValley, out.width='70%',fig.asp=1, fig.cap="Conditioned Latin hypercube sample from study area Hunter Valley in a map of compound topographic index", echo=F}
 ggplot(data=grd) +
@@ -75,7 +79,7 @@ ggplot(data=grd) +
   coord_fixed()
 ```
 
-Figure \@ref(fig:cLHSHunterValleyinscatter) shows the sample plotted in a scatter diagram of cti against ndvi. Each black dot represents one grid cell in the population. The horizontal and vertical lines in this scatter diagram are at the boundaries of the marginal strata of cti and ndvi, respectively. The number of black dots within the horizontal and vertical bars are equal (marginal strata have equal size), which explains that the intervals are the narrowest where the density of black dots in the plot is highest. We can see in Figure \@ref(fig:cLHSHunterValleyinscatter), for instance, that in the first marginal stratum of cti there are two sampling locations, whereas in the 7^th^ and 8^th^ marginal ndvi strata no sampling locations are selected. 
+Figure \@ref(fig:cLHSHunterValleyinscatter) shows the sample plotted in a scatter diagram of cti against ndvi. Each black dot represents one grid cell in the population. The horizontal and vertical lines in this scatter diagram are at the boundaries of the marginal strata of cti and ndvi, respectively. The number of black dots within the horizontal and vertical bars are equal (marginal strata have equal size), which explains that the intervals are the narrowest where the density of black dots in the plot is highest. We can see in Figure \@ref(fig:cLHSHunterValleyinscatter), for instance, that in the first marginal stratum of cti there are two sampling locations, whereas in the 7^th^ and 8^th^ marginal ndvi-strata no sampling locations are selected. 
 
 ```{r cLHSHunterValleyinscatter,  out.width='70%',fig.asp=1, fig.cap="Conditioned Latin hypercube sample plotted in scatter diagram of compound topographic index against normalized difference vegetation index", echo=F}
 by=1/samplesize
@@ -118,10 +122,10 @@ ggplot(countslf) +
   scale_y_continuous(name = "Sample size",breaks=c(0,1,2,3))
 ```
 
-For all marginal strata with one sampling location the contribution to component O1 of the criterion is zero. For strata with zero or two sampling locations, the contribution is one. There is one marginal stratum, the 18^th^ marginal stratum of aspect, that has three sampling locations, so the contribution of this stratum to O1 equals 2.
+For all marginal strata with one sampling location the contribution to component O1 of the criterion is zero. For strata with zero or two sampling locations, the contribution is $1/(p \cdot n)$, with $p$ the number of covariates, and $n$ the sample size ($p \cdot n$ is total number of marginal strata). There is one marginal stratum, the 18^th^ marginal stratum of aspect, that has three sampling locations, so the contribution of this stratum to O1 equals $2/(p \cdot n)$.
 
 ```{r}
-O1 <- sum(abs(counts-1))
+O1 <- mean(abs(counts-1))
 ```
 
 For the selected sample component O1 equals `r O1`. Fig \@ref(fig:tracecLHS) shows the trace of the objective function components O1 and O3, i.e. the values during the optimization. This trace can be extracted from the output of function `optimCLHS`:
@@ -138,18 +142,9 @@ ggplot(trace) +
   scale_y_continuous(name = "Component")
 ```
 
-Note that in package `spsann` O1 is not computed as the sum of the absolute values of the stratum sample sizes minus 1, but as the mean. The final value of O1 in the `data.frame` `trace` equals `r trace$O1[nrow(trace)]`, which equals the value of O1 computed above as a sum, divided by the total number of marginal strata (100) and multiplied by the weight for O1 (0.5).
+The final value of O1 in the `data.frame` `trace` equals `r trace$O1[nrow(trace)]`, which equals the value of O1 computed above, multiplied by the weight for O1 (0.5).
 
-```{r}
-(corpopulation <- cor(grd[,c(3,4,5,6,7)]))
-(corsample <- cor(mycLHSample[,c(4,5,6,7,8)]))
-
-O3 <- sum(abs(corpopulation-corsample))
-```
-
-Component O3 of the minimization criterion equals `r round(O3,3)`.
-
-Conditioned Latin hypercube samples can also be selected with R package `cLHS` [@roudier2011]. 
+Conditioned Latin hypercube samples can also be selected with R package `clhs` [@roudier2011]. This R package is of interest if we want to account for operational constraints in selecting the cLHS sample, using the approach proposed by @Roudier2012.
 
 ## Conditioned Latin hypercube infill sampling {#cLHIS}
 

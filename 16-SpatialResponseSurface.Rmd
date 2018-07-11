@@ -14,7 +14,7 @@ This design has been applied, amongst others, for mapping soil salinity (ECe), u
 
 This sampling design is illustrated with the Cotton Research Field in Uzbekistan. ECa was measured with the EM device in vertical dipole mode with transmitters at 1 m and 50 cm from the receiver. The measurements are one on transects covering the Cotton Research Field (Figure \@ref(fig:EMdataUzbekistan). The natural logs of the EM measurements are first interpolated to a 25 $times$ 25 m. grid by ordinary kriging. These interpolated EM data are then used as covariates in response surface sampling (Figure \@ref(fig:EMdataUzbekistan). The two covariates are strongly correlated, $r=0.73$.
 
-```{r EMdataUzbekistan, out.width='50%', fig.asp=.6, fig.show='hold', fig.cap="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates", echo=F,message=F}
+```{r EMdataUzbekistan, out.width='50%', fig.asp=.6, fig.show='hold', fig.cap="Natural logs of EM38 measurements on the cotton research field in Uzbekistan, and interpolated surfaces used as covariates", results='hide', echo=F,message=F}
 dat <- read.csv(file="UzbekistanEMv1m05m.csv")
 dat$lnEMv1m <- log(dat$EMv1mt)
 dat$lnEMv05m <- log(dat$EMv05mt)
@@ -30,7 +30,7 @@ ggplot(dat)+
   theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_colour_gradient("ln(EM)",low = "darkblue", high = "red",limits=c(2.4,5.4))+
   scale_x_continuous(name="Easting (km)",limits=c(305.5,308))+
-  scale_y_continuous(name="Northing (km)")
+  scale_y_continuous(name="Northing (km)",limits=c(4602,4603.5))
 
 ggplot(dat)+
   geom_point(mapping=aes(x=x/1000,y=y/1000,colour=lnEMv05m),size=0.5)+
@@ -38,10 +38,10 @@ ggplot(dat)+
   theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_colour_gradient(name="ln(EM)",low = "darkblue", high = "red",limits=c(4.2,5.8))+
   scale_x_continuous(name="Easting (km)",limits=c(305.5,308))+
-  scale_y_continuous(name="Northing (km)")
+  scale_y_continuous(name="Northing (km)",limits=c(4602,4603.5))
 
 #read shape file with with polygon of study area
-shpCRF <- readOGR(dsn = ".", layer = "CottonResearchField")
+shpCRF <- readOGR(dsn = ".", layer = "CottonResearchField",verbose=F)
 prj <- proj4string(shpCRF)
 shpCRF <- spTransform(shpCRF, CRS = CRS("+proj=tmerc +lat_0=0.000000000 +lon_0=63.000000000 +k=1.000000 +x_0=500000.000 +y_0=0.000 +ellps=krass +units=m"))
 
@@ -97,7 +97,7 @@ ggplot(grd)+
   theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_fill_gradient(low = "darkblue", high = "red",name="ln(EM)",limits=c(2.4,5.4))+
   scale_x_continuous(name="Easting (km)",limits=c(305.5,308))+
-  scale_y_continuous(name="Northing (km)")
+  scale_y_continuous(name="Northing (km)",limits=c(4602,4603.5))
 
 ggplot(grd)+
   geom_raster(aes(x=x1/1000,y=x2/1000,fill=lnEM05m))+
@@ -105,7 +105,7 @@ ggplot(grd)+
   theme(plot.title = element_text(size=16, hjust=0.5))+
   scale_fill_gradient(low = "darkblue", high = "red",name="ln(EM)",limits=c(4.2,5.8))+
   scale_x_continuous(name="Easting (km)",limits=c(305.5,308))+
-  scale_y_continuous(name="Northing (km)")
+  scale_y_continuous(name="Northing (km)",limits=c(4602,4603.5))
 ```
 
 I used the software [ESAP](https://www.ars.usda.gov/pacific-west-area/riverside-ca/us-salinity-laboratory/docs/esap-model/) to select a response surface sample. For a manual of ESAP, see @Lesch2000ESAPManual. In ESAP, either one or two variables can be chosen as covariates, and the possible sample sizes are 6, 12 or 20 points. Covariate data are centered, scaled, and in case of two covariates, decorrelated using PCA. Outliers are detected, which can be either deleted or masked. During the optimization a criterion is printed to the sceeen measuring how uniform the sample is distributed throughout the study area. Ideally, for the final sample this number should be 1.30 or less. For non-rectangular areas this threshold value must be multiplied by 1/$p$, with $p$ the proportion of the area of the rectangular bounding box covered by the study area. Figure \@ref(fig:ResponSurfaceSampleUzbekistan) shows a response surface sample of 12 points, plotted on one of the two covariates used in sampling. The uniformity criterion of this sample equals 1.92. The proportion $p$ equals about 0.49, leading to a threshold value of 2.65, so that we can conclude from this that the uniformity is excellent.  
@@ -141,7 +141,7 @@ In Figure \@ref(fig:RSSinscatter) the selected sample is plotted in the scatter 
 ```{r RSSinscatter, out.width='80%', fig.asp=.6, fig.cap="Response surface sample plotted in scatter diagrom of covariates",echo=F}
 res <- grd[myRSSample$id,]
 ggplot(data=grd) +
-  geom_point(mapping = aes(x = lnEM1m, y = lnEM05m), colour = "black",size=1,alpha=0.1) +
+  geom_point(mapping = aes(x = lnEM1m, y = lnEM05m), colour = "black",size=1,alpha=0.2) +
   geom_point(data=res, mapping = aes(x = lnEM1m, y = lnEM05m), shape=2,colour="red",size=2) +
   scale_x_continuous(name = "ln(EM)  1m") +
   scale_y_continuous(name = "ln(EM)  0.5m") +

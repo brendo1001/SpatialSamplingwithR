@@ -25,14 +25,14 @@
 <meta name="author" content="Dick J. Brus">
 
 
-<meta name="date" content="2018-07-02">
+<meta name="date" content="2018-07-11">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="SpatialResponseSurface.html">
+<link rel="prev" href="Introkriging.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -168,6 +168,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="15.1" data-path="cLHS.html"><a href="cLHS.html#cLHIS"><i class="fa fa-check"></i><b>15.1</b> Conditioned Latin hypercube infill sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="16" data-path="SpatialResponseSurface.html"><a href="SpatialResponseSurface.html"><i class="fa fa-check"></i><b>16</b> Spatial response surface sampling</a></li>
+<li class="chapter" data-level="17" data-path="Introkriging.html"><a href="Introkriging.html"><i class="fa fa-check"></i><b>17</b> Introduction to kriging</a><ul>
+<li class="chapter" data-level="17.0.1" data-path="Introkriging.html"><a href="Introkriging.html#kriging-with-an-external-drift"><i class="fa fa-check"></i><b>17.0.1</b> Kriging with an external drift</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -212,6 +215,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Brus, D.J., L.E.E.M. Spätjens, and J.J. de Gruijter. 1999. “A Sampling Scheme for Estimating the Mean Extractable Phosphorus Concentration of Fields for Environmental Regulation.” <em>Geoderma</em> 89: 129–48.</p>
 </div>
 <div>
+<p>Christensen, R. 1991. <em>Linear Models for Multivariate, Time Series and Spatial Data</em>. New York: Springer.</p>
+</div>
+<div>
 <p>Cochran, W.G. 1977. <em>Sampling Techniques</em>. New York: Wiley.</p>
 </div>
 <div>
@@ -236,10 +242,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Fitzgerald, G.J., S.M. Lesch, E.M. Barnes, and W.E. Luckett. 2006. “Directed Sampling Using Remote Sensing with a Response Surface Sampling Design for Site-Specific Agriculture.” <em>Computers and Electronics in Agriculture</em> 53 (2): 98–112. <a href="www.scopus.com" class="uri">www.scopus.com</a>.</p>
 </div>
 <div>
+<p>Goovaerts, P. 1997. <em>Geostatistics for Natural Resources Evaluation</em>. New York: Oxford University Press.</p>
+</div>
+<div>
 <p>Grafström, A., and Y. Tillé. 2013. “Doubly Balanced Spatial Sampling with Spreading and Restitution of Auxiliary Totals.” <em>Environmetrics</em> 24 (2). John Wiley &amp; Sons, Ltd: 120–31. doi:<a href="https://doi.org/10.1002/env.2194">10.1002/env.2194</a>.</p>
 </div>
 <div>
 <p>Grafström, A., N.L.P. Lundström, and L. Schelin. 2012. “Spatially Balanced Sampling Through the Pivotal Method.” <em>Biometrics</em> 68: 514–520.</p>
+</div>
+<div>
+<p>Isaaks, E.H., and R.H. Srivastava. 1989. <em>An Introduction to Applied Geostatistics</em>. New York: Oxford University Press.</p>
 </div>
 <div>
 <p>Lesch, S.M. 2005. “Sensor-Directed Response Surface Sampling Designs for Characterizing Spatial Variation in Soil Properties.” <em>Computers and Electronics in Agriculture</em> 46 (1-3 SPEC. ISS.): 153–79. <a href="www.scopus.com" class="uri">www.scopus.com</a>.</p>
@@ -272,6 +284,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Pebesma, E.J., and R.S. Bivand. 2005. “Classes and methods for spatial data in R.” <em>R News</em> 5(2). <a href="http://cran.r-project.org/doc/Rnews/" class="uri">http://cran.r-project.org/doc/Rnews/</a>.</p>
 </div>
 <div>
+<p>Roudier, P., D. Beaudette, and A. Hewitt. 2012. “A Conditioned Latin Hypercube Sampling Algorithm Incorporating Operational Constraints.” In <em>5th Global Workshop on Digital Soil Mapping</em>, 227–31.</p>
+</div>
+<div>
 <p>Roudier, Pierre. 2011. <em>Clhs: A R Package for Conditioned Latin Hypercube Sampling.</em></p>
 </div>
 <div>
@@ -283,8 +298,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div>
 <p>Walvoort, D.J.J., D.J. Brus, and J.J. de Gruijter. 2010. “An R Package for Spatial Coverage Sampling and Random Sampling from Compact Geographical Strata by K-Means.” <em>Computers and Geosciences</em> 36: 1261–7. doi:<a href="https://doi.org/10.1016/j.cageo.2010.04.005">10.1016/j.cageo.2010.04.005</a>.</p>
 </div>
+<div>
+<p>Webster, R., and M.A. Oliver. 2007. <em>Geostatistics for Environmental Scientists, Second Edition.</em> Wiley, Chichester.</p>
 </div>
 </div>
+</div>
+
 
 
 
@@ -300,7 +319,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="SpatialResponseSurface.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Introkriging.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

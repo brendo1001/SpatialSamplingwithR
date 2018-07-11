@@ -1,0 +1,340 @@
+# Introduction to kriging {#Introkriging}
+
+Kriging starts with the calibration of a model of the spatial variation of the study variable. There are several versions of kriging, building on different models of the spatial variation.  In **ordinary kriging** (OK) it is assumed that the mean of the study variable is the same everywhere:
+\begin{eqnarray}
+Z(\mathbf{s}) &=& \mu + \epsilon(\mathbf{s}) \\
+\epsilon(\mathbf{s}) &\sim& \mathcal{N}(0,\sigma^2)\\
+\mathrm{Cov}(\epsilon(\mathbf{s}),\epsilon(\mathbf{s}^{\prime})) &=& C(\mathbf{h}) \;,
+(\#eq:OKmodel)
+\end{eqnarray}
+with $Z(\mathbf{s})$ the variable of interest at location $\mathbf{s}$, $\mu$ the constant mean, independent of the location $\mathbf{s}$, $\epsilon(\mathbf{s})$ the error or residual (difference between study variable $z$ and mean $\mu$) at location $\mathbf{s}$, and $C(\mathbf{h})$ the covariance of $\epsilon$ at two points separated by vector $\mathbf{h} = \mathbf{s} - \mathbf{s}^{\prime}$. We say that in ordinary kriging we assume **stationarity in the mean**. The residuals are not independent, but spatially correlated. So if we have a large positive residual at some location $\mathbf{s}$, then in many caes we also have a positive residual at a nearby location $\mathbf{s}^{\prime}$.
+
+In practice not all sample data are used to predict the study variable at a prediction location, but only the sample data in some predefined neighbourhood. This implies that the stationarity assumption is relaxed to the often more realistic assumption of a constant mean within neighbourhoods. In ordinary kriging, the value of the study variable at a prediction location, $\widehat{Z}(\mathbf{s}_0)$, is predicted as a weighted average of the observations at the sampling locations within the neighbourhood
+\begin{equation}
+\widehat{Z}(\mathbf{s}_0)=\sum_{i=1}^{n}\lambda_i \,Z(\mathbf{s}_i) \;,
+(\#eq:weightedsumkriging)
+\end{equation}
+where $Z(\mathbf{s}_i)$ is the observed study variable at the $i^{\mathrm{th}}$ sampling location, and $\lambda _{i}$ is the weight attached to this location. The weights should be related to the strength of correlation of the study variable values at the sampling location and the prediction location. Note that as the mean is assumed constant (Equation \@ref(eq:OKmodel)), the correlation of the study variable $Z$ is equal to the correlation of the residual $\epsilon$. The stronger this autocorrelation (auto refers to the fact that the same variable is considered at both locations), the larger the weight must be. So if we have a model for this autocorrelation, then we can use this model to find the optimal weights. Further, if two sampling locations are very close, the weight attached to these two locations should not be twice the weight attached to a single, isolated sampling location at the same distance of the interpolation node. This explains that in computing the kriging weights, besides the covariances of the $n$ pairs of interpolation node and sampling location, also the covariances of the $n\cdot(n-1)/2$ pairs that can be formed with the $n$ sampling points are used. For OK, the optimal weights, i.e., the weights that lead to the predictor with minimum error variance (Best Linear Unbiased Predictor) can be found by solving the following $(n+1)$ equations:
+\begin{equation}
+\begin{array}{ccccc}
+\sum\limits_{j=1}^{n}\lambda _{j}\,\mathrm{Cov}[Z(\mathbf{s}_1),Z(\mathbf{s}_j)]&+&\nu &=&\mathrm{Cov}[Z(\mathbf{s}_1),Z(\mathbf{s}_0)]\\
+\sum\limits_{j=1}^{n}\lambda _{j}\,\mathrm{Cov}[Z(\mathbf{s}_2),Z(\mathbf{s}_j)]&+&\nu &=&\mathrm{Cov}[Z(\mathbf{s}_2),Z(\mathbf{s}_0)]\\
+&&&\vdots\\
+\sum\limits_{j=1}^{n}\lambda _{j}\,\mathrm{Cov}[Z(\mathbf{s}_n),Z(\mathbf{s}_j)]&+&\nu &=&\mathrm{Cov}[Z(\mathbf{s}_n),Z(\mathbf{s}_0)]\\
+\sum\limits_{j=1}^{n}\lambda _{j}&&&=&1\;,
+\end{array}
+(\#eq:krigingequations)
+\end{equation}
+where $\mathrm{Cov}[Z(\mathbf{s}_i),Z(\mathbf{s}_j)]$ is the covariance of the $i^{\mathrm{th}}$ and $j^{\mathrm{th}}$ sampling location, $\mathrm{Cov}[Z(\mathbf{s}_i),Z(\mathbf{s}_0)$ the covariance of the $i^{\mathrm{th}}$ sampling location and the interpolation node $s_0$, and $\nu$ an extra parameter to be estimated, referred to as the Lagrange multiplier. This Lagrange multiplier comes in because the error variance is minimized under the constraint that the kriging weights sum to 1, see the final equation in Equation \@ref(eq:krigingequations). This constraint ensures that the OK-predictor is unbiased. It is convenient to write this system of equations in matrix form:
+\begin{eqnarray}
+\left[
+\begin{array}{ccccc}
+C_{11}&C_{12}&\cdots&C_{1n}&1\\
+C_{21}&C_{22}&\cdots&C_{2n}&1\\
+\vdots&\vdots&\cdots&\vdots&1\\
+C_{n1}&C_{n2}&\cdots&C_{nn}&1\\
+1&1&\cdots&1&0\\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\lambda_1\\
+\lambda_2\\
+\vdots\\
+\lambda_n\\
+\nu\\
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+C_{10}\\
+C_{20}\\
+\vdots\\
+C_{n0}\\
+1\\
+\end{array}
+\right]\;.
+\end{eqnarray}
+Replacing submatrices by single symbols results in the shorthand matrix equation
+\begin{eqnarray}
+\left[
+\begin{array}{cc}
+\mathbf{C} & \mathbf{1} \\
+\mathbf{1}^{\mathrm{T}} & 0 \\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\boldsymbol{\lambda}\\
+\nu\\
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+\mathbf{c}_0\\
+1\\
+\end{array}
+\right]\;.
+(\#eq:OKsystem)
+\end{eqnarray}
+
+The variance of the prediction error (ordinary kriging variance) at a prediction location equals 
+\begin{equation}
+V(\widehat{Z}(\mathbf{s}_0))= \sigma^2 - \boldsymbol{\lambda}^{\mathrm{T}}\mathbf{c}_0 - \nu.
+(\#eq:OKvariance)
+\end{equation}
+This Equation shows that the ordinary kriging variance is independent of the data at the sampling locations. Given a model for the covariance (referred to as the covariance function or covariogram), it is fully determined by the coordinates of the sampling locations and of the prediction location. It is this nice property of kriging that makes it possible to optimize the grid-spacing, and as we will see in Chapter ?, to optimize the coordinates of the sampling locations, given a requirement on the kriging variance. If the kriging variance would be a function of the data at the sampling locations, optimization would be unfeasible.
+
+Computing the kriging predictor requires a model for the covariance as a function of the vector separating two locations. Often the covariance is modeled as a function of the length of the separation vector only, so as a function of the distance between two points. We then assume isotropy. Only authorized functions are allowed, ensuring that the variance of any linear combination of random variables, like the kriging predictor, is strictly positive. Commonly used functions are an exponential, spherical and Mat$\acute{\text{e}}$rn model. 
+
+Usually, not a covariance function is used in kriging, but a semivariogram (also shortly referred to as variogram). A semivariogram is a model of the **dissimilarity** of the study variable at two locations. The dissimilarity is quantified by half the squared difference of the study variable values at two points. A covariance function and variogram are related by, see Figure \@ref(fig:CovFunctionVariogram):
+\begin{equation}
+\gamma(\boldsymbol{h}) = \sigma^2 - C(\boldsymbol{h})\;.
+(\#eq:gammavscov)
+\end{equation}
+
+```{r CovFunctionVariogram, out.width='70%',fig.asp=0.7, fig.cap="Spherical covariance function (red line) and variogram (black line)", echo=F}
+nugget<-25
+psill<-75
+range<-500
+vgmodel<-vgm(model="Sph",nugget=nugget,psill=psill,range=range)
+d <- variogramLine(vgmodel,maxdist=700,min=0.01)
+cov <- variogramLine(vgmodel,maxdist=700,min=0.01,covariance=T)
+d$cov <- cov$gamma
+
+x<-ycov<-ysemi<-numeric(length=2)
+x<-c(0,0)
+ycov<-c(psill,psill+nugget)
+ysemi<-c(0,nugget)
+xydf<-data.frame(x,ycov,ysemi)
+ggplot() +
+  geom_line(data=d,aes(x=dist,y=cov),colour="red",size=1)+
+  geom_point(data=xydf,aes(x=x[1],y=ycov[1]),shape=1,size=3,colour="red")+
+  geom_point(data=xydf,aes(x=x[2],y=ycov[2]),shape=16,size=3,colour="red")+
+  geom_line(data=d,aes(x=dist,y=gamma),colour="black",size=1)+
+  geom_point(data=xydf,aes(x=x[1],y=ysemi[1]),shape=16,size=3,colour="black")+
+  geom_point(data=xydf,aes(x=x[2],y=ysemi[2]),shape=1,size=3,colour="black")+
+  scale_x_continuous(name = "Distance (m)",breaks=c(100,200,300,400,500,600,700)) +
+  scale_y_continuous(name = "Covariance, Semivariance\n")
+```
+
+To illustate that the ordinary kriging variance is independent of the values of the study variable at the sampling locations, I generate a square grid of 50 $\times$ 50 points. At each grid node  values of the study variable are simulated, using the variogram of Figure \@ref(fig:CovFunctionVariogram). This is repeated ten times, resulting in ten data sets of 2500 `observations' of the study variable. Each data set is used one-by-one to predict the study variable at a randomly selected prediction location, using again the variogram of Figure \@ref(fig:CovFunctionVariogram).
+
+```{r, echo=F, warning=F, results='hide', cache=T}
+xgrid<-seq(from=20,to=1000,by=20)
+ygrid<-xgrid
+grd<-expand.grid(xgrid,ygrid)
+names(grd)<-c("s1","s2")
+
+#Compute matrix with distances between sampling points
+H<-as.matrix(dist(grd[,c(1,2)]))
+
+#Define function to compute covariances
+Cspherical <- function(H,c0,c1,a){
+  C  <- matrix(nrow=nrow(H),ncol=ncol(H))
+  C[,] <- 0
+  Ha <- H/a
+  ind <- (Ha<1)
+  C[ind] <- ((-1.5*Ha[ind]+0.5*Ha[ind]^3)+1)*c1
+  diag(C) <- c0+c1
+  return(C)
+}
+
+C <- Cspherical(H, nugget, psill, range)
+Upper<-chol(C) #Cholesky decomposition of covariance matrix
+
+set.seed(314)
+mu <- 50
+Z <- matrix(nrow=nrow(grd),ncol=10)
+for (i in 1:10) {
+  N<-rnorm(n=nrow(grd),0,1) #simulate numbers from standard normal distribution
+  Z[,i]<-crossprod(Upper,N)+mu
+}
+
+#select random prediction location
+xypred<-data.frame(s1=runif(1,min=0,max=max(xgrid)),s2=runif(1,min=0,max=max(ygrid)))
+coordinates(xypred)<-~s1+s2
+```
+
+```{r, warning=F,results='hide', cache=T}
+library(gstat)
+vgmodel<-vgm(model="Sph",nugget=25,psill=75,range=500)
+OKpred <- OKvar <- NULL
+for (i in 1:ncol(Z)) {
+  grd$z <- Z[,i]
+  coordinates(grd)<-~s1+s2
+  prediction  <- krige(
+    formula = z ~ 1,
+    locations = grd,
+    newdata = xypred,
+    model = vgmodel,
+    nmax=100
+    )
+  OKpred[i]<-prediction$var1.pred
+  OKvar[i]<-prediction$var1.var
+  grd <- as(grd,"data.frame")
+}
+```
+
+As can be seen below, contrary to the predicted value, the ordinary kriging variance is constant.
+
+```{r OKpredandvar, tidy=FALSE, echo=F}
+tbl <- data.frame(OKpred,OKvar)
+
+knitr::kable(
+  head(tbl, 10), caption = 'Ordinary kriging predictions and kriging variance at fixed prediction locations for ten data sets with simulated values at a square grid',
+  col.names=c("Kriging prediction", "Kriging variance"),
+  booktabs = TRUE
+)
+```
+
+
+## Kriging with an external drift
+
+In kriging with an external drift (KED) the spatial variation of the study variable is modeled as the sum of a linear combination of covariates and a spatially correlated residual:
+\begin{eqnarray}
+Z(\mathbf{s}) &=& \sum_{k=0}^p \beta_k x_k(\mathbf{s}) + \epsilon(\mathbf{s}) \\
+\epsilon(\mathbf{s}) &\sim& \mathcal{N}(0,\sigma^2)\\
+\mathrm{Cov}(\epsilon(\mathbf{s}),\epsilon(\mathbf{s}^{\prime})) &=& C(\mathbf{h}) \;,
+(\#eq:KEDmodel2)
+\end{eqnarray}
+with $x_k(\mathbf{s})$ the value of the $k^{\mathrm{th}}$ covariate at location $\mathbf{s}$ ($x_0$ = 1 for all locations), $p$ the number of covariates, and $C(\mathbf{h})$ the covariance of the residuals at two points separated by vector $\mathbf{h} = \mathbf{s}-\mathbf{s}^{\prime}$. The constant mean $\mu$ in Equation \@ref(eq:OKmodel) is replaced by a linear combination of covariates, and as a consequence the mean is not constant anymore, but varies in space.
+
+With KED the study variable at a prediction location $s_0$ is predicted by
+\begin{equation}
+\hat{Z}(\mathbf{s}_0)=\sum_{k=0}^p \hat{\beta}_k x_k(\mathbf{s}_0)+\sum_{i=1}^n \lambda_i\left[Z(\mathbf{s}_i)-\sum_{k=0}^p \hat{\beta}_k x_k(\mathbf{s}_i)\right]\;,
+(\#eq:KEDpredictor)
+\end{equation}
+with $\hat{\beta}_k$ the estimated regression coefficient. The first component of this predictor is the estimated expectation at the new location using the covariate values at this location and the estimated regression coefficients, and the second component is a weighted sum of the residuals at the sampling locations.
+
+The optimal kriging weights $\lambda_i, i = 1 \cdots n$ are obtained in a similar way as in ordinary kriging. The difference is that additional constraints on the weights are needed, to ensure unbiased predictions. Not only the weights must sum to 1, but also for all $p$ covariates the weighted sum of the covariate values at the sampling locations must equal the covariate value at the target location ($\sum_{i=1}^n \lambda_i x_k(\mathbf{s}_i) = x_k(\mathbf{s}_0)$ for all $k=1 \cdots p$). This leads to a system of $n+p+1$ simultaneous equations that must be solved. In matrix notation this system is:
+\begin{eqnarray}
+\left[
+\begin{array}{cc}
+\mathbf{C} & \mathbf{X} \\
+\mathbf{X}^{\mathrm{T}} & \mathbf{0} \\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\boldsymbol{\lambda}\\
+\boldsymbol{\nu}\\
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+\mathbf{c}_0\\
+\mathbf{x}_0\\
+\end{array}
+\right]\;,
+(\#eq:KEDsystem)
+\end{eqnarray}
+with
+\begin{eqnarray}
+\mathbf{X}=
+\left[
+\begin{array}{ccccc}
+1&x_{11}&x_{12}&\cdots&x_{1p}\\
+1&x_{21}&x_{22}&\cdots&x_{2p}\\
+\vdots&\vdots&\cdots&\vdots\\
+1&x_{n1}&x_{n2}&\cdots&x_{np}\\
+\end{array}
+\right]\;,
+\end{eqnarray}
+$\mathbf{0}$ a ($(p+1) \times (p+1)$) matrix with zeroes, $\boldsymbol{\nu}$ a ($p+1$) vector with Lagrange multipliers, and $\mathbf{x}_0$ a $(p+1)$ vector with covariate values at the prediction location (including a 1 in first entry)
+
+The kriging variance with KED equals
+\begin{equation}
+V(\widehat{Z}(\mathbf{s}_0))= \sigma^2 - \boldsymbol{\lambda}^{\mathrm{T}}\mathbf{c}_0 - \boldsymbol{\nu}^{\mathrm{T}} \boldsymbol{x}_0.
+(\#eq:KEDvariance)
+\end{equation}
+The prediction error variance with KED can also be written as the sum of the variance of the estimated mean and the variance of the error in the interpolated residuals [@chr91]:
+\begin{equation}
+V(\widehat{Z}(\mathbf{s}_0))= \sigma^2 - \mathbf{c}_0^{\mathrm{T}}\mathbf{C}^{-1}\mathbf{c}_0 + (\mathbf{x}_0-\mathbf{X}^{\mathrm{T}}\mathbf{C}^{-1}\mathbf{c}_0)^{\mathrm{T}}(\mathbf{X}^{\mathrm{T}}\mathbf{C}^{-1}\mathbf{X})^{-1}(\mathbf{x}_0-\mathbf{X}^{\mathrm{T}}\mathbf{C}^{-1}\mathbf{c}_0)\;.
+(\#eq:KEDvariance2)
+\end{equation}
+The first two terms consitute the interpolation error variance, the thrid term the variance of the esimated mean.
+
+To illustate that the kriging variance with KED depends on the values of the covariate at the sampling locations and prediction location, values of a single covariate $x$ and of a correlated study variable $z$ are simulated at the nodes of the grid generated above. Besides, a series of values for the covariate $x$ is simulated at a randomly selected prediction location. Note that we have only one data set with `observations' of $x$ and $z$ at the sampling locations. These observations are used to predict $z$ at the randomly selected prediction location one-by-one for the simulated values of $x$ at the prediction location.
+
+To assess the contribution of the uncertainty about the mean, I also predict the values assuming that the mean is known, or more specifically that the two regression coefficients $\beta_0$ and $\beta_1$ are known. his type of kriging is referred to as simple kriging (SK).
+
+```{r, echo=F}
+grd$x<-rnorm(n=nrow(grd),mean=10,sd=2)
+
+#regression coefficients
+betas <- c(10,2)
+
+#compute mean of variable of interest
+mu <- betas[1] + betas[2]*grd$x
+
+#simulate values for residuals
+
+#parameters of residual variogram
+nugget<- 0
+psill <- 50
+range <- 200
+
+C <- Cspherical(H, nugget, psill, range )
+Upper<-chol(C) #Cholesky decomposition of covariance matrix
+set.seed(314)
+N<-rnorm(n=nrow(grd),0,1) #simulate numbers from standard normal distribution
+e<-crossprod(Upper,N)
+
+#compute variable of interest z
+grd$z <- mu  + e
+
+#residual variogram
+vgmodel.residual <- vgm(model="Sph", psill=psill, range=range, nugget=nugget)
+
+coordinates(grd)<-~s1+s2
+```
+
+```{r, results='hide',warning=F, cache=T}
+#generate vector with covariate values at prediction location
+x0 <- seq(from=0,to=20,by=2)
+KEDvar <- NULL
+for (i in 1:length(x0)) {
+  xypred$x <- x0[i]
+  prediction  <- krige(
+    formula = z ~ x,
+    locations = grd,
+    newdata = xypred,
+    model = vgmodel.residual,
+    nmax=100
+    )
+  KEDvar[i]<-prediction$var1.var
+}
+#Suppose the regression coefficients are known (simple kriging)
+SKvar <- NULL
+for (i in 1:length(x0)) {
+  xypred$x <- x0[i]
+  prediction  <- krige(
+    formula = z ~ x,
+    locations = grd,
+    newdata = xypred,
+    model = vgmodel.residual,
+    beta=betas,
+    nmax=100
+    )
+  SKvar[i]<-prediction$var1.var
+}
+```
+
+Figure \@ref(fig:KEDVarSKVar) shows that, contrary to the ordinary kriging variance,  the kriging variance with KED is not constant, but depends on the covariate value at the prediction location. It is the smallest near the mean of the covariate values at the sampling sites, which is 10.0. The more extreme the covariate value at the prediction location, the larger the kriging variance with KED. This is analogous to the variance of predictions with a linear regression model.
+
+On the other hand the variance with simple kriging (SK) is constant. This is beacuse with SK only the error in the interpolation of the residuals contribute to the variance (first two terms in Equation \@ref(eq:KEDvariance2). This interpolation error is indpendent of the value of $x$ at the prediction location. In Figure \@ref(fig:KEDVarSKVar) the difference between the variance with KED and with SK is the variance of the estimated mean, due to uncertainty about the regression coefficients. These regression coeffcients must be *estimated* from the sample data. 
+
+```{r KEDVarSKVar, out.width='70%',fig.asp=0.7, fig.cap="Variance of prediction error with KED (black dots) and SK (red dots) as a function of the covariate value at a fixed prediction location", echo=F}
+df<-data.frame(x0,KEDvar,SKvar)
+ggplot() +
+    geom_point(data=df,mapping=aes(x=x0,y=KEDvar),size=2) +
+    geom_point(data=df,mapping=aes(x=x0,y=SKvar),size=2,colour="red") +
+    scale_x_continuous(name = "Covariate value at prediction location")
+```
+
+
+I realize that this is rather a short introduction to kriging. I refer to @isa89 for an introduction in geostatistics, to @goo97 for an expos$\acute{\text{e}}$ of the many versions of kriging, and to @webster2007 for an elaborate explanation of kriging. An nice educational tool for getting a feeling with ordinary kriging is [E{Z}-Kriging](https://wiki.52north.org/AI_GEOSTATS/SWEZKriging).

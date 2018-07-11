@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial sampling with R</title>
+  <meta name="description" content="Spatial sampling with R">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial sampling with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial sampling with R" />
+  
+  
+  
+
+<meta name="author" content="Dick J. Brus">
+
+
+<meta name="date" content="2018-07-11">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="SpatialResponseSurface.html">
+<link rel="next" href="references.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Foreword</a></li>
+<li class="chapter" data-level="1" data-path="GeneralIntro.html"><a href="GeneralIntro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="GeneralIntro.html"><a href="GeneralIntro.html#design-based-versus-model-based-approach"><i class="fa fa-check"></i><b>1.1</b> Design-based versus model-based approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html"><i class="fa fa-check"></i><b>2</b> Probability sampling for estimating (sub)population parameters</a><ul>
+<li class="chapter" data-level="2.1" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#horvitz-thompson-estimator"><i class="fa fa-check"></i><b>2.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="2.2" data-path="IntroProbabilitySampling.html"><a href="IntroProbabilitySampling.html#Voorst"><i class="fa fa-check"></i><b>2.2</b> Simulated population</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="SI.html"><a href="SI.html"><i class="fa fa-check"></i><b>3</b> Simple random sampling</a><ul>
+<li class="chapter" data-level="3.1" data-path="SI.html"><a href="SI.html#horvitz-thompson-estimator-1"><i class="fa fa-check"></i><b>3.1</b> Horvitz-Thompson estimator</a></li>
+<li class="chapter" data-level="3.2" data-path="SI.html"><a href="SI.html#VarMeanSI"><i class="fa fa-check"></i><b>3.2</b> Sampling variance of estimated mean, total and proportion</a></li>
+<li class="chapter" data-level="3.3" data-path="SI.html"><a href="SI.html#confidence-interval-estimates"><i class="fa fa-check"></i><b>3.3</b> Confidence interval estimates</a></li>
+<li class="chapter" data-level="3.4" data-path="SI.html"><a href="SI.html#arbitrary-haphazard-sampling-versus-probability-sampling"><i class="fa fa-check"></i><b>3.4</b> Arbitrary (haphazard) sampling versus probability sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="STSI.html"><a href="STSI.html"><i class="fa fa-check"></i><b>4</b> Stratified random sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="STSI.html"><a href="STSI.html#estimation-of-the-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>4.1</b> Estimation of the mean and its sampling variance</a></li>
+<li class="chapter" data-level="4.2" data-path="STSI.html"><a href="STSI.html#confidence-interval-estimate"><i class="fa fa-check"></i><b>4.2</b> Confidence interval estimate</a></li>
+<li class="chapter" data-level="4.3" data-path="STSI.html"><a href="STSI.html#cumrootf"><i class="fa fa-check"></i><b>4.3</b> Optimal stratification</a></li>
+<li class="chapter" data-level="4.4" data-path="STSI.html"><a href="STSI.html#geographical-stratification"><i class="fa fa-check"></i><b>4.4</b> Geographical stratification</a></li>
+<li class="chapter" data-level="4.5" data-path="STSI.html"><a href="STSI.html#STSIallocation"><i class="fa fa-check"></i><b>4.5</b> Allocation of sample size to strata</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="SY.html"><a href="SY.html"><i class="fa fa-check"></i><b>5</b> Systematic random sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="SY.html"><a href="SY.html#EstVarSY"><i class="fa fa-check"></i><b>5.1</b> Estimation of mean and its sampling variance</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="pps.html"><a href="pps.html"><i class="fa fa-check"></i><b>6</b> Sampling with probabilities proportional to size</a><ul>
+<li class="chapter" data-level="6.1" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-with-replacement-ppswr"><i class="fa fa-check"></i><b>6.1</b> Probability-proportional-to-size sampling with replacement (ppswr)</a></li>
+<li class="chapter" data-level="6.2" data-path="pps.html"><a href="pps.html#probability-proportional-to-size-sampling-without-replacement-ppswor"><i class="fa fa-check"></i><b>6.2</b> Probability-proportional-to-size sampling without replacement (ppswor)</a></li>
+<li class="chapter" data-level="6.3" data-path="pps.html"><a href="pps.html#spatial-version-of-ppswor"><i class="fa fa-check"></i><b>6.3</b> Spatial version of ppswor</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="Cl.html"><a href="Cl.html"><i class="fa fa-check"></i><b>7</b> Cluster random sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="Cl.html"><a href="Cl.html#estimation-of-mean-and-its-sampling-variance"><i class="fa fa-check"></i><b>7.1</b> Estimation of mean and its sampling variance</a></li>
+<li class="chapter" data-level="7.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>7.2</b> Stratified cluster random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Twostage.html"><a href="Twostage.html"><i class="fa fa-check"></i><b>8</b> Two-stage random sampling</a><ul>
+<li class="chapter" data-level="8.1" data-path="Twostage.html"><a href="Twostage.html#estimation-of-mean-and-its-sampling-variance-1"><i class="fa fa-check"></i><b>8.1</b> Estimation of mean and its sampling variance</a><ul>
+<li class="chapter" data-level="" data-path="Twostage.html"><a href="Twostage.html#questions-9"><i class="fa fa-check"></i>Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="Cl.html"><a href="Cl.html#StratifiedCl"><i class="fa fa-check"></i><b>8.2</b> Stratified two-stage random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html"><i class="fa fa-check"></i><b>9</b> Regression and ratio estimator</a><ul>
+<li class="chapter" data-level="9.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator"><i class="fa fa-check"></i><b>9.1</b> Regression estimator</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.1.1</b> Regression estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator"><i class="fa fa-check"></i><b>9.2</b> Ratio estimator</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#ratio-estimator-for-stratified-simple-random-sampling"><i class="fa fa-check"></i><b>9.2.1</b> Ratio estimator for stratified simple random sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="RegressionEstimator.html"><a href="RegressionEstimator.html#regression-estimator-with-unknown-mean-of-covariate"><i class="fa fa-check"></i><b>9.3</b> Regression estimator with unknown mean of covariate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="Balanced.html"><a href="Balanced.html"><i class="fa fa-check"></i><b>10</b> Balanced sampling</a><ul>
+<li class="chapter" data-level="10.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sample-versus-balanced-sampling-design"><i class="fa fa-check"></i><b>10.1</b> Balanced sample versus balanced sampling design</a></li>
+<li class="chapter" data-level="10.2" data-path="Balanced.html"><a href="Balanced.html#unequal-inclusion-probabilities"><i class="fa fa-check"></i><b>10.2</b> Unequal inclusion probabilities</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="Balanced.html"><a href="Balanced.html#balanced-sampling-with-geographical-spreading"><i class="fa fa-check"></i><b>10.2.1</b> Balanced sampling with geographical spreading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html"><i class="fa fa-check"></i><b>11</b> Sampling for mapping</a><ul>
+<li class="chapter" data-level="11.1" data-path="IntroSamplingforMapping.html"><a href="IntroSamplingforMapping.html#geometric-versus-model-based-sampling-designs"><i class="fa fa-check"></i><b>11.1</b> Geometric versus model-based sampling designs</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="Regulargrid.html"><a href="Regulargrid.html"><i class="fa fa-check"></i><b>12</b> Sampling on a regular grid</a></li>
+<li class="chapter" data-level="13" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html"><i class="fa fa-check"></i><b>13</b> Spatial coverage sampling</a><ul>
+<li class="chapter" data-level="13.1" data-path="SpatialCoverage.html"><a href="SpatialCoverage.html#SpatialInfill"><i class="fa fa-check"></i><b>13.1</b> Spatial infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="kmeans.html"><a href="kmeans.html"><i class="fa fa-check"></i><b>14</b> K-means sampling</a><ul>
+<li class="chapter" data-level="14.1" data-path="kmeans.html"><a href="kmeans.html#Hardkmeans"><i class="fa fa-check"></i><b>14.1</b> Hard k-means</a></li>
+<li class="chapter" data-level="14.2" data-path="kmeans.html"><a href="kmeans.html#Fuzzykmens"><i class="fa fa-check"></i><b>14.2</b> Fuzzy k-means</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="cLHS.html"><a href="cLHS.html"><i class="fa fa-check"></i><b>15</b> Conditioned Latin hypercube sampling</a><ul>
+<li class="chapter" data-level="15.1" data-path="cLHS.html"><a href="cLHS.html#cLHIS"><i class="fa fa-check"></i><b>15.1</b> Conditioned Latin hypercube infill sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="SpatialResponseSurface.html"><a href="SpatialResponseSurface.html"><i class="fa fa-check"></i><b>16</b> Spatial response surface sampling</a></li>
+<li class="chapter" data-level="17" data-path="Introkriging.html"><a href="Introkriging.html"><i class="fa fa-check"></i><b>17</b> Introduction to kriging</a><ul>
+<li class="chapter" data-level="17.0.1" data-path="Introkriging.html"><a href="Introkriging.html#kriging-with-an-external-drift"><i class="fa fa-check"></i><b>17.0.1</b> Kriging with an external drift</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial sampling with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Introkriging" class="section level1">
+<h1><span class="header-section-number">Chapter 17</span> Introduction to kriging</h1>
+Kriging starts with the calibration of a model of the spatial variation of the study variable. There are several versions of kriging, building on different models of the spatial variation. In <strong>ordinary kriging</strong> (OK) it is assumed that the mean of the study variable is the same everywhere:
+<span class="math display" id="eq:OKmodel">\[\begin{eqnarray}
+Z(\mathbf{s}) &amp;=&amp; \mu + \epsilon(\mathbf{s}) \\
+\epsilon(\mathbf{s}) &amp;\sim&amp; \mathcal{N}(0,\sigma^2)\\
+\mathrm{Cov}(\epsilon(\mathbf{s}),\epsilon(\mathbf{s}^{\prime})) &amp;=&amp; C(\mathbf{h}) \;,
+\tag{17.1}
+\end{eqnarray}\]</span>
+<p>with <span class="math inline">\(Z(\mathbf{s})\)</span> the variable of interest at location <span class="math inline">\(\mathbf{s}\)</span>, <span class="math inline">\(\mu\)</span> the constant mean, independent of the location <span class="math inline">\(\mathbf{s}\)</span>, <span class="math inline">\(\epsilon(\mathbf{s})\)</span> the error or residual (difference between study variable <span class="math inline">\(z\)</span> and mean <span class="math inline">\(\mu\)</span>) at location <span class="math inline">\(\mathbf{s}\)</span>, and <span class="math inline">\(C(\mathbf{h})\)</span> the covariance of <span class="math inline">\(\epsilon\)</span> at two points separated by vector <span class="math inline">\(\mathbf{h} = \mathbf{s} - \mathbf{s}^{\prime}\)</span>. We say that in ordinary kriging we assume <strong>stationarity in the mean</strong>. The residuals are not independent, but spatially correlated. So if we have a large positive residual at some location <span class="math inline">\(\mathbf{s}\)</span>, then in many caes we also have a positive residual at a nearby location <span class="math inline">\(\mathbf{s}^{\prime}\)</span>.</p>
+In practice not all sample data are used to predict the study variable at a prediction location, but only the sample data in some predefined neighbourhood. This implies that the stationarity assumption is relaxed to the often more realistic assumption of a constant mean within neighbourhoods. In ordinary kriging, the value of the study variable at a prediction location, <span class="math inline">\(\widehat{Z}(\mathbf{s}_0)\)</span>, is predicted as a weighted average of the observations at the sampling locations within the neighbourhood
+<span class="math display" id="eq:weightedsumkriging">\[\begin{equation}
+\widehat{Z}(\mathbf{s}_0)=\sum_{i=1}^{n}\lambda_i \,Z(\mathbf{s}_i) \;,
+\tag{17.2}
+\end{equation}\]</span>
+where <span class="math inline">\(Z(\mathbf{s}_i)\)</span> is the observed study variable at the <span class="math inline">\(i^{\mathrm{th}}\)</span> sampling location, and <span class="math inline">\(\lambda _{i}\)</span> is the weight attached to this location. The weights should be related to the strength of correlation of the study variable values at the sampling location and the prediction location. Note that as the mean is assumed constant (Equation <a href="Introkriging.html#eq:OKmodel">(17.1)</a>), the correlation of the study variable <span class="math inline">\(Z\)</span> is equal to the correlation of the residual <span class="math inline">\(\epsilon\)</span>. The stronger this autocorrelation (auto refers to the fact that the same variable is considered at both locations), the larger the weight must be. So if we have a model for this autocorrelation, then we can use this model to find the optimal weights. Further, if two sampling locations are very close, the weight attached to these two locations should not be twice the weight attached to a single, isolated sampling location at the same distance of the interpolation node. This explains that in computing the kriging weights, besides the covariances of the <span class="math inline">\(n\)</span> pairs of interpolation node and sampling location, also the covariances of the <span class="math inline">\(n\cdot(n-1)/2\)</span> pairs that can be formed with the <span class="math inline">\(n\)</span> sampling points are used. For OK, the optimal weights, i.e., the weights that lead to the predictor with minimum error variance (Best Linear Unbiased Predictor) can be found by solving the following <span class="math inline">\((n+1)\)</span> equations:
+<span class="math display" id="eq:krigingequations">\[\begin{equation}
+\begin{array}{ccccc}
+\sum\limits_{j=1}^{n}\lambda _{j}\,\mathrm{Cov}[Z(\mathbf{s}_1),Z(\mathbf{s}_j)]&amp;+&amp;\nu &amp;=&amp;\mathrm{Cov}[Z(\mathbf{s}_1),Z(\mathbf{s}_0)]\\
+\sum\limits_{j=1}^{n}\lambda _{j}\,\mathrm{Cov}[Z(\mathbf{s}_2),Z(\mathbf{s}_j)]&amp;+&amp;\nu &amp;=&amp;\mathrm{Cov}[Z(\mathbf{s}_2),Z(\mathbf{s}_0)]\\
+\vdots\\
+\sum\limits_{j=1}^{n}\lambda _{j}\,\mathrm{Cov}[Z(\mathbf{s}_n),Z(\mathbf{s}_j)]&amp;+&amp;\nu &amp;=&amp;\mathrm{Cov}[Z(\mathbf{s}_n),Z(\mathbf{s}_0)]\\
+\sum\limits_{j=1}^{n}\lambda _{j}&amp;&amp;&amp;=&amp;1\;,
+\end{array}
+\tag{17.3}
+\end{equation}\]</span>
+where <span class="math inline">\(\mathrm{Cov}[Z(\mathbf{s}_i),Z(\mathbf{s}_j)]\)</span> is the covariance of the <span class="math inline">\(i^{\mathrm{th}}\)</span> and <span class="math inline">\(j^{\mathrm{th}}\)</span> sampling location, <span class="math inline">\(\mathrm{Cov}[Z(\mathbf{s}_i),Z(\mathbf{s}_0)\)</span> the covariance of the <span class="math inline">\(i^{\mathrm{th}}\)</span> sampling location and the interpolation node <span class="math inline">\(s_0\)</span>, and <span class="math inline">\(\nu\)</span> an extra parameter to be estimated, referred to as the Lagrange multiplier. This Lagrange multiplier comes in because the error variance is minimized under the constraint that the kriging weights sum to 1, see the final equation in Equation <a href="Introkriging.html#eq:krigingequations">(17.3)</a>. This constraint ensures that the OK-predictor is unbiased. It is convenient to write this system of equations in matrix form:
+<span class="math display">\[\begin{eqnarray}
+\left[
+\begin{array}{ccccc}
+C_{11}&amp;C_{12}&amp;\cdots&amp;C_{1n}&amp;1\\
+C_{21}&amp;C_{22}&amp;\cdots&amp;C_{2n}&amp;1\\
+\vdots&amp;\vdots&amp;\cdots&amp;\vdots&amp;1\\
+C_{n1}&amp;C_{n2}&amp;\cdots&amp;C_{nn}&amp;1\\
+1&amp;1&amp;\cdots&amp;1&amp;0\\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\lambda_1\\
+\lambda_2\\
+\vdots\\
+\lambda_n\\
+\nu\\
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+C_{10}\\
+C_{20}\\
+\vdots\\
+C_{n0}\\
+1\\
+\end{array}
+\right]\;.
+\end{eqnarray}\]</span>
+Replacing submatrices by single symbols results in the shorthand matrix equation
+<span class="math display">\[\begin{eqnarray}
+\left[
+\begin{array}{cc}
+\mathbf{C} &amp; \mathbf{1} \\
+\mathbf{1}^{\mathrm{T}} &amp; 0 \\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\boldsymbol{\lambda}\\
+\nu\\
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+\mathbf{c}_0\\
+1\\
+\end{array}
+\right]\;.
+\end{eqnarray}\]</span>
+The variance of the prediction error (ordinary kriging variance) at a prediction location equals
+<span class="math display" id="eq:OKvariance">\[\begin{equation}
+V(\widehat{Z}(\mathbf{s}_0))= \sigma^2 - \boldsymbol{\lambda}^{\mathrm{T}}\mathbf{c}_0 - \nu.
+\tag{17.4}
+\end{equation}\]</span>
+<p>This Equation shows that the ordinary kriging variance is independent of the data at the sampling locations. Given a model for the covariance (referred to as the covariance function or covariogram), it is fully determined by the coordinates of the sampling locations and of the prediction location. It is this nice property of kriging that makes it possible to optimize the grid-spacing, and as we will see in Chapter ?, to optimize the coordinates of the sampling locations, given a requirement on the kriging variance. If the kriging variance would be a function of the data at the sampling locations, optimization would be unfeasible.</p>
+<p>Computing the kriging predictor requires a model for the covariance as a function of the vector separating two locations. Often the covariance is modeled as a function of the length of the separation vector only, so as a function of the distance between two points. We then assume isotropy. Only authorized functions are allowed, ensuring that the variance of any linear combination of random variables, like the kriging predictor, is strictly positive. Commonly used functions are an exponential, spherical and Mat<span class="math inline">\(\acute{\text{e}}\)</span>rn model.</p>
+Usually, not a covariance function is used in kriging, but a semivariogram (also shortly referred to as variogram). A semivariogram is a model of the <strong>dissimilarity</strong> of the study variable at two locations. The dissimilarity is quantified by half the squared difference of the study variable values at two points. A covariance function and variogram are related by, see Figure <a href="Introkriging.html#fig:CovFunctionVariogram">17.1</a>:
+<span class="math display" id="eq:gammavscov">\[\begin{equation}
+\gamma(\boldsymbol{h}) = \sigma^2 - C(\boldsymbol{h})\;.
+\tag{17.5}
+\end{equation}\]</span>
+<div class="figure" style="text-align: center"><span id="fig:CovFunctionVariogram"></span>
+<img src="SpatialSampling_files/figure-html/CovFunctionVariogram-1.png" alt="Spherical covariance function (red line) and variogram (black line)" width="70%" />
+<p class="caption">
+Figure 17.1: Spherical covariance function (red line) and variogram (black line)
+</p>
+</div>
+<p>To illustate that the ordinary kriging variance is independent of the values of the study variable at the sampling locations, I generate a square grid of 50 <span class="math inline">\(\times\)</span> 50 points. At each grid node values of the study variable are simulated, using the variogram of Figure <a href="Introkriging.html#fig:CovFunctionVariogram">17.1</a>. This is repeated ten times, resulting in ten data sets of 2500 `observations’ of the study variable. Each data set is used one-by-one to predict the study variable at a randomly selected prediction location, using again the variogram of Figure <a href="Introkriging.html#fig:CovFunctionVariogram">17.1</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gstat)
+OKpred &lt;-<span class="st"> </span>OKvar &lt;-<span class="st"> </span><span class="ot">NULL</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(Z)) {
+  grd<span class="op">$</span>z &lt;-<span class="st"> </span>Z[,i]
+  <span class="kw">coordinates</span>(grd)&lt;-<span class="er">~</span>s1<span class="op">+</span>s2
+  prediction  &lt;-<span class="st"> </span><span class="kw">krige</span>(
+    <span class="dt">formula =</span> z <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+    <span class="dt">locations =</span> grd,
+    <span class="dt">newdata =</span> xypred,
+    <span class="dt">model =</span> vgmodel,
+    <span class="dt">nmax=</span><span class="dv">100</span>
+    )
+  OKpred[i]&lt;-prediction<span class="op">$</span>var1.pred
+  OKvar[i]&lt;-prediction<span class="op">$</span>var1.var
+  grd &lt;-<span class="st"> </span><span class="kw">as</span>(grd,<span class="st">&quot;data.frame&quot;</span>)
+}</code></pre></div>
+<p>As can be seen below, contrary to the predicted value, the ordinary kriging variance is constant.</p>
+<table>
+<caption><span id="tab:OKpredandvar">Table 17.1: </span>Ordinary kriging predictions and kriging variance at fixed prediction locations for ten data sets with simulated values at a square grid</caption>
+<thead>
+<tr class="header">
+<th align="right">Kriging prediction</th>
+<th align="right">Kriging variance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">30.25687</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="even">
+<td align="right">44.08787</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="odd">
+<td align="right">48.14399</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="even">
+<td align="right">49.30823</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="odd">
+<td align="right">46.63988</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="even">
+<td align="right">41.85311</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="odd">
+<td align="right">42.05698</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="even">
+<td align="right">50.64750</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="odd">
+<td align="right">57.75911</td>
+<td align="right">30.3181</td>
+</tr>
+<tr class="even">
+<td align="right">44.73511</td>
+<td align="right">30.3181</td>
+</tr>
+</tbody>
+</table>
+<div id="kriging-with-an-external-drift" class="section level3">
+<h3><span class="header-section-number">17.0.1</span> Kriging with an external drift</h3>
+In kriging with an external drift (KED) the spatial variation of the study variable is modeled as the sum of a linear combination of covariates and a spatially correlated residual:
+<span class="math display" id="eq:KEDmodel2">\[\begin{eqnarray}
+Z(\mathbf{s}) &amp;=&amp; \sum_{k=0}^p \beta_k x_k(\mathbf{s}) + \epsilon(\mathbf{s}) \\
+\epsilon(\mathbf{s}) &amp;\sim&amp; \mathcal{N}(0,\sigma^2)\\
+\mathrm{Cov}(\epsilon(\mathbf{s}),\epsilon(\mathbf{s}^{\prime})) &amp;=&amp; C(\mathbf{h}) \;,
+\tag{17.6}
+\end{eqnarray}\]</span>
+<p>with <span class="math inline">\(x_k(\mathbf{s})\)</span> the value of the <span class="math inline">\(k^{\mathrm{th}}\)</span> covariate at location <span class="math inline">\(\mathbf{s}\)</span> (<span class="math inline">\(x_0\)</span> = 1 for all locations), <span class="math inline">\(p\)</span> the number of covariates, and <span class="math inline">\(C(\mathbf{h})\)</span> the covariance of the residuals at two points separated by vector <span class="math inline">\(\mathbf{h} = \mathbf{s}-\mathbf{s}^{\prime}\)</span>. The constant mean <span class="math inline">\(\mu\)</span> in Equation <a href="Introkriging.html#eq:OKmodel">(17.1)</a> is replaced by a linear combination of covariates, and as a consequence the mean is not constant anymore, but varies in space.</p>
+With KED the study variable at a prediction location <span class="math inline">\(s_0\)</span> is predicted by
+<span class="math display">\[\begin{equation}
+\hat{Z}(\mathbf{s}_0)=\sum_{k=0}^p \hat{\beta}_k x_k(\mathbf{s}_0)+\sum_{i=1}^n \lambda_i\left[Z(\mathbf{s}_i)-\sum_{k=0}^p \hat{\beta}_k x_k(\mathbf{s}_i)\right]\;,
+\label{KEDpredictor}
+\end{equation}\]</span>
+<p>with <span class="math inline">\(\hat{\beta}_k\)</span> the estimated regression coefficient. The first component of this predictor is the estimated expectation at the new location using the covariate values at this location and the estimated regression coefficients, and the second component is a weighted sum of the residuals at the sampling locations.</p>
+The optimal kriging weights <span class="math inline">\(\lambda_i, i = 1 \cdots n\)</span> are obtained in a similar way as in ordinary kriging. The difference is that additional constraints on the weights are needed, to ensure unbiased predictions. Not only the weights must sum to 1, but also for all <span class="math inline">\(p\)</span> covariates the weighted sum of the covariate values at the sampling locations must equal the covariate value at the target location (<span class="math inline">\(\sum_{i=1}^n \lambda_i x_k(\mathbf{s}_i) = x_k(\mathbf{s}_0)\)</span> for all <span class="math inline">\(k=1 \cdots p\)</span>). This leads to a system of <span class="math inline">\(n+p+1\)</span> simultaneous equations that must be solved. In matrix notation this system is:
+<span class="math display">\[\begin{eqnarray}
+\left[
+\begin{array}{cc}
+\mathbf{C} &amp; \mathbf{X} \\
+\mathbf{X}^{\mathrm{T}} &amp; \mathbf{0} \\
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+\boldsymbol{\lambda}\\
+\boldsymbol{\nu}\\
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c}
+\mathbf{c}_0\\
+\mathbf{x}_0\\
+\end{array}
+\right]\;,
+\end{eqnarray}\]</span>
+with
+<span class="math display">\[\begin{eqnarray}
+\mathbf{X}=
+\left[
+\begin{array}{ccccc}
+1&amp;x_{11}&amp;x_{12}&amp;\cdots&amp;x_{1p}\\
+1&amp;x_{21}&amp;x_{22}&amp;\cdots&amp;x_{2p}\\
+\vdots&amp;\vdots&amp;\cdots&amp;\vdots\\
+1&amp;x_{n1}&amp;x_{n2}&amp;\cdots&amp;x_{np}\\
+\end{array}
+\right]\;,
+\end{eqnarray}\]</span>
+<p><span class="math inline">\(\mathbf{0}\)</span> a (<span class="math inline">\((p+1) \times (p+1)\)</span>) matrix with zeroes, <span class="math inline">\(\boldsymbol{\nu}\)</span> a (<span class="math inline">\(p+1\)</span>) vector with Lagrange multipliers, and <span class="math inline">\(\mathbf{x}_0\)</span> a <span class="math inline">\((p+1)\)</span> vector with covariate values at the prediction location (including a 1 in first entry)</p>
+The kriging variance with KED equals
+<span class="math display" id="eq:KEDvariance">\[\begin{equation}
+V(\widehat{Z}(\mathbf{s}_0))= \sigma^2 - \boldsymbol{\lambda}^{\mathrm{T}}\mathbf{c}_0 - \boldsymbol{\nu}^{\mathrm{T}} \boldsymbol{x}_0.
+\tag{17.7}
+\end{equation}\]</span>
+The prediction error variance with KED can also be written as the sum of the variance of the estimated mean and the variance of the error in the interpolated residuals <span class="citation">(Christensen 1991)</span>:
+<span class="math display" id="eq:KEDvariance2">\[\begin{equation}
+V(\widehat{Z}(\mathbf{s}_0))= \sigma^2 - \mathbf{c}_0^{\mathrm{T}}\mathbf{C}^{-1}\mathbf{c}_0 + (\mathbf{x}_0-\mathbf{X}^{\mathrm{T}}\mathbf{C}^{-1}\mathbf{c}_0)^{\mathrm{T}}(\mathbf{X}^{\mathrm{T}}\mathbf{C}^{-1}\mathbf{X})^{-1}(\mathbf{x}_0-\mathbf{X}^{\mathrm{T}}\mathbf{C}^{-1}\mathbf{c}_0)\;.
+\tag{17.8}
+\end{equation}\]</span>
+<p>The first two terms consitute the interpolation error variance, the thrid term the variance of the esimated mean.</p>
+<p>To illustate that the kriging variance with KED depends on the values of the covariate at the sampling locations and prediction location, values of a single covariate <span class="math inline">\(x\)</span> and of a correlated study variable <span class="math inline">\(z\)</span> are simulated at the nodes of the grid generated above. Besides, a series of values for the covariate <span class="math inline">\(x\)</span> is simulated at a randomly selected prediction location. Note that we have only one data set with `observations’ of <span class="math inline">\(x\)</span> and <span class="math inline">\(z\)</span> at the sampling locations. These observations are used to predict <span class="math inline">\(z\)</span> at the randomly selected prediction location one-by-one for the simulated values of <span class="math inline">\(x\)</span> at the prediction location.</p>
+<p>To assess the contribution of the uncertainty about the mean, I also predict the values assuming that the mean is known, or more specifically that the two regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are known. his type of kriging is referred to as simple kriging (SK).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#generate vector with covariate values at prediction location</span>
+x0 &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>,<span class="dt">to=</span><span class="dv">20</span>,<span class="dt">by=</span><span class="dv">2</span>)
+KEDvar &lt;-<span class="st"> </span><span class="ot">NULL</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(x0)) {
+  xypred<span class="op">$</span>x &lt;-<span class="st"> </span>x0[i]
+  prediction  &lt;-<span class="st"> </span><span class="kw">krige</span>(
+    <span class="dt">formula =</span> z <span class="op">~</span><span class="st"> </span>x,
+    <span class="dt">locations =</span> grd,
+    <span class="dt">newdata =</span> xypred,
+    <span class="dt">model =</span> vgmodel.residual,
+    <span class="dt">nmax=</span><span class="dv">100</span>
+    )
+  KEDvar[i]&lt;-prediction<span class="op">$</span>var1.var
+}
+<span class="co">#Suppose the regression coefficients are known (simple kriging)</span>
+SKvar &lt;-<span class="st"> </span><span class="ot">NULL</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(x0)) {
+  xypred<span class="op">$</span>x &lt;-<span class="st"> </span>x0[i]
+  prediction  &lt;-<span class="st"> </span><span class="kw">krige</span>(
+    <span class="dt">formula =</span> z <span class="op">~</span><span class="st"> </span>x,
+    <span class="dt">locations =</span> grd,
+    <span class="dt">newdata =</span> xypred,
+    <span class="dt">model =</span> vgmodel.residual,
+    <span class="dt">beta=</span>betas,
+    <span class="dt">nmax=</span><span class="dv">100</span>
+    )
+  SKvar[i]&lt;-prediction<span class="op">$</span>var1.var
+}</code></pre></div>
+<p>Figure <a href="Introkriging.html#fig:KEDVarSKVar">17.2</a> shows that, contrary to the ordinary kriging variance, the kriging variance with KED is not constant, but depends on the covariate value at the prediction location. It is the smallest near the mean of the covariate values at the sampling sites, which is 10.0. The more extreme the covariate value at the prediction location, the larger the kriging variance with KED. This is analogous to the variance of predictions with a linear regression model.</p>
+<p>On the other hand the variance with simple kriging (SK) is constant. This is beacuse with SK only the error in the interpolation of the residuals contribute to the variance (first two terms in Equation <a href="Introkriging.html#eq:KEDvariance2">(17.8)</a>. This interpolation error is indpendent of the value of <span class="math inline">\(x\)</span> at the prediction location. In Figure <a href="Introkriging.html#fig:KEDVarSKVar">17.2</a> the difference between the variance with KED and with SK is the variance of the estimated mean, due to uncertainty about the regression coefficients. These regression coeffcients must be <em>estimated</em> from the sample data.</p>
+<div class="figure" style="text-align: center"><span id="fig:KEDVarSKVar"></span>
+<img src="SpatialSampling_files/figure-html/KEDVarSKVar-1.png" alt="Variance of prediction error with KED (black dots) and SK (red dots) as a function of the covariate value at a fixed prediction location" width="70%" />
+<p class="caption">
+Figure 17.2: Variance of prediction error with KED (black dots) and SK (red dots) as a function of the covariate value at a fixed prediction location
+</p>
+</div>
+<p>I realize that this is rather a short introduction to kriging. I refer to <span class="citation">Isaaks and Srivastava (1989)</span> for an introduction in geostatistics, to <span class="citation">Goovaerts (1997)</span> for an expos<span class="math inline">\(\acute{\text{e}}\)</span> of the many versions of kriging, and to <span class="citation">Webster and Oliver (2007)</span> for an elaborate explanation of kriging.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="SpatialResponseSurface.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/DickBrus/SpatialSamplingwithR/17-IntroKriging.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
